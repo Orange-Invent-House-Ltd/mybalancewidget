@@ -26,7 +26,7 @@ export const TextField = ({
 
   return (
     <div
-      className={clsx("mb-3 mt-3", {
+      className={clsx("mb-2", {
         "w-full": variant == "xlong",
         "w-[343px] md:w-[486px]": variant == "long",
         "w-[343px] md:w-[280px]": variant == "medium",
@@ -69,14 +69,14 @@ export const MultilineTextField = ({
   const { field, fieldState } = useController(props);
 
   return (
-    <div className="w-fit mb-3">
+    <div className="w-fullmb-3">
       <p className="block text-lg mb-[6px] capitalize">{label}</p>
       <textarea
         // field: { onChange, onBlur, value, name, ref },
         {...field}
         {...props}
         rows={5}
-        className="block w-[280px] lg:w-[390px] rounded-[10px] appearance-none focus:bg-white focus:outline focus:outline-[#D9D9D9] bg-[#D9D9D9] mb-6 py-2 px-4"
+        className="block w-full rounded-[10px] appearance-none focus:bg-white outline-none border border-zinc-500 mb-6 py-2 px-4"
       ></textarea>
       <p
         className={clsx("text-xs mt-[6px]", {

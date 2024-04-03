@@ -1,12 +1,14 @@
 import { ArrowLeft } from "lucide-react"
-import { useNavigate } from "react-router-dom"
-import buyer from '../../../assets/images/buyer.png'
+import { useLocation, useNavigate } from "react-router-dom"
+import bannerImage from '../../../assets/images/buyer.png'
 import { MultilineTextField, TextField } from "../../../components/reuseable/FormInput"
 import { useForm } from "react-hook-form"
 import { Button } from "../../../components/reuseable/Buttons"
 
 
 const RaiseADispute = () => {
+  const location = useLocation();
+  const cartData = location.state?.cartData;
   const navigate = useNavigate()
   const { handleSubmit, control, register } = useForm();
 
@@ -20,17 +22,17 @@ const RaiseADispute = () => {
       <h2 className="font-bold text-[#303030] text-[23px] ">Raise a Dispute</h2>
       <p className="mb-6">Manage disputes with vendors by creating a dispute thread here.</p>
 
-      <div className="bg-[#12b76a] rounded-[16px] flex items-center px-6 text-white">
+      <div className="bg-[#12b76a] rounded-[16px] flex items-center mb-8 px-6 text-white">
         <div>
           <h2 className="mb-4 text-[36px] font-bold">Use MyBalance Today!</h2>
           <p className="mb-4 text-[18px] font-semibold ">"Take charge of your transactions instantly by connecting to your escrow account with a click.</p>
-          <a href="https://mybalanceapp.com/" className="text-[18px] font-bold ">Visit MyBalance today.</a>
+          <a href="https://mybalanceapp.com/" target="_blank" className="text-[18px] font-bold ">Visit MyBalance today.</a>
         </div>
-        <img src={buyer} alt="Buyer" />
+        <img src={bannerImage} alt="Buyer" />
       </div>
 
       <form
-        className="max-w-[720px] space-y-8 relative "
+        className="max-w-[720px] space-y-8 relative mb-8"
         onSubmit={handleSubmit(onSubmit)}
       >
         {/* {isLoading && <LoadingOverlay />} */}
@@ -38,11 +40,14 @@ const RaiseADispute = () => {
           <TextField
             control={control}
             label="Reference code/ Transaction ID"
+            value={cartData?.id}
             name="transaction"
+            variant="xlong"
+            disabled
             rules={{ required: "this field is required" }}
           />
       
-          <div className="w-full mb-3 ">
+          <div className="w-full mb-3">
             <label
               htmlFor={"selectBank"}
               className="text-sm mb-[6px] capitalize block"
@@ -50,7 +55,7 @@ const RaiseADispute = () => {
               Priority
             </label>
             <select
-              className="block border border-[#B7B7B7] w-full rounded-md p-2 outline-none focus:border-[#B7B7B7] "
+              className="block border border-[#B7B7B7] w-full h-12 rounded-md p-2 outline-none focus:border-[#B7B7B7] "
               {...register("priority", {
                 required: "this field is required",
               })}
@@ -65,7 +70,9 @@ const RaiseADispute = () => {
           control={control}
           label="Reason for filing your dispute"
           name="reason"
+          variant="xlong"
           rules={{ required: "this field is required" }}
+          
         />
         <MultilineTextField
           control={control}
@@ -73,13 +80,10 @@ const RaiseADispute = () => {
           rules={{ required: "this field is required" }}
           label="Type in the box below"
         />
-      
-        <div className="flex justify-end">
-          <div className="w-[350px]">
-            <Button  fullWidth> {/*disabled={isLoading} */}
-              submit
-            </Button>
-          </div>
+        <div className="w-[350px]">
+          <Button  fullWidth> 
+            submit
+          </Button>
         </div>
       </form>
 
