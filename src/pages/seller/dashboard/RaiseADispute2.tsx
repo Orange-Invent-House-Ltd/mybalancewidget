@@ -16,7 +16,7 @@ const RaiseADispute = () => {
 
   return (
     <div className="md:w-[70%] w-full ml-auto px-[5%] pt-[30px]">
-     <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-primary-btnbck bg-btnbg cursor-pointer" onClick={() => navigate(-1)} />
+     <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer" onClick={() => navigate(-1)} />
       <h2 className="font-bold text-[#303030] text-[23px] ">Raise a Dispute</h2>
       <p className="mb-6">Manage disputes with vendors by creating a dispute thread here.</p>
       <HeroHeader />

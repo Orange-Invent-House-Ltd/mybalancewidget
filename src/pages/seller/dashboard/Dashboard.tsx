@@ -11,7 +11,7 @@ import HeroHeader from '../../../components/reuseable/HeroHeader';
 const Dashboard = () => {
   return (
     <div className="md:w-[70%] w-[100%] ml-auto px-[5%] pt-[30px] backdrop-blur-lg bg-opacity-50"> 
-        <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-primary-btnbck bg-btnbg cursor-pointer" />
+        <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer" />
 
   <div className=" mt-7">
     <div className='flex justify-between'>
@@ -19,7 +19,7 @@ const Dashboard = () => {
       <div className=" font-semibold text-xl">Dashboard</div>
     <div className=" text-xs mt-2 text-slate-500">An overview</div>
       </div>
-      <button className="text-sm text-white bg-primary-primaryCol p-[1px] px-16 rounded-md">Make a Withdrawal</button>
+      <button className="text-sm text-white bg-[#FD7E14] p-[1px] px-16 rounded-md">Make a Withdrawal</button>
     </div>
     {/*  */}
  <div className='lg:flex md:flex block items-center gap-3'>
@@ -59,7 +59,7 @@ const Dashboard = () => {
          <LucideHelpCircle size="20" name="help" className="" />
             <div className="text-sm font-medium">View Transaction History</div>
             </div>
-            <button className="text-sm bg-white border border-btnbg text-primary-primaryCol p-3 px-10 rounded-lg font-semibold">Raise a Dispute</button>
+            <button className="text-sm bg-white border border-[#FFF2E8] text-[#FD7E14] p-3 px-10 rounded-lg font-semibold">Raise a Dispute</button>
         </div>
     </div>
   </div>
