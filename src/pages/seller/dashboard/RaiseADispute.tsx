@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import { MultilineTextField, TextField } from "../../../components/reuseable/FormInput"
+import {  TextField } from "../../../components/reuseable/FormInput"
 import { useForm } from "react-hook-form"
 // import { Button } from "../../../components/reuseable/Buttons"
 import HeroHeader from "../../../components/reuseable/HeroHeader"
@@ -68,7 +68,7 @@ const RaiseADispute = () => {
         </div>
         
         <div className='mt-3 '>
-         <input type='submit'  name="submit" id="" value="Submit" className=' border-gray-300 border-solid border-2 outline-none w-full md:w-1/2 p-2 text-[#FD7E14] cursor-pointer'/>
+         <input type='submit'  name="submit" id="" value="Submit" className=' border-gray-300 border-solid border-2 rounded-lg outline-none w-full md:w-1/2 p-2 bg-[#FD7E14]  text-white cursor-pointer'/>
         </div>
       </form>
 

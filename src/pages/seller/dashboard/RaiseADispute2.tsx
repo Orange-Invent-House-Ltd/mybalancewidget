@@ -16,7 +16,7 @@ const RaiseADispute = () => {
 
   return (
     <div className="md:w-[70%] w-full ml-auto px-[5%] pt-[30px]">
-     <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer" onClick={() => navigate(-1)} />
+     <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer " onClick={() => navigate(-1)} />
       <h2 className="font-bold text-[#303030] text-[23px] ">Raise a Dispute</h2>
       <p className="mb-6">Manage disputes with vendors by creating a dispute thread here.</p>
       <HeroHeader />
@@ -24,7 +24,7 @@ const RaiseADispute = () => {
         className=" w-full pr-7"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div  className="flex justify-between align-items-center w-full px-9 py-6 shadow-lg mt-[3rem] mb-[2rem]">
+        <div  className="flex justify-between align-items-center w-full px-9 py-6 shadow-lg mt-[3rem] mb-[2rem] border-t-2 border-slate-50">
           <div>
             <h2 className="mb-3 text-[18px] font-bold">Wrong Product!</h2>
             <p className="text-[12px] text-slate-500 ">Hello My Balance, this sneaker is not white o, it is blue.</p>
@@ -36,7 +36,7 @@ const RaiseADispute = () => {
         </div>
               
         <div className='mt-3 '>
-         <input type='submit'  name="submit" id="" value="Return to homepage" className=' border-gray-300 border-solid border-2 outline-none w-full md:w-1/2 p-2 text-heading rounded-lg t text-sm  mb-2  text-white bg-primary-primaryCol cursor-pointer '/>
+         <input type='submit'  name="submit" id="" value="Return to homepage" className=' border-gray-300 border-solid border-2 rounded-lg outline-none w-full md:w-1/2 p-2 bg-[#FD7E14]  text-white cursor-pointer '/>
         </div>
       </form>
     </div>
