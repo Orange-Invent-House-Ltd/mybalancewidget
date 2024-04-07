@@ -1,12 +1,15 @@
-import React from 'react';
-import Stepper from '../../../components/seller/Stepper';
-import { useForm } from 'react-hook-form';
+
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Stepper from '../../../components/seller/Stepper';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 const schema = z.object({
   bankName: z.string().min(3, 'Field cannot be empty'),
-  AccountNumber: z.string().min(10,"Account number must be (10)"),
+  AccountNumber: z.string().min(10, "Account number must be (10)"),
   AccountName: z.string().min(3, 'Field cannot be empty'),
   Amount: z.string().min(5, 'Field cannot be empty'),
 });
@@ -14,6 +17,7 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 function Withdraw() {
+  const navigate = useNavigate(); 
   const { register, handleSubmit, setError, formState: { errors, isSubmitting } } = useForm<FormFields>(
     {
       defaultValues: {
@@ -25,22 +29,34 @@ function Withdraw() {
     }
   );
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const onSubmitWrapper = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); 
+    handleSubmit(onSubmit)(e); 
+  };
+  
+  const onSubmit = async (data: FormFields) => {
     try {
+      setIsSubmitted(true);
       // Simulating server delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      throw new Error();
+      // throw new Error()
+      navigate('/seller/otp', { state: { progress: 100 } }); 
+
       console.log(data);
     } catch (error) {
-    //   setError('bankName', {
-    //     message: 'Invalid Bank Name'
-    //   });
+      console.error(error);
     }
   };
 
   return (
+    <div className="md:w-[80%] w-full ml-auto px-[5%] pt-[30px]">
+    <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer " onClick={() => navigate(-1)} />
+     <h2 className="font-semibold text-[#303030] text-[23px] ">Withdraw Funds</h2>
+     <p className="mb-6">Make your withdrawals seamlessly</p>
     <div className="flex mt-[5rem] md:px-[4rem] px-[.5rem]">
-      <Stepper />
+      <Stepper  isSubmitted={isSubmitted} />
 
       <div className='w-[60%]'>
         <div>
@@ -49,7 +65,7 @@ function Withdraw() {
           <p className='text-gray-500 text-[15px] mb-6'>Use the form below to withdraw funds to your personal account.</p>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={onSubmitWrapper}>
 
           <div className='w-full mt-5'>
             <label htmlFor="" className='block text-gray-600 text-[17px] mb-2'>Bank name</label>
@@ -94,6 +110,7 @@ function Withdraw() {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 }
