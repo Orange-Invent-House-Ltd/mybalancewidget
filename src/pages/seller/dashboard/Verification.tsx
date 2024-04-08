@@ -129,6 +129,7 @@ function Verification() {
                 Withdraw Now
               </button>
             </div>
+            <div className='text-gray-400 text-center' >Didn’t receive OTP? <a href='' className='text-[#FD7E14] font-bold'>Click to resend</a></div>
           </form>
         </div>
       </div>
