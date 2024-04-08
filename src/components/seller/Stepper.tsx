@@ -1,21 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as Progress from '@radix-ui/react-progress';
 import { Check } from 'lucide-react';
 
-
 interface StepperProps {
   isSubmitted: boolean;
+  filledCount?: number;
 }
 
-const Stepper: React.FC<StepperProps> = ({ isSubmitted }) => {
+const Stepper: React.FC<StepperProps> = ({ isSubmitted, filledCount }) => {
   const [progress, setProgress] = React.useState(13);
+  const [innerCircleVisible, setInnerCircleVisible] = React.useState(true);
 
   React.useEffect(() => {
-    const timer = setTimeout(() => setProgress(isSubmitted ? 100 : 50), 500); // 
+    const timer = setTimeout(() => {
+      setProgress(isSubmitted ? 100 : 50);
+    }, 500);
     return () => clearTimeout(timer);
   }, [isSubmitted]);
 
- 
+  useEffect(() => {
+    setInnerCircleVisible(filledCount !== 6); 
+  },[filledCount]);
+  
+
   return (
     <div className='relative w-[30%]'>
       <Progress.Root
@@ -32,12 +39,21 @@ const Stepper: React.FC<StepperProps> = ({ isSubmitted }) => {
       </Progress.Root>
       <div className='absolute top-[5%] left-[9%]'>
         <div className='flex items-center justify-center w-[25px] h-[25px] border border-[#FD7E14] rounded-full circle'>
-        <div className={`w-[17px] h-[17px] bg-[#FD7E14]  ${progress === 50 && !isSubmitted ? 'block' : 'hidden'} rounded-full`}></div>
-        <Check size={20}  className={`text-[#FD7E14]  ${progress === 50 && !isSubmitted ? 'hidden' : 'block'}  `}/>
+          {progress === 50 && !isSubmitted ?(
+            <div className='w-[17px] h-[17px] bg-[#FD7E14] rounded-full'></div>
+          ): 
+          (
+            <Check size={20} className='text-[#FD7E14]'/>
+          )
+          }
         </div>
         <div className='flex items-center justify-center w-[25px] h-[25px] border border-[#FD7E14] rounded-full circle mt-[7.5rem]'>
-        <Check size={20} className={`text-[#FD7E14] ${progress === 100 && !isSubmitted ? 'block' : 'hidden'}`} />
-          <div className={`w-[17px] h-[17px] bg-[#FD7E14] ${progress === 100 && !isSubmitted ? 'hidden' : 'block'} rounded-full`}></div>
+          
+          {innerCircleVisible ? (
+            <div className={`w-[17px] h-[17px] bg-[#FD7E14]  rounded-full`}></div>
+          ) : (
+            <Check size={20} className='text-[#FD7E14]' />
+          )}
         </div>
       </div>
     </div>
@@ -45,7 +61,3 @@ const Stepper: React.FC<StepperProps> = ({ isSubmitted }) => {
 };
 
 export default Stepper;
-{/* <form onSubmit={onSubmit}>
-Verification
-
-</form> */}

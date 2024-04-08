@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Stepper from '../../../components/seller/Stepper';
+import WithdrawalSuccess from '../../../components/seller/WithdrawalSuccess';
 
 function Verification() {
   const location = useLocation();
@@ -18,23 +19,21 @@ function Verification() {
     // Update the OTP state with the new value at the specified index
     setOTP(prevOTP => {
       const newOTP = [...prevOTP];
-      newOTP[index] = value;
+      newOTP[index] = value.trim(); // Trim leading and trailing spaces
       return newOTP;
     });
 
-    // Update the filled count
-    if (value !== '' && otp[index] === '') {
-      setFilledCount(prevCount => prevCount + 1);
-    } else if (value === '' && otp[index] !== '') {
-      setFilledCount(prevCount => prevCount - 1);
-    }
-
     // Move focus to the next input field if available
     if (value !== '' && index < 5 && inputRefs.current[index + 1]) {
-      inputRefs.current[index + 1].focus(); // No need for type assertion here
+      inputRefs.current[index + 1].focus(); // Focus on next input
+    } else if (value === '' && index > 0 && inputRefs.current[index - 1]) {
+      inputRefs.current[index - 1].focus(); // Focus on previous input when deleting a value
     }
-  };
 
+    // Update the filled count
+    const newFilledCount = value !== '' ? filledCount + 1 : filledCount - 1;
+    setFilledCount(newFilledCount);
+  };
 
   const progressFromWithdraw = location.state?.progress || 0;
 
@@ -59,6 +58,7 @@ function Verification() {
         const currentIndex = inputRefs.current.findIndex(ref => document.activeElement === ref);
         if (currentIndex > 0 && otp[currentIndex] === '') {
           inputRefs.current[currentIndex - 1].focus();
+          setFilledCount(currentIndex - 1);
         }
         setOTP(prevOTP => {
           const newOTP = [...prevOTP];
@@ -82,27 +82,25 @@ function Verification() {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [otp, filledCount]);
-  
 
   return (
-    <div className="md:w-[80%] w-full ml-auto px-[5%] pt-[30px]">
+    <div className="md:w-[70%] w-full ml-auto px-[5%] pt-[30px] relative">
       <ArrowLeft
         size={40}
         className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer"
         onClick={() => navigate(-1)}
-     
       />
       <h2 className="font-semibold text-[#303030] text-[23px]">Withdraw Funds</h2>
       <p className="mb-6">Make your withdrawals seamlessly</p>
       <div className="flex mt-[5rem] md:px-[3rem] px-[.5rem]">
-        <Stepper isSubmitted={progressFromWithdraw === 100 || isSubmitted} />
+        <Stepper isSubmitted={progressFromWithdraw === 100 || isSubmitted} filledCount={filledCount} />
 
         <div className='w-[60%]'>
-        <div>
-          <p className='text-gray-700 text-[27px] font-bold mb-2'>Verify OTP</p>
-          <p className='text-gray-500 text-[19px] mb-6'>Enter the 6-digits OTP that was sent to your email address your provided.</p>
-        </div>
-        
+          <div>
+            <p className='text-gray-700 text-[27px] font-bold mb-2'>Verify OTP</p>
+            <p className='text-gray-500 text-[19px] mb-6'>Enter the 6-digits OTP that was sent to your email address you provided.</p>
+          </div>
+
           <form onSubmit={onSubmit}>
             <div className="mb-4">
               <div className="flex">
@@ -114,7 +112,7 @@ function Verification() {
                     type="text"
                     value={otp[index]}
                     onChange={(e) => handleChange(index, e.target.value)}
-                    className=" w-[60px] h-[70px] border-4 mr-2 py-2 px-3
+                    className="w-[60px] h-[70px] border-4 mr-6 py-2 px-3
                       focus:outline-none focus:shadow-outline rounded-lg text-[45px] text-gray-600"
                     maxLength={1}
                     placeholder='3'
@@ -123,16 +121,19 @@ function Verification() {
               </div>
             </div>
             <div className="flex items-center justify-between">
-            <button
-  type='submit'
-  className='p-3 w-full rounded-lg outline-none text-white font-semibold bg-[#FD7E14] my-6'
->
-  Withdraw Now
-</button>
+              <button
+                type='submit'
+                className={`p-3 w-full rounded-lg outline-none text-white font-semibold bg-[#FD7E14] my-6 ${filledCount=== 6 ? ' opacity-100':'opacity-35'}`}
+                disabled={filledCount === 0}  // Disable button if no OTP box is filled
+              >
+                Withdraw Now
+              </button>
             </div>
           </form>
         </div>
       </div>
+      {isSubmitted && <WithdrawalSuccess />}
+
     </div>
   );
 }
