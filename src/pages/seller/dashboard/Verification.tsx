@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Minus, TimerReset } from 'lucide-react';
 import Stepper from '../../../components/seller/Stepper';
 import WithdrawalSuccess from '../../../components/seller/WithdrawalSuccess';
 
@@ -85,6 +85,7 @@ function Verification() {
 
   return (
     <div className="md:w-[70%] w-full ml-auto px-[5%] pt-[30px] relative">
+      
       <ArrowLeft
         size={40}
         className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer"

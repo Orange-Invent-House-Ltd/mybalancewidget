@@ -1,7 +1,14 @@
+import { X } from 'lucide-react'
 import confetti from '../../assets/icon/confetti.svg'
+import { useNavigate } from 'react-router-dom';
 function WithdrawalSuccess() {
+  const navigate = useNavigate();
+
   return (
     <div className="absolute top-[58%] left-[0] z-20 w-[45%] h-auto shadow-lg bg-white p-[30px] rounded-xl transition-all">
+      <div className='flex justify-end '>
+      <X size={30} className='text-[#FD7E14] cursor-pointer' onClick={() => navigate('/seller/dashboard')} />
+      </div>
       <div className='flex flex-col justify-center items-center'>
         <div className='mb-6'>
     <img src={confetti} alt="" />
