@@ -8,7 +8,7 @@ export default function HomeHeading() {
     const navigate = useNavigate()
   return (
     <div className="md:w-[70%] w-[100%] ml-auto px-[5%] pt-[30px] backdrop-blur-lg bg-opacity-50"> 
-    <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-primary-btnbck bg-btnbg cursor-pointer"   onClick={() => navigate(-1)}/>
+           <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer"  onClick={() => navigate(-1)}/>
     <div className=" mt-7">
     <div className=" font-semibold ">Heading</div>
     <div className=" text-sm mt-2"> Subtitle Text goes here</div>

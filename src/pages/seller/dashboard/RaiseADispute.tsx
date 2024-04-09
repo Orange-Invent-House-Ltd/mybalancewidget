@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import { MultilineTextField, TextField } from "../../../components/reuseable/FormInput"
+import {  TextField } from "../../../components/reuseable/FormInput"
 import { useForm } from "react-hook-form"
 // import { Button } from "../../../components/reuseable/Buttons"
 import HeroHeader from "../../../components/reuseable/HeroHeader"
@@ -16,7 +16,7 @@ const RaiseADispute = () => {
 
   return (
     <div className="md:w-[70%] w-full ml-auto px-[5%] pt-[30px]">
-     <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-primary-btnbck bg-btnbg cursor-pointer" onClick={() => navigate(-1)} />
+     <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer" onClick={() => navigate(-1)} />
       <h2 className="font-bold text-[#303030] text-[23px] ">Raise a Dispute</h2>
       <p className="mb-6">Manage disputes with vendors by creating a dispute thread here.</p>
       <HeroHeader />
@@ -68,7 +68,7 @@ const RaiseADispute = () => {
         </div>
         
         <div className='mt-3 '>
-         <input type='submit'  name="submit" id="" value="Submit" className=' border-gray-300 border-solid border-2 outline-none w-full md:w-1/2 p-2 text-heading rounded-lg t text-sm  mb-2  text-white bg-primary-primaryCol cursor-pointer'/>
+         <input type='submit'  name="submit" id="" value="Submit" className=' border-gray-300 border-solid border-2 rounded-lg outline-none w-full md:w-1/2 p-2 bg-[#FD7E14]  text-white cursor-pointer'/>
         </div>
       </form>
 
