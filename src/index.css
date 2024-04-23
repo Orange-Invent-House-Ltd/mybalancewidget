@@ -1,5 +1,35 @@
 @tailwind base; @tailwind components; @tailwind utilities; 
 
+html,
+body {
+  @apply scroll-smooth;
+}
+.h6 {
+  @apply text-[#121212] text-[23px] font-bold leading-[31.05px] mb-[20px] md:mb-[30px];
+}
+
+
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* no scrollbar */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+/* Input type number will not have increase or decrease arrow */
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0; 
+}
+
+
 
 @font-face {
   font-family: "satoshi";
@@ -119,32 +149,4 @@
   font-weight: 900;
   font-display: swap;
   font-style: italic;
-}
-
-html,
-body {
-  @apply scroll-smooth;
-}
-
-
-
-
-@layer utilities {
-  /* Chrome, Safari and Opera */
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  /* no scrollbar */
-  .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-  }
-}
-
-/* Input type number will not have increase or decrease arrow */
-input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  margin: 0; 
 }
