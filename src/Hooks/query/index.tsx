@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { login } from "../../api";
+import { getTransactions} from "../../api";
 
 
-export const useLogin = () => {
+export const useTransactions = ({search, page, size}:any) => {
   return useQuery({
-    queryKey: ["blogs"],
-    queryFn: login,
+    queryKey: ["transactions", search, page, size],
+    queryFn: () => getTransactions({search, page, size}),
   });
 };

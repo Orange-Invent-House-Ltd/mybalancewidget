@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import { login, passwordlessLogin, passwordlessOtpVerification } from "../../api";
+import { passwordlessLogin, passwordlessOtpVerification } from "../../api";
 
 
 export const usePasswordlessLogin = () => {
@@ -56,20 +56,6 @@ export const usePasswordlessOtpVerification = () => {
       error.response.data.errors === null ? resMessage = error.response.data.message : 
       resMessage = error.response.data.errors.email[0]
       toast.error(resMessage);
-    },
-  });
-};
-
-export const useCheckPhoneNumber = () => {
-  return useMutation({
-    mutationFn: login,
-    onSuccess: (data) => {
-      toast.error('user with this phone number already exist. Use another Phone number',{
-        toastId: "error1",
-      });
-    },
-    onError: (error: any) => {
-      // toast.error(error.response.data.message);
     },
   });
 };
