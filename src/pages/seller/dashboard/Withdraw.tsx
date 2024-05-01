@@ -51,7 +51,7 @@ function Withdraw() {
   };
 
   return (
-    <div className="md:w-[70%] w-full ml-auto px-[5%] pt-[30px]">
+    <div className="w-full px-[5%] pt-[30px]">
     <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer " onClick={() => navigate('/seller/dashboard')} />
      <h2 className="font-semibold text-[#303030] text-[23px] ">Withdraw Funds</h2>
      <p className="mb-6">Make your withdrawals seamlessly</p>

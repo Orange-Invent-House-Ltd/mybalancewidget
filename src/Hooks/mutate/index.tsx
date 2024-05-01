@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import { passwordlessLogin, passwordlessOtpVerification } from "../../api";
+import { passwordlessLogin, passwordlessOtpVerification, unlockFunds} from "../../api";
 
 
 export const usePasswordlessLogin = () => {
@@ -12,23 +12,27 @@ export const usePasswordlessLogin = () => {
     onSuccess: (data) => {
       localStorage.setItem("tempId", data.data.tempId);
       localStorage.setItem("email", data.data.email);
-      toast.success(data.message);
+      toast.success(data.message, {
+        toastId: 'success1'
+      });
 
-      if (location.state?.from) {
-        navigate(location.state.from);
-        return;
-      }
-      if(data?.data?.phoneNumberFlagged){
-        navigate("/change-phone-number");
-      }else{
-        navigate("/passwordless-otp-verification");
-      }
+      // if (location.state?.from) {
+      //   navigate(location.state.from);
+      //   return;
+      // }
+      // if(data?.data?.phoneNumberFlagged){
+      //   navigate("/change-phone-number");
+      // }else{
+      //   navigate("/passwordless-otp-verification");
+      // }
     },
     onError: (error: any) => {
       let resMessage;
       error.response.data.errors === null ? resMessage = error.response.data.message : 
       resMessage = error.response.data.errors.email[0]
-      toast.error(resMessage);
+      toast.error(resMessage, {
+        toastId: 'error1'
+      });
     },
   });
 };
@@ -41,7 +45,9 @@ export const usePasswordlessOtpVerification = () => {
     onSuccess: (data) => {
       localStorage.setItem("session_token", data.data.token);
       localStorage.setItem("email", data.data.email);
-      toast.success(data.message);
+      toast.success(data.message, {
+        toastId: 'success1'
+      });
       if(data?.data?.phoneNumberFlagged){
         navigate("/change-phone-number");
       }else if(data?.data?.user?.isBuyer) {
@@ -55,7 +61,30 @@ export const usePasswordlessOtpVerification = () => {
       let resMessage;
       error.response.data.errors === null ? resMessage = error.response.data.message : 
       resMessage = error.response.data.errors.email[0]
-      toast.error(resMessage);
+      toast.error(resMessage,{
+        toastId: 'error1'
+      });
+    },
+  });
+};
+
+export const useUnlockFunds = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  return useMutation({
+    mutationFn: unlockFunds,
+    onSuccess: (data) => {
+      toast.success(data.message, {
+        toastId: 'success1'
+      });
+    },
+    onError: (error: any) => {
+      let resMessage;
+      error.response.data.errors === null ? resMessage = error.response.data.message : 
+      resMessage = error.response.data.errors.error[0]
+      toast.error(resMessage,{
+        toastId: 'error1'
+      });
     },
   });
 };

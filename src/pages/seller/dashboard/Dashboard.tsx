@@ -5,17 +5,22 @@ import shoe from '../../../assets/images/shoe.png'
 import ItemsCard from '../../../components/seller/ItemsCard';
 import HeroHeader from '../../../components/reuseable/HeroHeader';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useTransactions } from '../../../Hooks/query';
 
 
 
 const Dashboard = () => {
-
+  const email = localStorage.getItem("email");
+  const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`
+  const [page, setPage] = useState<number>(1)
+  const {data:transactions} = useTransactions({page})
   const navigate =useNavigate()
   const goTo = ():void =>{
     navigate('/seller/withdraw')
   }
   return (
-    <div className="md:w-[70%] w-[100%] ml-auto px-[5%] pt-[30px] backdrop-blur-lg bg-opacity-50"> 
+    <div className="px-[5%] pt-[30px] backdrop-blur-lg bg-opacity-50"> 
         <ArrowLeft size={40} className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer" />
 
   <div className=" mt-7">
@@ -59,16 +64,16 @@ const Dashboard = () => {
       </div>
 
         <div className="flex justify-center items-center gap-3 px-1 mt-4">
-         <div className="flex lg:items-center md:items-center items-start gap-2"
-         >
-         <LucideHelpCircle size="20" name="help" className="" />
-            <div className="text-sm font-medium">View Transaction History</div>
-            </div>
+         <div className="flex lg:items-center md:items-center items-start gap-2">
+            <a href= {urlWithUserEmail} target="_blank" rel="noopener noreferrer"> <LucideHelpCircle size="20" name="help" className="inline" />
+            <div className="text-sm font-medium inline ml-2">View Transaction History</div>
+            </a>
+          </div>
             <button className="text-sm bg-white border border-[#FFF2E8] text-[#FD7E14] p-3 px-10 rounded-lg font-semibold">Raise a Dispute</button>
         </div>
     </div>
   </div>
-  {cartDatas.map(({name, description, img, price}:any, index:any, arr:any)=>(
+  {transactions?.data?.map(({name, description, img, price}:any, index:any, arr:any)=>(
         <div className={ arr.length - 1 === index ? '' : 'mb-4'}>
         <ItemsCard name={name} description={description} img={img} price={price} />
         </div>

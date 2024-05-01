@@ -2,22 +2,48 @@ import { ArrowLeft } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import bannerImage from '../../../assets/images/buyer.png'
 import { MultilineTextField, TextField } from "../../../components/reuseable/FormInput"
-import { useForm } from "react-hook-form"
+import { set, useForm } from "react-hook-form"
 import { Button } from "../../../components/reuseable/Buttons"
+import { privateApi } from "../../../api/axios"
+import { toast } from "react-toastify"
+import { useEffect } from "react"
+import moment from "moment"
 
 
 const RaiseADispute = () => {
   const location = useLocation();
   const cartData = location.state?.cartData;
+  const id = cartData?.id
   const navigate = useNavigate()
-  const { handleSubmit, control, register } = useForm();
+  const today  = moment().format("YYYY-MM-DD");
+  const { handleSubmit, control, register, reset, formState:{isSubmitSuccessful} } = useForm();
 
-  const onSubmit = () => {
-    alert('hey')
+  const onSubmit = async(data:any) => {
+    try{
+      const res = await privateApi.post(`/merchants/customer-transactions/${id}`, data);
+
+    }catch(error:any){
+      let resMessage;
+      error.response.data.errors === null ? resMessage = error.response.data.message : 
+      resMessage = error.response.data.errors.transaction[0]
+      toast.error(resMessage,{
+        toastId: 'error1'
+      });
+    }
   };
 
+  useEffect(()=>{
+    if(isSubmitSuccessful){
+      reset({
+        priority: '',
+        reason: '',
+        description: ''
+      })
+    }
+  },[isSubmitSuccessful])// eslint-disable-line react-hooks/exhaustive-deps
+
   return (
-    <div className="w-[70%] ml-auto px-[5%] pt-[30px]">
+    <div className="px-[5%] pt-[30px]">
       <ArrowLeft size={40} className="border rounded-[4px] text-[#FD7E14] p-2 mb-4" onClick={() => navigate(-1)} />
       <h2 className="font-bold text-[#303030] text-[23px] ">Raise a Dispute</h2>
       <p className="mb-6">Manage disputes with vendors by creating a dispute thread here.</p>
@@ -55,7 +81,7 @@ const RaiseADispute = () => {
               Priority
             </label>
             <select
-              className="block border border-[#B7B7B7] w-full h-12 rounded-md p-2 outline-none focus:border-[#B7B7B7] "
+              className="block border border-[#B7B7B7] w-full h-12 rounded-md p-2 outline-none focus:border-[#B7B7B7]"
               {...register("priority", {
                 required: "this field is required",
               })}
@@ -78,10 +104,10 @@ const RaiseADispute = () => {
           control={control}
           name="description"
           rules={{ required: "this field is required" }}
-          label="Type in the box below"
+          label="Description"
         />
         <div className="w-[350px]">
-          <Button  fullWidth> 
+          <Button disabled={ today <= cartData?.escrow?.deliveryDate ? true : false }  fullWidth> 
             submit
           </Button>
         </div>

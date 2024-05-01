@@ -2,16 +2,24 @@ import UnlockFundCard from "../../../components/buyer/UnlockFundCard";
 import { ArrowLeft, CircleHelp } from "lucide-react";
 import shoe from "../../../assets/images/shoe.png";
 import { useEffect, useState } from "react";
+import { useTransactions } from "../../../Hooks/query";
+import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
+import moment from 'moment'
 
 const UnlockFund = () => {
+  localStorage.setItem("session_token", 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0NDgwNzU2LCJpYXQiOjE3MTQ0NzM1NTYsImp0aSI6ImNlY2IwN2MwYzlmMTRiNmM4OGM1OTgwOTM5ZDhjNzkzIiwidXNlcl9pZCI6MTIsImtleSI6bnVsbH0.HuQbEvThV8Sb3TXXq7EXgbm1WxGuIIKpCaARyf2Bymc')
+  localStorage.setItem("email", 'omobayode93@gmail.com');
+  localStorage.setItem("merchant", 'adbc5c96-f8ba-4a01-8383-58bf5241b05c');
+  const today  = moment().format("YYYY-MM-DD");
+  
+  const email = localStorage.getItem("email");
+  const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`
   const [hover, setHover] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [checkBoxes, setCheckBoxes] = useState<any>([])
   const [selectedItems, setSelectedItems] = useState<any>([])
-  // const [selectedItems, setSelectedItems] = useState<any>({
-  //   items: [],
-  //   response: [],
-  // });
+  const [page, setPage] = useState<number>(1)
+  const {data:transactions, isPending} = useTransactions({page}) 
 
   const handleAllChecked = () => {
     if(!selectAll){
@@ -55,7 +63,8 @@ const UnlockFund = () => {
 
   return (
     <div>
-      <div className="w-[70%] ml-auto px-[5%] pt-[30px]">
+      {isPending && <LoadingOverlay/>}
+      <div className="px-[5%] pt-[30px]">
         <ArrowLeft
           size={40}
           className="border rounded-[4px] text-[#FD7E14] p-2 mb-4"
@@ -71,8 +80,9 @@ const UnlockFund = () => {
                 className="text-[#FD7E14] text-[14px] font-bold"
                 onMouseEnter={() => setHover(true)}
                 onMouseLeave={() => setHover(false)}
-              >
+              ><a href= {urlWithUserEmail} target="_blank" rel="noopener noreferrer"> 
                 <CircleHelp className="inline" /> View Transaction History
+                </a>
               </p>
               {hover && (
                 <div className="absolute top-10 bg-[#d4d4d4] rounded-[8px] w-[359px] px-4 py-4">
@@ -94,7 +104,7 @@ const UnlockFund = () => {
         {selectedItems.map((value:any)=>(
           <p>{value.id}</p>
         ))}
-        {checkBoxes.map((cartData: any, index: any, arr: any) => (
+        {transactions?.data?.map((cartData: any, index: any, arr: any) => (
           <div className={arr.length - 1 === index ? "" : "mb-4"}>
             <UnlockFundCard cartData={cartData} handleSingleCheckBoxChange={handleSingleCheckBoxChange} />
           </div>

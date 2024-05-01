@@ -1,29 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OtpInput from "../../components/reuseable/OtpInput";
 import LoadingOverlay from "../../components/reuseable/LoadingOverlay";
 import { Button } from "../../components/reuseable/Buttons";
-import { usePasswordlessOtpVerification } from "../../Hooks/mutate";
+import { usePasswordlessLogin, usePasswordlessOtpVerification } from "../../Hooks/mutate";
 
 const SingleSignInVeriication = () => {
   const [otp, setOtp] = useState("");
-  const { mutate, isPending, isSuccess } = usePasswordlessOtpVerification();
+  const { mutate: mutat,} = usePasswordlessLogin();
+  const { mutate, isPending } = usePasswordlessOtpVerification();
   const tempId = localStorage.getItem("tempId");
   const email = localStorage.getItem("email");
 
+  const passwordlessLogin = async () => {
+    mutat({email: email});
+  };
+
   const passwordlessOTPVerification = async (otp: string) => {
-    console.log(
-      "🚀 ~ file: EmailVerification.tsx:82 ~ verifyEmail ~ otp:",
-      otp
-    );
-    // const stringOtp = otp.join("").toString();
-    console.log(
-      "🚀 ~ file: EmailVerification.tsx:87 ~ verifyEmail ~ stringOtp:",
-      otp
-    );
     if (otp.length < 6) return;
     mutate({ otp: otp, tempId: tempId! });
   };
 
+  useEffect(()=>{
+    passwordlessLogin()
+  },[]) // eslint-disable-line react-hooks/exhaustive-deps
+  
   return (
     <div className="relative mb-20">
       {isPending && <LoadingOverlay />}

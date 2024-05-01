@@ -7,7 +7,7 @@ const DisputeResolution = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-[70%] ml-auto px-[5%] pt-[30px]">
+    <div className="px-[5%] pt-[30px]">
       <ArrowLeft
         size={40}
         className="border rounded-[4px] text-[#FD7E14] p-2 mb-4"

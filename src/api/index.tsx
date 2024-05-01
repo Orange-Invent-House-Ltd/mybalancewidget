@@ -1,6 +1,6 @@
 import { privateApi, publicApi } from "./axios";
 
-export const passwordlessLogin = async (data: string) => {
+export const passwordlessLogin = async (data: any) => {
   const res = await publicApi.post("/auth/send-login-otc", data);
   return res.data;
 };
@@ -11,13 +11,24 @@ export const passwordlessOtpVerification = async (data: any) => {
 
 
 // Private APIs
+// Mutate
+export const unlockFunds = async (data: any) => {
+  const res = await privateApi.post("/merchants/customers/unlock-funds", data, {
+    params:{
+      merchant: localStorage.getItem('merchant')
+    }});
+  return res.data;
+};
+
+
 // Queries
 export const getTransactions = async ({search, page, size}:{search?: string; page?: number; size?: number;}) => {
   const res = await privateApi.get("/merchants/customer-transactions", {
     params:{
       search,
       page,
-      size
+      size,
+      merchant: localStorage.getItem('merchant')
     }
   });
   return res.data;
