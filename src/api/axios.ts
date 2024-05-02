@@ -42,7 +42,7 @@ privateApi.interceptors.response.use(
       if (pathname === "/share-escrow-link") {
         return;
       }
-      if (window.location) window.location.href = "/login";
+      if (window.location) window.location.href = "/";
     }
     return Promise.reject(error);
   }

@@ -10,7 +10,7 @@ const Index = () => {
 
   return (
     <Routes>
-      <Route path="unlock-fund" element={<UnlockFund />} />
+      <Route path="unlock-fund/:key" element={<UnlockFund />} />
       <Route path="raise-a-dispute" element={<RaiseADispute />} />
       <Route path="item-details" element={<ItemInformation />} />
       <Route path="dispute-resolution" element={<DisputeResolution />} />

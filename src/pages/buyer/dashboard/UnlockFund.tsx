@@ -5,11 +5,15 @@ import { useEffect, useState } from "react";
 import { useTransactions } from "../../../Hooks/query";
 import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
 import moment from 'moment'
+import { useStrimKey } from "../../../Hooks/mutate";
+import { useParams } from "react-router-dom";
 
 const UnlockFund = () => {
-  localStorage.setItem("session_token", 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0NDgwNzU2LCJpYXQiOjE3MTQ0NzM1NTYsImp0aSI6ImNlY2IwN2MwYzlmMTRiNmM4OGM1OTgwOTM5ZDhjNzkzIiwidXNlcl9pZCI6MTIsImtleSI6bnVsbH0.HuQbEvThV8Sb3TXXq7EXgbm1WxGuIIKpCaARyf2Bymc')
-  localStorage.setItem("email", 'omobayode93@gmail.com');
-  localStorage.setItem("merchant", 'adbc5c96-f8ba-4a01-8383-58bf5241b05c');
+  const { key}:any = useParams();
+  const {mutate} = useStrimKey()
+  // localStorage.setItem("session_token", 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0NjY1OTQwLCJpYXQiOjE3MTQ2NTg3NDAsImp0aSI6IjI1MWZjMzUwZmU2YjQ3MDFhNjk3MTJmOGJjMDkzM2UzIiwidXNlcl9pZCI6MTIsImtleSI6bnVsbH0.zOotcpidjh-W6Rezokzuw0isnJ5W7jU0eesrYHA4N5Y')
+  // localStorage.setItem("email", 'omobayode93@gmail.com');
+  // localStorage.setItem("merchant", 'adbc5c96-f8ba-4a01-8383-58bf5241b05c');
   const today  = moment().format("YYYY-MM-DD");
   
   const email = localStorage.getItem("email");
@@ -53,13 +57,30 @@ const UnlockFund = () => {
     setSelectAll(updatedCheckBoxes.every((checkbox:any) => checkbox.isChecked));
   };
 
+  const strimkey = async() => {
+    mutate({key: key})
+  }
+
   useEffect(() => {
+    // Get the current URL using window.location.href
+    const currentURL = window.location.href;
+    const startString = "unlock-fund/";
+    // Find the index of the starting string
+    const startIndex = currentURL.indexOf(startString);
+    // Calculate the start of the substring (position after "unlock-fund/")
+    const extractStartIndex = startIndex + startString.length;
+    // Extract the substring from the calculated start index to the end of the URL
+    // const key = currentURL.substring(extractStartIndex);
+    
+    // localStorage.setItem("key", extractedValue);
+    strimkey()
+    console.log(key)
     const itemIds = cartDatas.map((cartData:any)=>(
       {...cartData, isChecked: false}
     ))
     setCheckBoxes(itemIds);
     console.log(itemIds)
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
