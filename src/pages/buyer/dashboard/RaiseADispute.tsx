@@ -116,7 +116,8 @@ const RaiseADispute = () => {
           label="Description"
         />
         <div className="w-[350px]">
-          <Button disabled={ today <= cartData?.escrow?.deliveryDate ? true : false }  fullWidth> 
+        {/* disabled={ today <= cartData?.escrow?.deliveryDate ? true : false }  */}
+          <Button fullWidth> 
             submit
           </Button>
         </div>

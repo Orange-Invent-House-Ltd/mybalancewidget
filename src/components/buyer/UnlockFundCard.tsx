@@ -5,7 +5,7 @@ import moment from "moment"
 
 const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
   const [unlockFund, setUnlockFund] = useState(false)
-  const today  = '2024-05-09'
+  const today  = moment().format("YYYY-MM-DD");
   // const [disable, setDisable] = useState(false)
   // today <= cartData?.escrow?.deliveryDate ? setDisable(true) : setDisable(false) 
   let disable;
@@ -30,7 +30,7 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
         <div className="flex gap-6">
         <Link to='/buyer/item-details' state={{cartData: cartData }}><p className="font-medium text-[14px] cursor-pointer hover:underline">View Info</p></Link>
           
-          {disable ? (
+          {!disable ? (
             <p className="font-medium text-[14px] opacity-50 hover:cursor-not-allowed hover:underline">
             Raise a Dispute</p>
           ):(
