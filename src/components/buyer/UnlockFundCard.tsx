@@ -14,7 +14,9 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
   
   return (
     <div className="">
-      {unlockFund && <UnlockFundModal unlockFund = {unlockFund} setUnlockFund={setUnlockFund} cartData={cartData} /> }
+      {unlockFund && (
+        <UnlockFundModal unlockFund = {unlockFund} setUnlockFund={setUnlockFund} cartData={cartData} />
+      )}
       <div className='flex justify-between items-center'>
         <div className='flex items-center gap-6'>
           <input type="checkbox" name='item' value={cartData?.id} checked={cartData?.isChecked} onChange={() => handleSingleCheckBoxChange(cartData?.id)} />

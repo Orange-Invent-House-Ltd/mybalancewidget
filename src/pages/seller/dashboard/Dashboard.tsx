@@ -36,8 +36,6 @@ const Dashboard = () => {
     const extractStartIndex = startIndex + startString.length;
     // Extract the substring from the calculated start index to the end of the URL
     // const key = currentURL.substring(extractStartIndex);
-
-    // localStorage.setItem("key", extractedValue);
     strimkey();
     console.log(key);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -53,7 +51,7 @@ const Dashboard = () => {
         <div className="flex justify-between">
           <div>
             <div className=" font-semibold text-xl">Dashboard</div>
-            <div className=" text-xs mt-2 text-slate-500">An overview</div>
+            <div className=" text-xs mt-2 text-slate-500">An overview.</div>
           </div>
           <button
             className="text-sm text-white bg-[#FD7E14] p-[1px] px-16 rounded-md"

@@ -9,6 +9,7 @@ const UnlockFundModal = ({cartData, setUnlockFund}:any) => {
         cartData?.id
       ]
     })
+    setUnlockFund(false)
   }
 
   return (

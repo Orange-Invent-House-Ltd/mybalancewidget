@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { InvalidateQueryFilters, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { passwordlessLogin, passwordlessOtpVerification, strimKey, unlockFunds} from "../../api";
@@ -85,9 +85,11 @@ export const useStrimKey = () => {
 export const useUnlockFunds = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient()
   return useMutation({
     mutationFn: unlockFunds,
     onSuccess: (data) => {
+      queryClient.invalidateQueries(['transactions'] as InvalidateQueryFilters)
       toast.success(data.message, {
         toastId: 'success1'
       });
@@ -95,7 +97,8 @@ export const useUnlockFunds = () => {
     onError: (error: any) => {
       let resMessage;
       error.response.data.errors === null ? resMessage = error.response.data.message : 
-      resMessage = error.response.data.errors.error[0]
+      error.response.data.error ? resMessage = error.response.data.error :
+      resMessage = error.response.data.errors.error[0] 
       toast.error(resMessage,{
         toastId: 'error1'
       });
