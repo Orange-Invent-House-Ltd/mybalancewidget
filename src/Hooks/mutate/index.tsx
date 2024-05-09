@@ -1,4 +1,8 @@
-import { InvalidateQueryFilters, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  InvalidateQueryFilters,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -94,30 +98,22 @@ export const useStrimKey = () => {
 export const useUnlockFunds = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: unlockFunds,
     onSuccess: (data) => {
-      queryClient.invalidateQueries(['transactions'] as InvalidateQueryFilters)
+      queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
       toast.success(data.message, {
         toastId: "success1",
       });
     },
     onError: (error: any) => {
       let resMessage;
-<<<<<<< HEAD
       error.response.data.errors === null
         ? (resMessage = error.response.data.message)
         : (resMessage = error.response.data.errors.error[0]);
       toast.error(resMessage, {
         toastId: "error1",
-=======
-      error.response.data.errors === null ? resMessage = error.response.data.message : 
-      error.response.data.error ? resMessage = error.response.data.error :
-      resMessage = error.response.data.errors.error[0] 
-      toast.error(resMessage,{
-        toastId: 'error1'
->>>>>>> 6c06a68e9f16e913d86b84306f85c1de065901b6
       });
     },
   });

@@ -130,8 +130,8 @@ function Verification() {
                     type="text"
                     value={otp[index]}
                     onChange={(e) => handleChange(index, e.target.value)}
-                    className="w-[60px] h-[70px] border-4 mr-6 py-2 px-3
-                      focus:outline-none focus:shadow-outline rounded-lg text-[45px] text-gray-600"
+                    className="w-[50px] h-[60px] border-4 mr-4 py-2 px-3
+                      focus:outline-none focus:shadow-outline rounded-lg text-[40px] text-gray-600"
                     maxLength={1}
                     placeholder="3"
                   />
