@@ -71,8 +71,6 @@ const UnlockFund = () => {
     const extractStartIndex = startIndex + startString.length;
     // Extract the substring from the calculated start index to the end of the URL
     // const key = currentURL.substring(extractStartIndex);
-    
-    // localStorage.setItem("key", extractedValue);
     strimkey()
     console.log(key)
     const itemIds = cartDatas.map((cartData:any)=>(
@@ -86,12 +84,12 @@ const UnlockFund = () => {
     <div>
       {isPending && <LoadingOverlay/>}
       <div className="px-[5%] pt-[30px]">
-        <ArrowLeft
+        {/* <ArrowLeft
           size={40}
           className="border rounded-[4px] text-[#FD7E14] p-2 mb-4"
-        />
+        /> */}
         <h2 className="font-bold text-[#303030] text-[23px] ">Unlock Fund</h2>
-        <p className="mb-6">A subtitle goes here</p>
+        <p className="mb-6">Perform transactions such as unlock funds, raise a dispute or view trannsactions details.</p>
 
         <div className="flex items-center justify-between mb-4">
           <input type="checkbox" name='allSelect' checked={selectAll} onChange={handleAllChecked}/>

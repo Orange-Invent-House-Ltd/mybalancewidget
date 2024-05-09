@@ -6,8 +6,10 @@ import { set, useForm } from "react-hook-form"
 import { Button } from "../../../components/reuseable/Buttons"
 import { privateApi } from "../../../api/axios"
 import { toast } from "react-toastify"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import moment from "moment"
+import { useTransactions } from "../../../Hooks/query"
+import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query"
 
 
 const RaiseADispute = () => {
@@ -16,11 +18,18 @@ const RaiseADispute = () => {
   const id = cartData?.id
   const navigate = useNavigate()
   const today  = moment().format("YYYY-MM-DD");
+  const [page, setPage] = useState<number>(1)
+  const {data} = useTransactions({page})
+  const queryClient = useQueryClient()
   const { handleSubmit, control, register, reset, formState:{isSubmitSuccessful} } = useForm();
 
-  const onSubmit = async(data:any) => {
+  const raiseADispute = async(data:any) => {
     try{
       const res = await privateApi.post(`/merchants/customer-transactions/${id}`, data);
+      queryClient.invalidateQueries(['transactions'] as InvalidateQueryFilters)
+      toast.success(res.data.message, {
+        toastId: 'success1'
+      });
 
     }catch(error:any){
       let resMessage;
@@ -59,7 +68,7 @@ const RaiseADispute = () => {
 
       <form
         className="max-w-[720px] space-y-8 relative mb-8"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(raiseADispute)}
       >
         {/* {isLoading && <LoadingOverlay />} */}
         <div className="flex gap-5 w-full items-center flex-col lg:flex-row ">
@@ -107,7 +116,8 @@ const RaiseADispute = () => {
           label="Description"
         />
         <div className="w-[350px]">
-          <Button disabled={ today <= cartData?.escrow?.deliveryDate ? true : false }  fullWidth> 
+        {/* disabled={ today <= cartData?.escrow?.deliveryDate ? true : false }  */}
+          <Button fullWidth> 
             submit
           </Button>
         </div>

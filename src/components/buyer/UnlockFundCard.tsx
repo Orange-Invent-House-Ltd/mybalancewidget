@@ -14,7 +14,9 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
   
   return (
     <div className="">
-      {unlockFund && <UnlockFundModal unlockFund = {unlockFund} setUnlockFund={setUnlockFund} cartData={cartData} /> }
+      {unlockFund && (
+        <UnlockFundModal unlockFund = {unlockFund} setUnlockFund={setUnlockFund} cartData={cartData} />
+      )}
       <div className='flex justify-between items-center'>
         <div className='flex items-center gap-6'>
           <input type="checkbox" name='item' value={cartData?.id} checked={cartData?.isChecked} onChange={() => handleSingleCheckBoxChange(cartData?.id)} />
@@ -28,7 +30,7 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
         <div className="flex gap-6">
         <Link to='/buyer/item-details' state={{cartData: cartData }}><p className="font-medium text-[14px] cursor-pointer hover:underline">View Info</p></Link>
           
-          {disable ? (
+          {!disable ? (
             <p className="font-medium text-[14px] opacity-50 hover:cursor-not-allowed hover:underline">
             Raise a Dispute</p>
           ):(
@@ -41,7 +43,7 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
               Raise a Dispute</p>
             </Link>
           </button> */}
-          <button disabled = { today <= cartData?.escrow?.deliveryDate ? true : false } className="font-medium text-[14px] text-[#FD7E14] cursor-pointer hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+          <button className="font-medium text-[14px] text-[#FD7E14] cursor-pointer hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={()=> setUnlockFund(true)}
           >Unlock Funds </button>
         </div>
