@@ -29,7 +29,7 @@ const Dashboard = () => {
   useEffect(() => {
     // Get the current URL using window.location.href
     const currentURL = window.location.href;
-    const startString = "unlock-fund/";
+    const startString = "dashboard/";
     // Find the index of the starting string
     const startIndex = currentURL.indexOf(startString);
     // Calculate the start of the substring (position after "unlock-fund/")
