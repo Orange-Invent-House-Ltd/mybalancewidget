@@ -9,7 +9,6 @@ export const passwordlessOtpVerification = async (data: any) => {
   return res.data;
 };
 
-
 // Private APIs
 // Mutate
 export const strimKey = async (data: any) => {
@@ -18,23 +17,52 @@ export const strimKey = async (data: any) => {
 };
 export const unlockFunds = async (data: any) => {
   const res = await privateApi.post("/merchants/customers/unlock-funds", data, {
-    params:{
-      merchant: localStorage.getItem('merchant')
-    }});
+    params: {
+      merchant: localStorage.getItem("merchant"),
+    },
+  });
+  return res.data;
+};
+export const initiateWithdrawal = async (data: any) => {
+  const res = await privateApi.post(
+    "/merchants/customers/initiate-withdrawal",
+    data,
+    {
+      params: {
+        merchant: localStorage.getItem("merchant"),
+      },
+    }
+  );
   return res.data;
 };
 
+export const getBanks = async () => {
+  const res = await publicApi.get("/shared/banks");
+  return res.data;
+};
+
+export const LookUpBank = async (data: any) => {
+  const res = await privateApi.post("/shared/lookup/nuban", data);
+  return res.data;
+};
 
 // Queries
-export const getTransactions = async ({search, page, size}:{search?: string; page?: number; size?: number;}) => {
-  const res = await privateApi.get("/merchants/customer-transactions", 
-  {
-    params:{
+export const getTransactions = async ({
+  search,
+  page,
+  size,
+}: {
+  search?: string;
+  page?: number;
+  size?: number;
+}) => {
+  const res = await privateApi.get("/merchants/customer-transactions", {
+    params: {
       search,
       page,
       size,
-      merchant: localStorage.getItem('merchant')
-    }
+      merchant: localStorage.getItem("merchant"),
+    },
   });
   return res.data;
 };
