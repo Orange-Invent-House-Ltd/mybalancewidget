@@ -1,4 +1,4 @@
-import { LucideHelpCircle, ArrowLeft } from "lucide-react";
+import { LucideHelpCircle, ArrowLeft, Rabbit } from "lucide-react";
 import amtwallet from "../../../assets/icon/amtwallet.svg";
 import amtwithdrawn from "../../../assets/icon/amtwithdrawn.svg";
 import shoe from "../../../assets/images/shoe.png";
@@ -8,13 +8,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useProfile, useTransactions } from "../../../Hooks/query";
 import { useStrimKey } from "../../../Hooks/mutate";
+import EmptyState from "../../../components/reuseable/EmptyState";
 
 const Dashboard = () => {
   const { key }: any = useParams();
   const { mutate } = useStrimKey();
 
   const email = localStorage.getItem("email");
-  const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`;
+  const urlWithUserEmail = `https://mybalanceapp.netlify.app/passwordless-otp-verification?email=${email}`;
   const [page, setPage] = useState<number>(1);
   const { data: transactions } = useTransactions({ page });
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ const Dashboard = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="px-[5%] pt-[30px] backdrop-blur-lg bg-opacity-50">
+    <div className="px-[5%] pt-[30px] pb-10 backdrop-blur-lg bg-opacity-50">
       <ArrowLeft
         size={40}
         className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer"
@@ -128,16 +129,28 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      {transactions?.data?.map(
-        ({ name, description, img, price }: any, index: any, arr: any) => (
-          <div className={arr.length - 1 === index ? "" : "mb-4"} key={name}>
-            <ItemsCard
-              name={name}
-              description={description}
-              img={img}
-              price={price}
-            />
-          </div>
+      {transactions?.data?.length === 0 ? (
+        <div className="mt-10">
+          <EmptyState
+            img={
+              <Rabbit size={100} className="" />
+            }
+            title={`No Lock found`}
+            text={`opps, it seems you don't have any transaction yet.`}
+          />
+        </div>
+      ) : (
+        transactions?.data?.map(
+          ({ name, description, img, price }: any, index: any, arr: any) => (
+            <div className={arr.length - 1 === index ? "" : "mb-4"} key={name}>
+              <ItemsCard
+                name={name}
+                description={description}
+                img={img}
+                price={price}
+              />
+            </div>
+          )
         )
       )}
     </div>
