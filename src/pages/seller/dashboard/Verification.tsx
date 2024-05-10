@@ -1,93 +1,34 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft, Minus, TimerReset } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Stepper from "../../../components/seller/Stepper";
 import WithdrawalSuccess from "../../../components/seller/WithdrawalSuccess";
+import { useInitiateOtpVerification } from "../../../Hooks/mutate";
+import OtpInput from "../../../components/reuseable/OtpInput";
+import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
 
 function Verification() {
+  const [otp, setOtp] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
-  const inputRefs = useRef<HTMLInputElement[]>(Array(6).fill(null));
+  const [filledCount, setFilledCount] = useState(0);
 
-  const [otp, setOTP] = useState<string[]>(["", "", "", "", "", ""]); // Initialize OTP state with empty strings
-  const [filledCount, setFilledCount] = useState(0); // Track the count of filled OTP boxes
+  const { mutate, isSuccess } = useInitiateOtpVerification();
+  const tempId = localStorage.getItem("tempId");
+  const email = localStorage.getItem("email");
 
-  // Function to handle changes in OTP input fields
-  const handleChange = (index: number, value: string) => {
-    if (isNaN(parseInt(value)) || value.length > 1) return; // Ensure only one digit is entered
-
-    // Update the OTP state with the new value at the specified index
-    setOTP((prevOTP) => {
-      const newOTP = [...prevOTP];
-      newOTP[index] = value.trim(); // Trim leading and trailing spaces
-      return newOTP;
-    });
-
-    // Move focus to the next input field if available
-    if (value !== "" && index < 5 && inputRefs.current[index + 1]) {
-      inputRefs.current[index + 1].focus(); // Focus on next input
-    } else if (value === "" && index > 0 && inputRefs.current[index - 1]) {
-      inputRefs.current[index - 1].focus(); // Focus on previous input when deleting a value
-    }
-
-    // Update the filled count
-    const newFilledCount = value !== "" ? filledCount + 1 : filledCount - 1;
-    setFilledCount(newFilledCount);
+  const passwordlessOTPVerification = async (otp: string) => {
+    if (otp.length < 6) return;
+    mutate({ otp: otp, tempId: tempId! });
   };
 
   const progressFromWithdraw = location.state?.progress || 0;
-
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      const enteredOTP = otp.join("");
-      console.log("Entered OTP:", enteredOTP);
-      setIsSubmitted(true);
-      console.log("Clicked");
-      navigate("", { state: { progress: 100 } });
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Backspace") {
-        const currentIndex = inputRefs.current.findIndex(
-          (ref) => document.activeElement === ref
-        );
-        if (currentIndex > 0 && otp[currentIndex] === "") {
-          inputRefs.current[currentIndex - 1].focus();
-          setFilledCount(currentIndex - 1);
-        }
-        setOTP((prevOTP) => {
-          const newOTP = [...prevOTP];
-          newOTP[currentIndex] = "";
-          return newOTP;
-        });
-      } else if (e.key === "ArrowLeft" && filledCount > 0) {
-        const currentIndex = inputRefs.current.findIndex(
-          (ref) => document.activeElement === ref
-        );
-        if (currentIndex > 0 && otp[currentIndex - 1] !== "") {
-          inputRefs.current[currentIndex - 1].focus();
-        }
-      } else if (e.key === "ArrowRight" && filledCount < 6) {
-        const currentIndex = inputRefs.current.findIndex(
-          (ref) => document.activeElement === ref
-        );
-        if (currentIndex < 5 && otp[currentIndex + 1] !== "") {
-          inputRefs.current[currentIndex + 1].focus();
-        }
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [otp, filledCount]);
+  const handleOtpChange = (value: string) => {
+    setOtp(value);
+    setFilledCount(value.length);
+  };
 
   return (
     <div className=" w-full ml-auto px-[5%] pt-[30px] relative">
@@ -117,34 +58,22 @@ function Verification() {
             </p>
           </div>
 
-          <form onSubmit={onSubmit}>
-            <div className="mb-4">
-              <div className="flex">
-                {[...Array(6)].map((_, index) => (
-                  <input
-                    key={index}
-                    ref={(el) =>
-                      (inputRefs.current[index] = el as HTMLInputElement)
-                    }
-                    id={`otp-input-${index}`}
-                    type="text"
-                    value={otp[index]}
-                    onChange={(e) => handleChange(index, e.target.value)}
-                    className="w-[50px] h-[60px] border-4 mr-4 py-2 px-3
-                      focus:outline-none focus:shadow-outline rounded-lg text-[40px] text-gray-600"
-                    maxLength={1}
-                    placeholder="3"
-                  />
-                ))}
-              </div>
-            </div>
+          <form>
+            <OtpInput value={otp} valueLength={6} onChange={handleOtpChange} />
             <div className="flex items-center justify-between">
               <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  passwordlessOTPVerification(otp);
+                  setIsSubmitted(true);
+                  // setOtp("");
+                  // setFilledCount(0);
+                }}
                 type="submit"
-                className={`p-3 w-full rounded-lg outline-none text-white font-semibold bg-[#FD7E14] my-6 ${
-                  filledCount === 6 ? " opacity-100" : "opacity-35"
+                className={`p-3 w-full rounded-lg outline-none text-white font-semibold bg-[#FD7E14] my-6 hover:bg-[#c37e46] ${
+                  filledCount === 6 ? "opacity-100" : "opacity-35"
                 }`}
-                disabled={filledCount === 0} // Disable button if no OTP box is filled
+                disabled={filledCount !== 6}
               >
                 Withdraw Now
               </button>
@@ -158,7 +87,7 @@ function Verification() {
           </form>
         </div>
       </div>
-      {isSubmitted && <WithdrawalSuccess />}
+      {!isSuccess ? <LoadingOverlay /> : <WithdrawalSuccess />}
     </div>
   );
 }

@@ -46,6 +46,14 @@ export const LookUpBank = async (data: any) => {
   return res.data;
 };
 
+export const sellerOtpVerification = async (data: any) => {
+  const res = await privateApi.post(
+    "/merchants/customers/confirm-withdrawal",
+    data
+  );
+  return res.data;
+};
+
 // Queries
 export const getTransactions = async ({
   search,
