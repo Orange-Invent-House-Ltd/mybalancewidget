@@ -163,7 +163,7 @@ function Withdraw() {
       <ArrowLeft
         size={40}
         className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer "
-        onClick={() => navigate("/seller/dashboard")}
+        onClick={() => navigate(-1)}
       />
       <h2 className="font-semibold text-[#303030] text-[23px] ">
         Withdraw Funds

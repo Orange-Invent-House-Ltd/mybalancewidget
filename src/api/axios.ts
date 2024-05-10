@@ -38,6 +38,8 @@ privateApi.interceptors.response.use(
       // Handle error refreshing refresh token
       // Log the user out and redirect to login page
       // Example:
+      
+      if (window.location) window.location.href = "/";
     }
     return Promise.reject(error);
   }
