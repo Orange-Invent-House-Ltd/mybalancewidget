@@ -56,11 +56,6 @@ const Dashboard = () => {
 
   return (
     <div className="px-[5%] pt-[30px] pb-10 backdrop-blur-lg bg-opacity-50">
-      <ArrowLeft
-        size={40}
-        className="border rounded-[4px] p-2 mb-4 text-[#FD7E14] bg-[#FFF2E8] cursor-pointer"
-      />
-
       <div className=" mt-7">
         <div className="flex justify-between">
           <div>
