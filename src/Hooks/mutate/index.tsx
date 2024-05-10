@@ -79,7 +79,7 @@ export const useStrimKey = () => {
     onSuccess: (data) => {
       localStorage.setItem("session_token", data.data.token);
       localStorage.setItem("merchant", data.data.merchantId);
-      localStorage.setItem("email", "tosxnthedesigner@gmail.com");
+      localStorage.setItem("email", "tben9889@gmail.com");
       // toast.success(data.message, {
       //   toastId: 'success1'
       // });
