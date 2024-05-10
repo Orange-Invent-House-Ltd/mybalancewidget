@@ -87,7 +87,7 @@ function Verification() {
           </form>
         </div>
       </div>
-      {!isSuccess ? <LoadingOverlay /> : <WithdrawalSuccess />}
+      {/* {!isSuccess ? <LoadingOverlay /> : <WithdrawalSuccess />} */}
     </div>
   );
 }

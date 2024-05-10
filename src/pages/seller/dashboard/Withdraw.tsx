@@ -100,14 +100,13 @@ function Withdraw() {
       subscribeToChannel(withdrawData?.data?.transactionReference);
       //   setIsWithdraw(true);
     }
-  }, [withdrawSuccess]);
+  }, [withdrawSuccess]);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (accNum.length === 10) {
       LookupMutate({ bankCode: code, accountNumber: accNum });
-      // LookupMutate({ bankCode: "044", accountNumber: accNum });
     }
-  }, [accNum, code]);
+  }, [accNum, code]);// eslint-disable-line react-hooks/exhaustive-deps
   //
 
   const {
@@ -242,9 +241,10 @@ function Withdraw() {
                 type="text"
                 id=""
                 readOnly={true}
+                disabled={true}
                 value={LookupData?.data.accountName}
                 placeholder="Account name"
-                className="border-gray-400 border-2 p-3 w-full rounded-lg outline-none text-gray-600 font-semibold"
+                className="hover:cursor-not-allowed border-gray-400 border-2 p-3 w-full rounded-lg outline-none text-gray-600 font-semibold"
               />
               {/* {errors.AccountName && (
                 <p className="text-red-500 text-[15px] font-semibold mt-2 mb-[-8px]">

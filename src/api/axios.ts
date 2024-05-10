@@ -38,11 +38,6 @@ privateApi.interceptors.response.use(
       // Handle error refreshing refresh token
       // Log the user out and redirect to login page
       // Example:
-      const pathname = window.location.pathname;
-      if (pathname === "/share-escrow-link") {
-        return;
-      }
-      if (window.location) window.location.href = "/";
     }
     return Promise.reject(error);
   }

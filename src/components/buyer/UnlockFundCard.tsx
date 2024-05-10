@@ -30,9 +30,9 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
         <div className="flex gap-6">
         <Link to='/buyer/item-details' state={{cartData: cartData }}><p className="font-medium text-[14px] cursor-pointer hover:underline">View Info</p></Link>
           
-          {!disable ? (
-            <p className="font-medium text-[14px] opacity-50 hover:cursor-not-allowed hover:underline">
-            Raise a Dispute</p>
+          {cartData?.escrow?.disputeRaised ? (
+            <p className="font-medium text-[14px] opacity-50 hover:cursor-not-allowed">
+             Dispute Raised</p>
           ):(
             <Link to='/buyer/raise-a-dispute' state={{cartData: cartData }}><p className="font-medium text-[14px] cursor-pointer hover:underline">
               Raise a Dispute</p>
