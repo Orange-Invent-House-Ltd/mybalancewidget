@@ -6,7 +6,7 @@ import ItemsCard from "../../../components/seller/ItemsCard";
 import HeroHeader from "../../../components/reuseable/HeroHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useTransactions } from "../../../Hooks/query";
+import { useProfile, useTransactions } from "../../../Hooks/query";
 import { useStrimKey } from "../../../Hooks/mutate";
 
 const Dashboard = () => {
@@ -18,6 +18,7 @@ const Dashboard = () => {
   const [page, setPage] = useState<number>(1);
   const { data: transactions } = useTransactions({ page });
   const navigate = useNavigate();
+  const {data:profile} = useProfile()
   const goTo = (): void => {
     navigate("/seller/withdraw");
   };
@@ -25,6 +26,7 @@ const Dashboard = () => {
   const strimkey = async () => {
     mutate({ key: key });
   };
+  console.log(profile)
 
   useEffect(() => {
     // Get the current URL using window.location.href

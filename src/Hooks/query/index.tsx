@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBanks, getTransactions } from "../../api";
+import { getProfile, getBanks, getTransactions } from "../../api";
 
 export const useTransactions = ({
   search,
@@ -20,5 +20,11 @@ export const useBanks = () => {
   return useQuery({
     queryKey: ["banks"],
     queryFn: getBanks,
+  });
+};
+export const useProfile= () => {
+  return useQuery({
+    queryKey: ["profile"],
+    queryFn: getProfile,
   });
 };

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useTransactions } from "../../../Hooks/query";
 import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
 import moment from 'moment'
-import { useStrimKey } from "../../../Hooks/mutate";
+import { useStrimKey, useUnlockFunds } from "../../../Hooks/mutate";
 import { useParams } from "react-router-dom";
 
 const UnlockFund = () => {
@@ -24,6 +24,7 @@ const UnlockFund = () => {
   const [selectedItems, setSelectedItems] = useState<any>([])
   const [page, setPage] = useState<number>(1)
   const {data:transactions, isPending} = useTransactions({page}) 
+  const{mutate:unlockFund, isPending:unlockFundIsPending}= useUnlockFunds()
 
   const handleAllChecked = () => {
     if(!selectAll){
@@ -73,12 +74,21 @@ const UnlockFund = () => {
     // const key = currentURL.substring(extractStartIndex);
     strimkey()
     console.log(key)
-    const itemIds = cartDatas.map((cartData:any)=>(
-      {...cartData, isChecked: false}
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(()=>{
+    // CartDatas
+    const itemIds = transactions?.data?.map((cartData:any)=>(
+      // {...cartData, isChecked: false} //complete data with checked status
+      {//only the data id with check status
+        id: cartData.id,
+        isChecked: false
+      }
     ))
     setCheckBoxes(itemIds);
     console.log(itemIds)
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+    console.log('here you go')
+  }, [transactions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>
@@ -115,16 +125,27 @@ const UnlockFund = () => {
                 </div>
               )}
             </div>
-            <button className="rounded-[8px] bg-[#FD7E14] px-[16px] py-[12px] text-[14px] font-bold text-white ">
+            <button disabled={selectedItems.length === 0 ? true : false } 
+              className="rounded-[8px] bg-[#FD7E14] px-[16px] py-[12px] text-[14px] font-bold text-white disabled:cursor-not-allowed"
+              onClick={()=>{
+                // selectedIds is an array
+                const seletedItemsId = selectedItems.map((seletedItem:any)=>(
+                  seletedItem.id
+                ))
+                unlockFund({
+                  transactions: seletedItemsId
+                })
+              }}
+              >
               Unlock Funds
             </button>
           </div>
         </div>
-        {selectedItems.map((value:any)=>(
+        {/* {selectedItems.map((value:any)=>(
           <p>{value.id}</p>
-        ))}
-        {transactions?.data?.map((cartData: any, index: any, arr: any) => (
-          <div className={arr.length - 1 === index ? "" : "mb-4"}>
+        ))} */}
+        {transactions?.data?.map((cartData: any, index: any, arr: any, key:any) => (
+          <div key={key} className={arr.length - 1 === index ? "" : "mb-4"}>
             <UnlockFundCard cartData={cartData} handleSingleCheckBoxChange={handleSingleCheckBoxChange} />
           </div>
         ))}
