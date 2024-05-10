@@ -11,22 +11,6 @@ import { useInitiateWithdrawal, useLookUpBank } from "../../../Hooks/mutate";
 import formatToNairaCurrency from "../../../util/formatNumber";
 import { useBanks } from "../../../Hooks/query";
 
-// type FormFields = {
-//   bankName: string;
-//   AccountNumber: string;
-//   AccountName: string;
-//   Amount: number;
-// };
-
-// const schema = z.object({
-//   bankName: z.string().min(3, "Bank name must be at least 3 characters"),
-//   AccountNumber: z
-//     .string()
-//     .min(10, "Account number must be at least 10 characters"),
-//   // AccountName: z.string().min(3,"Account name must be at least 3 characters"),
-//   Amount: z.number().min(5, "Amount must be at least 5"),
-// });
-
 function Withdraw() {
   const [accNum, setAccNum] = useState("");
   const [code, setCode] = useState("");
@@ -34,11 +18,15 @@ function Withdraw() {
   const [isWithdraw, setIsWithdraw] = useState(false);
   const [modalMessageDescription, setModalMessageDescription] = useState("");
   const [pusherLoading, setPusherLoading] = useState(false);
-
-  // const { mutate: initiateWithdrawal } = useInitiateWithdrawal();
+  const merchantId = localStorage.getItem('merchant')
   const navigate = useNavigate();
-  //
-  //
+
+  const {mutate: withdrawMutate,
+    isPending: withdrawLoading,
+    isSuccess: withdrawSuccess,
+    data: withdrawData,
+  } = useInitiateWithdrawal();
+
   const subscribeToChannel = (txReference: any) => {
     const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
       cluster: "mt1",
@@ -74,15 +62,10 @@ function Withdraw() {
     });
   };
   //
+
+  
   //
-  const {
-    mutate: withdrawMutate,
-    // isLoading: withdrawLoading,
-    isSuccess: withdrawSuccess,
-    data: withdrawData,
-  } = useInitiateWithdrawal();
-  //
-  //
+
   const { data: banks, isLoading: bankIsLoading } = useBanks();
   const {
     data: LookupData,
@@ -114,41 +97,29 @@ function Withdraw() {
     handleSubmit: handleSubmitWithdraw,
     formState: { errors, isSubmitting },
   } = useForm();
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   control: controlWithdraw,
-  //   formState: { errors, isSubmitting },
-  // } = useForm<FormFields>({
-  //   resolver: zodResolver(schema),
-  // });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Define onSubmitWrapper to bind form submission event
   const onSubmitWrapper = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    handleSubmitWithdraw(onSubmit)(e);
+    handleSubmitWithdraw(handleInitiateWithdrawal)(e);
   };
 
   // Handle form submission asynchronously in onSubmit function
-  const onSubmit = async (data: any) => {
+  const handleInitiateWithdrawal = async (data: any) => {
     try {
       setIsSubmitted(true);
       const { bankName, AccountNumber, AccountName, Amount } = data;
       console.log(data);
-      const merchantId = "b5bf0e52-32e8-4c07-b1ea-734e55969af7";
-
       // Call withdrawMutate asynchronously
-      const response = withdrawMutate({
+      withdrawMutate({
         // ...data,
         accountNumber: accNum,
         bankCode: code,
         amount: Amount,
         merchantId: merchantId,
       });
-
-      console.log("Response:", response);
 
       // Handle success, navigate to next step or show success message
       navigate("/seller/otp", { state: { progress: 100 } });

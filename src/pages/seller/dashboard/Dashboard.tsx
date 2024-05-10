@@ -25,20 +25,9 @@ const Dashboard = () => {
     navigate("/seller/withdraw");
   };
 
-  // const { data, isLoading, isError } = useProfile();
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (isError) {
-  //   return <div>Error fetching profile data</div>;
-  // }
-  // const { walletBalance, withdrawnAmount } = profile;
-
   const strimkey = async () => {
     mutate({ key: key });
   };
-  console.log(profile);
 
   useEffect(() => {
     // Get the current URL using window.location.href
@@ -51,7 +40,7 @@ const Dashboard = () => {
     // Extract the substring from the calculated start index to the end of the URL
     // const key = currentURL.substring(extractStartIndex);
     strimkey();
-    console.log(key);
+    console.log(`key : ${key}`);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

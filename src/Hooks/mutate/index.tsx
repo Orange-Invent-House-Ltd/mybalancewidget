@@ -77,9 +77,9 @@ export const useStrimKey = () => {
   return useMutation({
     mutationFn: strimKey,
     onSuccess: (data) => {
-      localStorage.setItem("session_token", data.data.token);
-      localStorage.setItem("merchant", data.data.merchantId);
-      localStorage.setItem("email", "tben9889@gmail.com");
+      localStorage.setItem("session_token", data?.data?.token);
+      localStorage.setItem("merchant", data?.data?.merchantId);
+      localStorage.setItem("email", data?.data?.customerEmail);
       // toast.success(data.message, {
       //   toastId: 'success1'
       // });
