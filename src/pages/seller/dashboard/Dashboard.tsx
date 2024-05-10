@@ -18,15 +18,25 @@ const Dashboard = () => {
   const [page, setPage] = useState<number>(1);
   const { data: transactions } = useTransactions({ page });
   const navigate = useNavigate();
-  const {data:profile} = useProfile()
+  const { data: profile } = useProfile();
   const goTo = (): void => {
     navigate("/seller/withdraw");
   };
 
+  const { data, isLoading, isError } = useProfile();
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (isError) {
+  //   return <div>Error fetching profile data</div>;
+  // }
+  const { walletBalance, withdrawnAmount } = data;
+
   const strimkey = async () => {
     mutate({ key: key });
   };
-  console.log(profile)
+  console.log(profile);
 
   useEffect(() => {
     // Get the current URL using window.location.href
@@ -67,7 +77,7 @@ const Dashboard = () => {
           <div className="flex flex-auto justify-between shadow-lg  rounded-[25px] p-9 mt-[2rem] border border-slate-100">
             <div>
               <p className="text-xs text-slate-500 mb-2">Amount in wallet</p>
-              <div className="font-semibold text-lg">₦550,500.90</div>
+              <div className="font-semibold text-lg">₦{walletBalance}</div>
               <p className="text-xs text-slate-500 mt-5">since last month</p>
             </div>
             <div>
@@ -77,7 +87,7 @@ const Dashboard = () => {
           <div className="flex flex-auto justify-between shadow-lg  rounded-[25px] p-9 mt-[2rem] border border-slate-100">
             <div>
               <p className="text-xs text-slate-500 mb-2">Amount withdrawn</p>
-              <div className="font-semibold text-lg">₦200,399.00</div>
+              <div className="font-semibold text-lg">₦{withdrawnAmount}</div>
               <p className="text-xs text-slate-500 mt-5">since last month</p>
             </div>
             <div>

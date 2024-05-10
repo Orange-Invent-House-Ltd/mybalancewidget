@@ -15,6 +15,7 @@ export const useTransactions = ({
     queryFn: () => getTransactions({ search, page, size }),
   });
 };
+7;
 
 export const useBanks = () => {
   return useQuery({
@@ -22,7 +23,8 @@ export const useBanks = () => {
     queryFn: getBanks,
   });
 };
-export const useProfile= () => {
+
+export const useProfile = () => {
   return useQuery({
     queryKey: ["profile"],
     queryFn: getProfile,

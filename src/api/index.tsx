@@ -74,7 +74,8 @@ export const getTransactions = async ({
   });
   return res.data;
 };
+
 export const getProfile = async () => {
-  const res = await privateApi.get(`/auth/profile`);
+  const res = await privateApi.get("/auth/profile");
   return res.data.data;
 };
