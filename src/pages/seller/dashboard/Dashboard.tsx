@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useProfile, useTransactions } from "../../../Hooks/query";
 import { useStrimKey } from "../../../Hooks/mutate";
 import EmptyState from "../../../components/reuseable/EmptyState";
+import FormatNumberWithCommas from "../../../components/reuseable/FormatNumberWithCommas";
 
 const Dashboard = () => {
   const { key }: any = useParams();
@@ -24,7 +25,7 @@ const Dashboard = () => {
     navigate("/seller/withdraw");
   };
 
-  const { data, isLoading, isError } = useProfile();
+  // const { data, isLoading, isError } = useProfile();
   // if (isLoading) {
   //   return <div>Loading...</div>;
   // }
@@ -32,7 +33,7 @@ const Dashboard = () => {
   // if (isError) {
   //   return <div>Error fetching profile data</div>;
   // }
-  const { walletBalance, withdrawnAmount } = data;
+  // const { walletBalance, withdrawnAmount } = profile;
 
   const strimkey = async () => {
     mutate({ key: key });
@@ -78,7 +79,7 @@ const Dashboard = () => {
           <div className="flex flex-auto justify-between shadow-lg  rounded-[25px] p-9 mt-[2rem] border border-slate-100">
             <div>
               <p className="text-xs text-slate-500 mb-2">Amount in wallet</p>
-              <div className="font-semibold text-lg">₦{walletBalance}</div>
+              <div className="font-semibold text-lg">₦ <FormatNumberWithCommas number = {profile?.walletBalance} /></div>
               <p className="text-xs text-slate-500 mt-5">since last month</p>
             </div>
             <div>
@@ -88,7 +89,7 @@ const Dashboard = () => {
           <div className="flex flex-auto justify-between shadow-lg  rounded-[25px] p-9 mt-[2rem] border border-slate-100">
             <div>
               <p className="text-xs text-slate-500 mb-2">Amount withdrawn</p>
-              <div className="font-semibold text-lg">₦{withdrawnAmount}</div>
+              <div className="font-semibold text-lg">₦ <FormatNumberWithCommas number = {profile?.withdrawnAmount} /></div>
               <p className="text-xs text-slate-500 mt-5">since last month</p>
             </div>
             <div>
