@@ -10,6 +10,7 @@ import {
   initiateWithdrawal,
   passwordlessLogin,
   passwordlessOtpVerification,
+  sellerOtpVerification,
   strimKey,
   unlockFunds,
 } from "../../api";
@@ -124,6 +125,7 @@ export const useInitiateWithdrawal = () => {
   return useMutation({
     mutationFn: initiateWithdrawal,
     onSuccess: (data) => {
+      localStorage.setItem("tempId", data.data.tempId);
       toast.success(data.message, {
         toastId: "success1",
       });
@@ -139,6 +141,31 @@ export const useInitiateWithdrawal = () => {
     },
   });
 };
+
+export const useInitiateOtpVerification = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  return useMutation({
+    mutationFn: sellerOtpVerification,
+    onSuccess: (data) => {
+      localStorage.setItem("session_token", data.data.token);
+      localStorage.setItem("email", data.data.email);
+      toast.success(data.message, {
+        toastId: "success1",
+      });
+    },
+    onError: (error: any) => {
+      let resMessage;
+      error.response.data.errors === null
+        ? (resMessage = error.response.data.message)
+        : (resMessage = error.response.data.errors.error[0]);
+      toast.error(resMessage, {
+        toastId: "error1",
+      });
+    },
+  });
+};
+
 export const useLookUpBank = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();

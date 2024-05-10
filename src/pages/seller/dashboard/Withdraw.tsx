@@ -277,7 +277,7 @@ function Withdraw() {
               type="submit"
               className="p-3 w-full rounded-lg outline-none text-white font-semibold bg-[#FD7E14] my-6"
             >
-              {isSubmitting ? "loading..." : "Continue"}
+              {pusherLoading ? "loading..." : "Continue"}
             </button>
           </form>
         </div>

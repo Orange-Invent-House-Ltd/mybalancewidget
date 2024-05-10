@@ -128,18 +128,18 @@ export default function OtpInput({ value, valueLength, onChange }: Props) {
     <div className="mb-6 flex justify-start items-center space-x-2">
       {valueItems.map((digit, idx) => (
         <input
+          placeholder="3"
           key={idx}
           type="text"
           inputMode="numeric"
           autoComplete="one-time-code"
           pattern="\d{1}"
           maxLength={valueLength}
-          className="w-[50px] h-[50px] rounded bg-transparent text-center font-semibold text-xl spin-button-none outline-none border border-[#cccccc] focus:border-gray-700 text-primary transition"
+          className="w-[55px] h-[60px] rounded bg-transparent text-center font-semibold text-xl spin-button-none outline-none border border-[#cccccc] focus:border-gray-700 text-primary text-[40px] py-4 transition"
           value={digit}
           onChange={(e) => inputOnChange(e, idx)}
           onKeyDown={inputOnKeyDown}
           onFocus={inputOnFocus}
-          
         />
       ))}
     </div>

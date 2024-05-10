@@ -5,7 +5,7 @@ function WithdrawalSuccess() {
   const navigate = useNavigate();
 
   return (
-    <div className="absolute left-[24%] top-[50%] z-20 w-[60%] h-auto shadow-lg bg-white p-[30px] rounded-xl transition-all">
+    <div className="absolute left-[20%] top-[40%] z-20 w-[60%] h-auto shadow-lg bg-white p-[30px] rounded-xl transition-all">
       <div className="flex justify-end ">
         <X
           size={30}
