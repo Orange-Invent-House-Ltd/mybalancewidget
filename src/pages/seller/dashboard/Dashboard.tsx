@@ -29,15 +29,40 @@ const Dashboard = () => {
     navigate("/seller/withdraw");
   };
 
-  // const { data, isLoading, isError } = useProfile();
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  const handleAllChecked = () => {
+    if (!selectAll) {
+      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
+        return { ...checkbox, isChecked: !selectAll };
+      });
+      setCheckBoxes(updatedCheckBoxes);
+      setSelectedItems(updatedCheckBoxes);
+      setSelectAll(!selectAll);
+    } else {
+      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
+        return { ...checkbox, isChecked: !selectAll };
+      });
+      setCheckBoxes(updatedCheckBoxes);
+      setSelectAll(!selectAll);
+    }
+  };
 
-  // if (isError) {
-  //   return <div>Error fetching profile data</div>;
-  // }
-  // const { walletBalance, withdrawnAmount } = profile;
+  const handleSingleCheckBoxChange = (id: any) => {
+    const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
+      if (checkbox.id === id) {
+        return { ...checkbox, isChecked: !checkbox.isChecked };
+      }
+      return checkbox;
+    });
+    setCheckBoxes(updatedCheckBoxes);
+    setSelectedItems(
+      updatedCheckBoxes.filter(
+        (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
+      )
+    );
+    setSelectAll(
+      updatedCheckBoxes.every((checkbox: any) => checkbox.isChecked)
+    );
+  };
 
   const strimkey = async () => {
     mutate({ key: key });
@@ -56,24 +81,6 @@ const Dashboard = () => {
     strimkey();
     console.log(key);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const handleAllChecked = () => {
-    if (!selectAll) {
-      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
-        return { ...checkbox, isChecked: !selectAll };
-      });
-      setCheckBoxes(updatedCheckBoxes);
-      setSelectedItems(updatedCheckBoxes);
-      setSelectAll(!selectAll);
-    } else {
-      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
-        return { ...checkbox, isChecked: !selectAll };
-      });
-      setCheckBoxes(updatedCheckBoxes);
-      setSelectedItems([]);
-      setSelectAll(!selectAll);
-    }
-  };
 
   return (
     <div>
