@@ -15,7 +15,7 @@ const App: React.FC = () => {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/" element={<Home />} />
         <Route path="/buyer/*" element={<Buyer />} />
         <Route path="/seller/*" element={<Seller />} />
         <Route path="/auth" element={<AuthLayout />} >
