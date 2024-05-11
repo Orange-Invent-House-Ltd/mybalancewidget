@@ -15,7 +15,6 @@ export const useTransactions = ({
     queryFn: () => getTransactions({ search, page, size }),
   });
 };
-7;
 
 export const useBanks = () => {
   return useQuery({
