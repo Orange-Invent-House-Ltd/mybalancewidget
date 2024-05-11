@@ -57,6 +57,24 @@ const Dashboard = () => {
     console.log(key);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const handleAllChecked = () => {
+    if (!selectAll) {
+      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
+        return { ...checkbox, isChecked: !selectAll };
+      });
+      setCheckBoxes(updatedCheckBoxes);
+      setSelectedItems(updatedCheckBoxes);
+      setSelectAll(!selectAll);
+    } else {
+      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
+        return { ...checkbox, isChecked: !selectAll };
+      });
+      setCheckBoxes(updatedCheckBoxes);
+      setSelectedItems([]);
+      setSelectAll(!selectAll);
+    }
+  };
+
   return (
     <div>
       {isPending && <LoadingOverlay />}
