@@ -92,6 +92,8 @@ export const useStrimKey = () => {
       toast.error(resMessage, {
         toastId: "error1",
       });
+      navigate('/')
+      localStorage.clear()
     },
   });
 };

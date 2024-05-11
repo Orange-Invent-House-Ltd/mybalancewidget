@@ -21,6 +21,7 @@ const UnlockFund = () => {
   const urlWithUserEmail = `https://mybalanceapp.netlify.app/passwordless-otp-verification?email=${email}`;
   const [hover, setHover] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
+  const [allSelected, setAllSelected] = useState(false)
   const [checkBoxes, setCheckBoxes] = useState<any>([]);
   const [selectedItems, setSelectedItems] = useState<any>([]);
   const [unlockAll, setUnlockAll] = useState(false)
@@ -29,28 +30,13 @@ const UnlockFund = () => {
   const { mutate: unlockFund, isPending: unlockFundIsPending } =
     useUnlockFunds();
 
-  const handleAllChecked = () => {
-    if (!selectAll) {
-      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
-        return { ...checkbox, isChecked: !selectAll };
-      });
-      setCheckBoxes(updatedCheckBoxes);
-      setSelectedItems(updatedCheckBoxes);
-      setSelectAll(!selectAll);
-    } else {
-      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
-        return { ...checkbox, isChecked: !selectAll };
-      });
-      setCheckBoxes(updatedCheckBoxes);
-      setSelectedItems([]);
-      setSelectAll(!selectAll);
-    }
-  };
-
+  // update check boxes array : CheckBoxes has the data and isChecked status that is either tru or false
+  // selectedItems is an array of data and isChecked status that is true - items that has been checked
+  // set isChecked to true for every checked boxes and VICE VERSA 
   const handleSingleCheckBoxChange = (id: any) => {
     const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
       if (checkbox.id === id) {
-        return { ...checkbox, isChecked: !checkbox.isChecked };
+        return { ...checkbox, isChecked: !checkbox.isChecked }; //if isChecked is false set it to true, if it is true set it to false
       }
       return checkbox;
     });
@@ -60,11 +46,42 @@ const UnlockFund = () => {
         (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
       )
     );
-    setSelectAll(
-      updatedCheckBoxes.every((checkbox: any) => checkbox.isChecked)
+    // setSelectAll(
+    //   //set SelectAll to true if all checkboxes are checked and false otherwise.
+    //   updatedCheckBoxes.every((checkbox: any) => checkbox.isChecked) 
+    // );
+    setAllSelected(
+      //set AllSelected to true if all checkboxes are checked and false otherwise.
+      updatedCheckBoxes.every((checkbox: any) => checkbox.isChecked) 
     );
   };
 
+  const handleAllChecked = () => {
+    if (selectAll) {
+      // alert('All')
+      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
+        return { ...checkbox, isChecked: selectAll };
+      });
+      setCheckBoxes(updatedCheckBoxes);
+      setSelectedItems(updatedCheckBoxes);
+      // setSelectAll(!selectAll);
+    } else {
+      // alert('not all')
+      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
+        return { ...checkbox, isChecked: selectAll }; //there is a problem here
+      });
+      setCheckBoxes(updatedCheckBoxes);
+      // setSelectedItems([]);
+      setSelectedItems(
+        updatedCheckBoxes.filter(
+          (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
+        )
+      );
+      setAllSelected(false); // set all selected to false when selectAll is false
+    }
+  };
+
+  
   const strimkey = async () => {
     mutate({ key: key });
   };
@@ -86,26 +103,26 @@ const UnlockFund = () => {
   useEffect(() => {
     // CartDatas
     const itemIds = transactions?.data?.map((cartData: any) =>
-      // {...cartData, isChecked: false} //complete data with checked status
-      ({
-        //only the data id with check status
-        id: cartData.id,
-        isChecked: false,
-      })
+      ({...cartData, isChecked: false} )//complete data with checked status
+      // ({
+      //   //only the data id with check status
+      //   id: cartData.id,
+      //   isChecked: false,
+      // })
     );
     setCheckBoxes(itemIds);
     console.log(itemIds);
     console.log("here you go");
   }, [transactions]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+      handleAllChecked()
+  }, [selectAll]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div>
       {isPending && <LoadingOverlay />}
       <div className="px-[5%] pt-[30px]">
-        {/* <ArrowLeft
-          size={40}
-          className="border rounded-[4px] text-[#FD7E14] p-2 mb-4"
-        /> */}
         <h2 className="font-bold text-[#303030] text-[23px] ">Unlock Fund</h2>
         <p className="mb-6">
           Perform transactions such as unlock funds, raise a dispute or view
@@ -116,8 +133,10 @@ const UnlockFund = () => {
           <input
             type="checkbox"
             name="allSelect"
-            checked={selectAll}
-            onChange={handleAllChecked}
+            checked={selectAll || allSelected}
+            onChange={() => {
+              setSelectAll((prev) => !prev)
+            }}
           />
           <div className="flex items-center gap-x-4 cursor-pointer">
             <div className="relative">
@@ -149,7 +168,6 @@ const UnlockFund = () => {
             <button
               disabled={selectedItems.length === 0 ? true : false}
               className="rounded-[8px] bg-[#FD7E14] px-[16px] py-[12px] text-[14px] font-bold text-white disabled:cursor-not-allowed"
-              
               onClick={() => setUnlockAll(true)}
             >
               Unlock Funds
@@ -162,22 +180,24 @@ const UnlockFund = () => {
                     <h2 className="text-neutral-950 text-[18px] font-semibold">
                       Unlock Funds!
                     </h2>
-                    <div className='mt-4 mb-10 leading-tight '>Before proceeding, please confirm if you wish to unlock the funds for all your funds with transaction id
-                      { selectedItems.map((seletedItem: any) => (
-                        <p>{seletedItem.id}</p>
-                      ))}
+                    <div className='mt-4 mb-10 leading-tight '>Before proceeding, please confirm if you wish to unlock the funds for your fund(s) with transaction id
+                      <div className="mt-2 flex flex-col gap-y-2">
+                        { selectedItems.map((seletedItem:any, key:any) => (
+                          <p key={key}  className="font-bold">{seletedItem?.id}</p>
+                        ))}
+                      </div>
                     </div>
                     <button className="w-full rounded-md border border-[#101828] py-3 px-4 capitalize font-bold cursor-pointer transition-all mb-3"
                       onClick={()=>setUnlockAll(false)}
                     >Cancel</button>
                     <button className="w-full bg-[#039855] text-white rounded-md py-3 px-4 capitalize font-bold cursor-pointer transition-all mb-6"
                       onClick={() => {
-                        // selectedIds is an array
-                        const seletedItemsId = selectedItems.map(
+                        // selectedIds is an array of selected item ids
+                        const seletedItemsIds= selectedItems.map(
                           (seletedItem: any) => seletedItem.id
                         );
                         unlockFund({
-                          transactions: seletedItemsId,
+                          transactions: seletedItemsIds,
                         });
                       }}
                     >
@@ -190,7 +210,7 @@ const UnlockFund = () => {
           </div>
         </div>
         {/* {selectedItems.map((value:any)=>(
-          <p>{value.id}</p>
+          <p key={value.id}>{value.id}</p>
         ))} */}
         {transactions?.data?.length === 0 ? (
           <div className="mt-10">
@@ -203,7 +223,7 @@ const UnlockFund = () => {
             />
           </div>
         ) : (
-          transactions?.data?.map(
+          checkBoxes.map(
             (cartData: any, index: any, arr: any, key: any) => (
               <div key={key} className={arr.length - 1 === index ? "" : "mb-4"}>
                 <UnlockFundCard

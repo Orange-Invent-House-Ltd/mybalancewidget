@@ -1,4 +1,6 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 //create an Axios instance with a config to prevent us from repeating these options in every request
 
 // const BASE_URL = "https://staging-api.mybalanceapp.com/v1";
@@ -33,13 +35,18 @@ privateApi.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem("session_token");
+    const navigate = useNavigate()
+    if (error.response?.status === 401 || error.response?.message === 'Authentication credentials were not provided.') {
+      localStorage.clear();
       // Handle error refreshing refresh token
       // Log the user out and redirect to login page
       // Example:
+      navigate('/')
+      console.log(error.response?.message)
       
-      if (window.location) window.location.href = "/";
+      toast.error('Token expire reopen the modal',{
+        toastId: 'error1'
+      })
     }
     return Promise.reject(error);
   }
