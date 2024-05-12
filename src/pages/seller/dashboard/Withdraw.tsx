@@ -1,11 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Stepper from "../../../components/seller/Stepper";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Pusher from "pusher-js";
+
 
 import { useInitiateWithdrawal, useLookUpBank } from "../../../Hooks/mutate";
 import formatToNairaCurrency from "../../../util/formatNumber";
@@ -21,50 +19,12 @@ function Withdraw() {
   const merchantId = localStorage.getItem('merchant')
   const navigate = useNavigate();
 
-  const {mutate: withdrawMutate,
+  const {mutate: initiateWithdrawMutate,
     isPending: withdrawLoading,
     isSuccess: withdrawSuccess,
     data: withdrawData,
   } = useInitiateWithdrawal();
 
-  const subscribeToChannel = (txReference: any) => {
-    const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
-      cluster: "mt1",
-    });
-
-    const channelName = `WALLET_WITHDRAWAL_${txReference}`;
-    const channel = pusher.subscribe(channelName);
-    setPusherLoading(true);
-    console.log("STARTING CONNECTION", channelName);
-
-    channel.bind("WALLET_WITHDRAWAL_SUCCESS", (data: any) => {
-      console.log("WALLET_WITHDRAWAL_SUCCESS", data);
-      setModalMessageTitle(`${formatToNairaCurrency(data.amount)} Withdrawn!`);
-      setModalMessageDescription(
-        `Weldone! You have successfully withdrawn ${formatToNairaCurrency(
-          data.amount
-        )}. You should receive a credit alert in seconds`
-      );
-      //   setModalMessageAmount(data.amount);
-      setPusherLoading(false);
-      setIsWithdraw(true);
-    });
-
-    channel.bind("WALLET_WITHDRAWAL_FAILURE", (data: any) => {
-      console.log("WALLET_WITHDRAWAL_FAILURE", data);
-      setModalMessageTitle("Withdrawal failed");
-      setModalMessageDescription(`Oops, something went wrong`);
-
-      setPusherLoading(false);
-
-      //   setModalMessageAmount(data.amount);
-      //   setIsWithdraw(true);
-    });
-  };
-  //
-
-  
-  //
 
   const { data: banks, isLoading: bankIsLoading } = useBanks();
   const {
@@ -72,25 +32,6 @@ function Withdraw() {
     mutate: LookupMutate,
     // isLoading: LookupIsLoading,
   } = useLookUpBank();
-
-  //
-  useEffect(() => {
-    if (withdrawSuccess) {
-      console.log(
-        "🚀 ~ file: WithdrawMoney.tsx:77 ~ useEffect ~ withdrawData:",
-        withdrawData
-      );
-      subscribeToChannel(withdrawData?.data?.transactionReference);
-      //   setIsWithdraw(true);
-    }
-  }, [withdrawSuccess]);// eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (accNum.length === 10) {
-      LookupMutate({ bankCode: code, accountNumber: accNum });
-    }
-  }, [accNum, code]);// eslint-disable-line react-hooks/exhaustive-deps
-  //
 
   const {
     register,
@@ -112,23 +53,27 @@ function Withdraw() {
       setIsSubmitted(true);
       const { bankName, AccountNumber, AccountName, Amount } = data;
       console.log(data);
-      // Call withdrawMutate asynchronously
-      withdrawMutate({
+      initiateWithdrawMutate({
         // ...data,
         accountNumber: accNum,
         bankCode: code,
         amount: Amount,
         merchantId: merchantId,
       });
-
       // Handle success, navigate to next step or show success message
       navigate("/seller/otp", { state: { progress: 100 } });
     } catch (error) {
-      console.error(error);
+      console.error(error)
       // Handle error, display error message or retry logic
     }
   };
 
+  useEffect(() => {
+    if (accNum.length === 10) {
+      LookupMutate({ bankCode: code, accountNumber: accNum });
+    }
+  }, [accNum, code]);// eslint-disable-line react-hooks/exhaustive-deps
+  
   return (
     <div className="w-full px-[5%] pt-[30px]">
       <ArrowLeft

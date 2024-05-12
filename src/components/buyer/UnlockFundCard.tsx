@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import UnlockFundModal from "./UnlockFundModal"
 import moment from "moment"
+import FormatNumberWithCommas from "../reuseable/FormatNumberWithCommas"
 
 const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
   const [unlockFund, setUnlockFund] = useState(false)
@@ -24,7 +25,10 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
           <div>
             <h2 className='font-medium mb-2'>{cartData?.meta?.title}</h2>
             <p>{cartData?.meta?.description}</p>
-            <p className=" text-[13px]"><span>Delivery date: {cartData?.escrow?.deliveryDate}</span> <span className="ml-4 font-bold">₦{cartData?.amount}</span></p>
+            <p className=" text-[13px]">
+              <span>Delivery date: <span className="font-semiold">{cartData?.escrow?.deliveryDate}</span></span> 
+              <span className="ml-4 font-bold">₦ <FormatNumberWithCommas number={cartData?.amount}/></span>
+            </p>
           </div>
         </div>
         <div className="flex gap-6">

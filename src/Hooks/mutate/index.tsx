@@ -164,6 +164,15 @@ export const useInitiateOtpVerification = () => {
       toast.error(resMessage, {
         toastId: "error1",
       });
+      if (error.response?.data?.message == 'Authentication credentials were not provided.') {
+        //place your reentry code
+        localStorage.clear();
+        navigate('/')
+        console.log(error.response?.status)
+        toast.error('Token expire reopen the modal',{
+          toastId: 'error1'
+        })
+      }
     },
   });
 };

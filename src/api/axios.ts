@@ -30,25 +30,37 @@ privateApi.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-privateApi.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
+privateApi.interceptors.response.use(response => {
+  return response;
+  }, error => {
     const navigate = useNavigate()
-    if (error.response?.status === 401 || error.response?.message === 'Authentication credentials were not provided.') {
-      localStorage.clear();
-      // Handle error refreshing refresh token
-      // Log the user out and redirect to login page
-      // Example:
-      navigate('/')
-      console.log(error.response?.message)
-      
-      toast.error('Token expire reopen the modal',{
-        toastId: 'error1'
-      })
-    }
-    return Promise.reject(error);
+  if (error.response.data.message == 'Authentication credentials were not provided.') {
+    //place your reentry code
+    localStorage.clear();
+    navigate('/')
+    console.log(error.response?.status)
+    toast.error('Token expire reopen the modal',{
+      toastId: 'error1'
+    })
   }
-);
+  return error;
+});
+
+// privateApi.interceptors.response.use(
+//   (response) => {
+//     return response;
+//   },
+//   async (error) => {
+//     const navigate = useNavigate()
+//     if (error.response?.status === 401) {
+//       localStorage.clear();
+//       navigate('/')
+//       console.log(error.response?.status)
+//       toast.error('Token expire reopen the modal',{
+//         toastId: 'error1'
+//       })
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 // publicApi.defaults.headers.common["Content-Type"] = "application/json";
