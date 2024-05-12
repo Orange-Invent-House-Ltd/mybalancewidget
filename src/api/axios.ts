@@ -24,43 +24,25 @@ privateApi.interceptors.request.use(
         config.headers.Authorization = `Bearer ${sessionToken}`;
       }
     }
-
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-privateApi.interceptors.response.use(response => {
-  return response;
-  }, error => {
+privateApi.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
     const navigate = useNavigate()
-  if (error.response.data.message == 'Authentication credentials were not provided.') {
-    //place your reentry code
-    localStorage.clear();
-    navigate('/')
-    console.log(error.response?.status)
-    toast.error('Token expire reopen the modal',{
-      toastId: 'error1'
-    })
+    if (error.response?.status === 401) {
+      localStorage.clear();
+      navigate('/')
+      console.log(error.response?.status)
+      toast.error('Token expire reopen the modal',{
+        toastId: 'error1'
+      })
+    }
+    return Promise.reject(error);
   }
-  return error;
-});
-
-// privateApi.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   },
-//   async (error) => {
-//     const navigate = useNavigate()
-//     if (error.response?.status === 401) {
-//       localStorage.clear();
-//       navigate('/')
-//       console.log(error.response?.status)
-//       toast.error('Token expire reopen the modal',{
-//         toastId: 'error1'
-//       })
-//     }
-//     return Promise.reject(error);
-//   }
-// );
-// publicApi.defaults.headers.common["Content-Type"] = "application/json";
+);
