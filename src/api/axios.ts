@@ -24,7 +24,6 @@ privateApi.interceptors.request.use(
         config.headers.Authorization = `Bearer ${sessionToken}`;
       }
     }
-
     return config;
   },
   (error) => Promise.reject(error)
@@ -36,14 +35,10 @@ privateApi.interceptors.response.use(
   },
   async (error) => {
     const navigate = useNavigate()
-    if (error.response?.status === 401 || error.response?.message === 'Authentication credentials were not provided.') {
+    if (error.response?.status === 401) {
       localStorage.clear();
-      // Handle error refreshing refresh token
-      // Log the user out and redirect to login page
-      // Example:
       navigate('/')
-      console.log(error.response?.message)
-      
+      console.log(error.response?.status)
       toast.error('Token expire reopen the modal',{
         toastId: 'error1'
       })
@@ -51,4 +46,3 @@ privateApi.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-// publicApi.defaults.headers.common["Content-Type"] = "application/json";

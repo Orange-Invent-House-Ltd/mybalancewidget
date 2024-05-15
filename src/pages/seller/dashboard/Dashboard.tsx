@@ -105,7 +105,12 @@ const Dashboard = () => {
               <div>
                 <p className="text-xs text-slate-500 mb-2">Amount in wallet</p>
                 <div className="font-semibold text-lg">
-                  ₦ <FormatNumberWithCommas number={profile?.walletBalance} />
+                  ₦{" "}
+                  {profile ? (
+                    <FormatNumberWithCommas number={profile?.walletBalance} />
+                  ) : (
+                    "Loading..."
+                  )}
                 </div>
                 <p className="text-xs text-slate-500 mt-5">since last month</p>
               </div>
@@ -117,7 +122,12 @@ const Dashboard = () => {
               <div>
                 <p className="text-xs text-slate-500 mb-2">Amount withdrawn</p>
                 <div className="font-semibold text-lg">
-                  ₦ <FormatNumberWithCommas number={profile?.withdrawnAmount} />
+                  ₦{" "}
+                  {profile ? (
+                    <FormatNumberWithCommas number={profile?.withdrawnAmount} />
+                  ) : (
+                    "Loading..."
+                  )}
                 </div>
                 <p className="text-xs text-slate-500 mt-5">since last month</p>
               </div>
@@ -130,13 +140,6 @@ const Dashboard = () => {
           <HeroHeader />
           <div className="flex flex-col md:flex-row lg:flex-row text-center justify-between align-items-center  mt-10">
             <div className="flex lg:justify-normal justify-center items-center gap-4">
-              <input
-                type="checkbox"
-                name="selectAllCheckbox"
-                checked={selectAll}
-                onChange={handleAllChecked}
-                className="form-checkbox lg:h[25px] lg:w[25px] h-6 w-6  cursor-pointer accent-black rounded-lg"
-              />
               <div className="text-2xl font-semibold">Transaction history</div>
             </div>
 
@@ -154,9 +157,6 @@ const Dashboard = () => {
                   </div>
                 </a>
               </div>
-              <button className="text-sm bg-white border border-[#FFF2E8] text-[#FD7E14] p-3 px-10 rounded-lg font-semibold">
-                Raise a Dispute
-              </button>
             </div>
           </div>
         </div>

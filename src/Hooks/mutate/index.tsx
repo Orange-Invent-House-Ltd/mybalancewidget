@@ -161,7 +161,7 @@ export const useInitiateOtpVerification = () => {
       error.response.data.errors === null
         ? (resMessage = error.response.data.message)
         : (resMessage = error.response.data.errors.error[0]);
-      toast.error(resMessage, {
+      toast.error(error.response.data.message, {
         toastId: "error1",
       });
     },

@@ -1,15 +1,19 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import Stepper from "../../../components/seller/Stepper";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Pusher from "pusher-js";
 
 import { useInitiateWithdrawal, useLookUpBank } from "../../../Hooks/mutate";
 import formatToNairaCurrency from "../../../util/formatNumber";
-import { useBanks } from "../../../Hooks/query";
+import { useBanks, useProfile } from "../../../Hooks/query";
+import FormatNumberWithCommas from "../../../components/reuseable/FormatNumberWithCommas";
+
+interface FormValues {
+  Amount: number;
+  AccountName: string;
+  AccountNumber: string;
+}
 
 function Withdraw() {
   const [accNum, setAccNum] = useState("");
@@ -18,53 +22,16 @@ function Withdraw() {
   const [isWithdraw, setIsWithdraw] = useState(false);
   const [modalMessageDescription, setModalMessageDescription] = useState("");
   const [pusherLoading, setPusherLoading] = useState(false);
-  const merchantId = localStorage.getItem('merchant')
+  const merchantId = localStorage.getItem("merchant");
   const navigate = useNavigate();
+  const { data: profile } = useProfile();
 
-  const {mutate: withdrawMutate,
+  const {
+    mutate: initiateWithdrawMutate,
     isPending: withdrawLoading,
     isSuccess: withdrawSuccess,
     data: withdrawData,
   } = useInitiateWithdrawal();
-
-  const subscribeToChannel = (txReference: any) => {
-    const pusher = new Pusher(import.meta.env.VITE_PUSHER_KEY, {
-      cluster: "mt1",
-    });
-
-    const channelName = `WALLET_WITHDRAWAL_${txReference}`;
-    const channel = pusher.subscribe(channelName);
-    setPusherLoading(true);
-    console.log("STARTING CONNECTION", channelName);
-
-    channel.bind("WALLET_WITHDRAWAL_SUCCESS", (data: any) => {
-      console.log("WALLET_WITHDRAWAL_SUCCESS", data);
-      setModalMessageTitle(`${formatToNairaCurrency(data.amount)} Withdrawn!`);
-      setModalMessageDescription(
-        `Weldone! You have successfully withdrawn ${formatToNairaCurrency(
-          data.amount
-        )}. You should receive a credit alert in seconds`
-      );
-      //   setModalMessageAmount(data.amount);
-      setPusherLoading(false);
-      setIsWithdraw(true);
-    });
-
-    channel.bind("WALLET_WITHDRAWAL_FAILURE", (data: any) => {
-      console.log("WALLET_WITHDRAWAL_FAILURE", data);
-      setModalMessageTitle("Withdrawal failed");
-      setModalMessageDescription(`Oops, something went wrong`);
-
-      setPusherLoading(false);
-
-      //   setModalMessageAmount(data.amount);
-      //   setIsWithdraw(true);
-    });
-  };
-  //
-
-  
-  //
 
   const { data: banks, isLoading: bankIsLoading } = useBanks();
   const {
@@ -73,31 +40,13 @@ function Withdraw() {
     // isLoading: LookupIsLoading,
   } = useLookUpBank();
 
-  //
-  useEffect(() => {
-    if (withdrawSuccess) {
-      console.log(
-        "🚀 ~ file: WithdrawMoney.tsx:77 ~ useEffect ~ withdrawData:",
-        withdrawData
-      );
-      subscribeToChannel(withdrawData?.data?.transactionReference);
-      //   setIsWithdraw(true);
-    }
-  }, [withdrawSuccess]);// eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (accNum.length === 10) {
-      LookupMutate({ bankCode: code, accountNumber: accNum });
-    }
-  }, [accNum, code]);// eslint-disable-line react-hooks/exhaustive-deps
-  //
-
   const {
     register,
     handleSubmit: handleSubmitWithdraw,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<FormValues>();
 
+  const isButtonEnabled = accNum.length > 0;
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Define onSubmitWrapper to bind form submission event
@@ -112,15 +61,13 @@ function Withdraw() {
       setIsSubmitted(true);
       const { bankName, AccountNumber, AccountName, Amount } = data;
       console.log(data);
-      // Call withdrawMutate asynchronously
-      withdrawMutate({
+      initiateWithdrawMutate({
         // ...data,
         accountNumber: accNum,
         bankCode: code,
         amount: Amount,
         merchantId: merchantId,
       });
-
       // Handle success, navigate to next step or show success message
       navigate("/seller/otp", { state: { progress: 100 } });
     } catch (error) {
@@ -128,6 +75,12 @@ function Withdraw() {
       // Handle error, display error message or retry logic
     }
   };
+
+  useEffect(() => {
+    if (accNum.length === 10) {
+      LookupMutate({ bankCode: code, accountNumber: accNum });
+    }
+  }, [accNum, code]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="w-full px-[5%] pt-[30px]">
@@ -140,15 +93,20 @@ function Withdraw() {
         Withdraw Funds
       </h2>
       <p className="mb-6">Make your withdrawals seamlessly</p>
-      <div className="flex mt-[5rem] md:px-[4rem] px-[.5rem]">
+      <div className=" block md:flex mt-[5rem] md:px-[4rem] px-[.5rem]">
         <Stepper isSubmitted={isSubmitted} />
-        <div className="w-[60%]">
+        <div className="md:w-[60%] w-full">
           <div>
             <p className="text-gray-700 text-[27px] font-bold mb-2">
               Withdraw to Bank
             </p>
             <p className="text-gray-500 text-[15px] font-semibold mb-2">
-              Available balance is ₦550,500.90
+              Available balance is ₦{" "}
+              {profile ? (
+                <FormatNumberWithCommas number={profile?.walletBalance} />
+              ) : (
+                "Loading..."
+              )}
             </p>
             <p className="text-gray-500 text-[15px] mb-6">
               Use the form below to withdraw funds to your personal account.
@@ -231,24 +189,31 @@ function Withdraw() {
                 Amount to Withdraw <span className="font-bold">(₦)</span>
               </label>
               <input
-                {...register("Amount", { valueAsNumber: true })}
+                {...register("Amount", {
+                  valueAsNumber: true,
+                  required: "Amount is required",
+                  min: {
+                    value: 0,
+                    message: "Feild cannot be empty",
+                  },
+                })}
                 type="number"
                 id=""
                 placeholder="e.g 40,000"
                 className="border-gray-400 border-2 p-3 w-full rounded-lg outline-none"
               />
-              {/* {errors.Amount && (
+              {errors.Amount && (
                 <p className="text-red-500 text-[15px] font-semibold mt-2 mb-[-8px]">
                   {errors.Amount.message}
                 </p>
-              )} */}
+              )}
             </div>
             <button
-              disabled={isSubmitting}
+              disabled={!isButtonEnabled || isSubmitting}
               type="submit"
               className="p-3 w-full rounded-lg outline-none text-white font-semibold bg-[#FD7E14] my-6"
             >
-              {pusherLoading ? "loading..." : "Continue"}
+              {isSubmitting ? "Loading..." : "Submit"}
             </button>
           </form>
         </div>
