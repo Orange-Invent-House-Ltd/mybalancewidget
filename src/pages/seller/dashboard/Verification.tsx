@@ -171,7 +171,7 @@ function Verification() {
                   fullWidth={true}
                   onClick={() => {
                     setIsWithdraw(false);
-                    navigate("/seller/dashboard");
+                    navigate(-1);
                   }}
                 >
                   Return to dashboard
