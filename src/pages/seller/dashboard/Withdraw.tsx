@@ -4,10 +4,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
-
 import { useInitiateWithdrawal, useLookUpBank } from "../../../Hooks/mutate";
 import formatToNairaCurrency from "../../../util/formatNumber";
-import { useBanks } from "../../../Hooks/query";
+import { useBanks, useProfile } from "../../../Hooks/query";
+import FormatNumberWithCommas from "../../../components/reuseable/FormatNumberWithCommas";
+
+interface FormValues {
+  Amount: number;
+  AccountName: string;
+  AccountNumber: string;
+}
 
 function Withdraw() {
   const [accNum, setAccNum] = useState("");
@@ -16,15 +22,16 @@ function Withdraw() {
   const [isWithdraw, setIsWithdraw] = useState(false);
   const [modalMessageDescription, setModalMessageDescription] = useState("");
   const [pusherLoading, setPusherLoading] = useState(false);
-  const merchantId = localStorage.getItem('merchant')
+  const merchantId = localStorage.getItem("merchant");
   const navigate = useNavigate();
+  const { data: profile } = useProfile();
 
-  const {mutate: initiateWithdrawMutate,
+  const {
+    mutate: initiateWithdrawMutate,
     isPending: withdrawLoading,
     isSuccess: withdrawSuccess,
     data: withdrawData,
   } = useInitiateWithdrawal();
-
 
   const { data: banks, isLoading: bankIsLoading } = useBanks();
   const {
@@ -37,8 +44,9 @@ function Withdraw() {
     register,
     handleSubmit: handleSubmitWithdraw,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<FormValues>();
 
+  const isButtonEnabled = accNum.length > 0;
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Define onSubmitWrapper to bind form submission event
@@ -63,7 +71,7 @@ function Withdraw() {
       // Handle success, navigate to next step or show success message
       navigate("/seller/otp", { state: { progress: 100 } });
     } catch (error) {
-      console.error(error)
+      console.error(error);
       // Handle error, display error message or retry logic
     }
   };
@@ -72,8 +80,8 @@ function Withdraw() {
     if (accNum.length === 10) {
       LookupMutate({ bankCode: code, accountNumber: accNum });
     }
-  }, [accNum, code]);// eslint-disable-line react-hooks/exhaustive-deps
-  
+  }, [accNum, code]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="w-full px-[5%] pt-[30px]">
       <ArrowLeft
@@ -85,15 +93,20 @@ function Withdraw() {
         Withdraw Funds
       </h2>
       <p className="mb-6">Make your withdrawals seamlessly</p>
-      <div className="flex mt-[5rem] md:px-[4rem] px-[.5rem]">
+      <div className=" block md:flex mt-[5rem] md:px-[4rem] px-[.5rem]">
         <Stepper isSubmitted={isSubmitted} />
-        <div className="w-[60%]">
+        <div className="md:w-[60%] w-full">
           <div>
             <p className="text-gray-700 text-[27px] font-bold mb-2">
               Withdraw to Bank
             </p>
             <p className="text-gray-500 text-[15px] font-semibold mb-2">
-              Available balance is ₦550,500.90
+              Available balance is ₦{" "}
+              {profile ? (
+                <FormatNumberWithCommas number={profile?.walletBalance} />
+              ) : (
+                "Loading..."
+              )}
             </p>
             <p className="text-gray-500 text-[15px] mb-6">
               Use the form below to withdraw funds to your personal account.
@@ -176,24 +189,31 @@ function Withdraw() {
                 Amount to Withdraw <span className="font-bold">(₦)</span>
               </label>
               <input
-                {...register("Amount", { valueAsNumber: true })}
+                {...register("Amount", {
+                  valueAsNumber: true,
+                  required: "Amount is required",
+                  min: {
+                    value: 0,
+                    message: "Feild cannot be empty",
+                  },
+                })}
                 type="number"
                 id=""
                 placeholder="e.g 40,000"
                 className="border-gray-400 border-2 p-3 w-full rounded-lg outline-none"
               />
-              {/* {errors.Amount && (
+              {errors.Amount && (
                 <p className="text-red-500 text-[15px] font-semibold mt-2 mb-[-8px]">
                   {errors.Amount.message}
                 </p>
-              )} */}
+              )}
             </div>
             <button
-              disabled={isSubmitting}
+              disabled={!isButtonEnabled || isSubmitting}
               type="submit"
               className="p-3 w-full rounded-lg outline-none text-white font-semibold bg-[#FD7E14] my-6"
             >
-              {pusherLoading ? "loading..." : "Continue"}
+              {isSubmitting ? "Loading..." : "Submit"}
             </button>
           </form>
         </div>

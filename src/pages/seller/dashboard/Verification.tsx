@@ -9,10 +9,11 @@ import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
 import Pusher from "pusher-js";
 import formatToNairaCurrency from "../../../util/formatNumber";
 import { Button } from "../../../components/reuseable/Buttons";
-import check from '../../../assets/icon/check.svg'
-import waves from  '../../../assets/icon/waves.svg'
-import loading from '../../../assets/icon/loadingSpinner.svg'
-import warningIcon from '../../../assets/icon/warningIcon.svg'
+import check from "../../../assets/icon/check.svg";
+import waves from "../../../assets/icon/waves.svg";
+import loading from "../../../assets/icon/loadingSpinner.svg";
+import warningIcon from "../../../assets/icon/warningIcon.svg";
+import { useProfile } from "../../../Hooks/query";
 
 function Verification() {
   const [otp, setOtp] = useState("");
@@ -24,9 +25,11 @@ function Verification() {
   const [isFailWithdraw, setIsFailWithdraw] = useState(false);
   const [modalMessageDescription, setModalMessageDescription] = useState("");
   const [pusherLoading, setPusherLoading] = useState(false);
-  const merchantId = localStorage.getItem('merchant')
-  
-  const {mutate: withdrawMutate,
+  const merchantId = localStorage.getItem("merchant");
+  const { data: profile } = useProfile();
+
+  const {
+    mutate: withdrawMutate,
     isPending: withdrawLoading,
     isSuccess: withdrawSuccess,
     data: withdrawData,
@@ -62,7 +65,9 @@ function Verification() {
       console.log("WALLET_WITHDRAWAL_SUCCESS", data);
       setModalMessageTitle(`${formatToNairaCurrency(data.amount)} Withdrawn!`);
       setModalMessageDescription(
-        `Weldone! You have successfully withdrawn ${formatToNairaCurrency(data.amount)}. You should receive a credit alert in seconds`
+        `Weldone! You have successfully withdrawn ${formatToNairaCurrency(
+          data.amount
+        )}. You should receive a credit alert in seconds`
       );
       setPusherLoading(false);
       setIsWithdraw(true);
@@ -73,7 +78,7 @@ function Verification() {
       setModalMessageTitle("Withdrawal failed");
       setModalMessageDescription(`Oops, something went wrong`);
 
-      setPusherLoading(false)
+      setPusherLoading(false);
       setIsFailWithdraw(true);
     });
   };
@@ -87,7 +92,7 @@ function Verification() {
       subscribeToChannel(withdrawData?.data?.transactionReference);
       //   setIsWithdraw(true);
     }
-  }, [withdrawSuccess]);// eslint-disable-line react-hooks/exhaustive-deps
+  }, [withdrawSuccess]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className=" w-full ml-auto px-[5%] pt-[30px] relative">
@@ -101,18 +106,18 @@ function Verification() {
         Withdraw Funds
       </h2>
       <p className="mb-6">Make your withdrawals seamlessly</p>
-      <div className="flex mt-[5rem] md:px-[3rem] px-[.5rem]">
+      <div className="block md:flex mt-[5rem] md:px-[3rem] px-[.5rem]">
         <Stepper
           isSubmitted={progressFromWithdraw === 100 || isSubmitted}
           filledCount={filledCount}
         />
 
-        <div className="max-w-[600px]">
+        <div className="md:max-w-[600px] w-[80%]">
           <div>
             <p className="text-gray-700 text-[27px] font-bold mb-2">
               Verify OTP
             </p>
-            <p className="text-gray-500 max-w-[400px] text-[19px] mb-6">
+            <p className="text-gray-500 max-w-[400px]text-[19px] mb-6">
               Enter the 6-digits OTP that was sent to your email address you
               provided.
             </p>
@@ -148,63 +153,61 @@ function Verification() {
         </div>
       </div>
 
-      { (isWithdraw || isFailWithdraw)  && (
-        <div className="animate-jump fixed top-0 left-0 z-50 w-full h-full bg-[#3a3a3a]/30 backdrop-blur-[8px]"> 
-        <div className="py-6 px-6 max-w-[400px] min-h-[246px] rounded-[12px] absolute bg-white top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 z-50">
-          <img
-            className="p-4 bg-[#ECFDF3] rounded-[50%]"
-            src={ isWithdraw ? check : warningIcon}
-            alt="check"
-          />
-          <h6 className="h6">{modalMessageTitle} 👍🏾</h6>
-          <p className="mt-4 text-center text-base font-normal leading-[21.6px]">
-            {modalMessageDescription}
-          </p>
-          <div className=" mt-4 w-[300px]">
-            {isWithdraw ? (
-              <Button
-                fullWidth={true}
-                onClick={() => {
-                  setIsWithdraw(false)
-                  navigate('/seller/dashboard')
-                }}
-              >
-                Return to dashboard
-              </Button> ) : 
-            (
-              <Button
-                fullWidth={true}
-                onClick={() => {
-                  setIsWithdraw(false)
-                }}
-              >
-                Try again
-              </Button>
-
-              )
-            }
+      {(isWithdraw || isFailWithdraw) && (
+        <div className="animate-jump fixed top-0 left-0 z-50 w-full h-full bg-[#3a3a3a]/30 backdrop-blur-[8px]">
+          <div className="py-6 px-6 max-w-[400px] min-h-[246px] rounded-[12px] absolute bg-white top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 z-50">
+            <img
+              className="p-4 bg-[#ECFDF3] rounded-[50%]"
+              src={isWithdraw ? check : warningIcon}
+              alt="check"
+            />
+            <h6 className="h6">{modalMessageTitle} 👍🏾</h6>
+            <p className="mt-4 text-center text-base font-normal leading-[21.6px]">
+              {modalMessageDescription}
+            </p>
+            <div className=" mt-4 w-[300px]">
+              {isWithdraw ? (
+                <Button
+                  fullWidth={true}
+                  onClick={() => {
+                    setIsWithdraw(false);
+                    navigate("/seller/dashboard");
+                  }}
+                >
+                  Return to dashboard
+                </Button>
+              ) : (
+                <Button
+                  fullWidth={true}
+                  onClick={() => {
+                    setIsWithdraw(false);
+                  }}
+                >
+                  Try again
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
         </div>
       )}
 
-      { pusherLoading && (
-        <div className="animate-jump fixed top-0 left-0 z-50 w-full h-full bg-[#3a3a3a]/30 backdrop-blur-[8px]"> 
-        <div className="fixed top-0 left-0 right-0  bottom-0 bg-white flex items-center justify-center z-40">
-          <div className="w-screen h-screen flex items-center justify-center">
-            <div className="text-center space-y-2 my-auto">
-              <img
-                src={loading}
-                className="animate-spin mx-auto "
-                alt="loading spinner"
-              />
-              <h1 className="font-medium ">
-                Transaction in progress... Please wait.
-              </h1>
+      {pusherLoading && (
+        <div className="animate-jump fixed top-0 left-0 z-50 w-full h-full bg-[#3a3a3a]/30 backdrop-blur-[8px]">
+          <div className="fixed top-0 left-0 right-0  bottom-0 bg-white flex items-center justify-center z-40">
+            <div className="w-screen h-screen flex items-center justify-center">
+              <div className="text-center space-y-2 my-auto">
+                <img
+                  src={loading}
+                  className="animate-spin mx-auto "
+                  alt="loading spinner"
+                />
+                <h1 className="font-medium ">
+                  Transaction in progress... Please wait.
+                </h1>
+              </div>
+              <img src={waves} className="absolute bottom-0 w-full" alt="" />
             </div>
-            <img src={waves} className="absolute bottom-0 w-full" alt="" />
           </div>
-        </div>
         </div>
       )}
     </div>

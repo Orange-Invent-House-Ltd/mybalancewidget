@@ -16,6 +16,10 @@ function ItemsCard({ cartData }: any) {
             name=""
             className="accent-black cursor-pointer"
           />
+          <div>
+            <span className="font-bold mr-4">Delivery date: </span>
+            {cartData?.escrow?.deliveryDate}
+          </div>
           {/* <img
             // src={cartData?.img}
             alt=''
@@ -24,9 +28,9 @@ function ItemsCard({ cartData }: any) {
           <div>
             <h2 className="font-medium mb-1">{cartData?.meta?.title}</h2>
             <p className="text-sm">{cartData?.meta?.description}</p>
-            <p className="text-[13px]">
-              <span>Delivery date: <span className="font-semiold">{cartData?.escrow?.deliveryDate}</span></span> 
-              <span className="ml-4 font-bold">₦<FormatNumberWithCommas number={cartData?.amount} /></span>
+            <p className="font-bold text-[13px]">
+              {" "}
+              ₦ <FormatNumberWithCommas number={cartData?.amount} />
             </p>
           </div>
         </div>
@@ -36,7 +40,6 @@ function ItemsCard({ cartData }: any) {
               View Info
             </p>
           </Link>
-
           {cartData?.escrow?.disputeRaised ? (
             <p className="font-medium text-[14px] opacity-50 hover:cursor-not-allowed">
               Dispute Raised
