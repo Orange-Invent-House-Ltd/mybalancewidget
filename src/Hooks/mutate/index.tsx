@@ -14,6 +14,7 @@ import {
   strimKey,
   unlockFunds,
 } from "../../api";
+import useStore from "../../store";
 
 export const usePasswordlessLogin = () => {
   const navigate = useNavigate();
@@ -74,6 +75,7 @@ export const usePasswordlessOtpVerification = () => {
 export const useStrimKey = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: strimKey,
     onSuccess: (data) => {
@@ -83,6 +85,7 @@ export const useStrimKey = () => {
       // toast.success(data.message, {
       //   toastId: 'success1'
       // });
+      queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
     },
     onError: (error: any) => {
       let resMessage;
@@ -102,6 +105,7 @@ export const useUnlockFunds = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
+  const store = useStore()
   return useMutation({
     mutationFn: unlockFunds,
     onSuccess: (data) => {
@@ -109,6 +113,7 @@ export const useUnlockFunds = () => {
       toast.success(data.message, {
         toastId: "success1",
       });
+      store.setIsUnlockAll(false)
     },
     onError: (error: any) => {
       let resMessage;

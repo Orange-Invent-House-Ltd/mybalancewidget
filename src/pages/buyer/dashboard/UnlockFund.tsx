@@ -8,27 +8,29 @@ import moment from "moment";
 import { useStrimKey, useUnlockFunds } from "../../../Hooks/mutate";
 import { useParams } from "react-router-dom";
 import EmptyState from "../../../components/reuseable/EmptyState";
+import useStore from "../../../store";
+import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
+
 
 const UnlockFund = () => {
   const { key }: any = useParams();
   const { mutate } = useStrimKey();
-  // localStorage.setItem("session_token", 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0NjY1OTQwLCJpYXQiOjE3MTQ2NTg3NDAsImp0aSI6IjI1MWZjMzUwZmU2YjQ3MDFhNjk3MTJmOGJjMDkzM2UzIiwidXNlcl9pZCI6MTIsImtleSI6bnVsbH0.zOotcpidjh-W6Rezokzuw0isnJ5W7jU0eesrYHA4N5Y')
-  // localStorage.setItem("email", 'omobayode93@gmail.com');
-  // localStorage.setItem("merchant", 'adbc5c96-f8ba-4a01-8383-58bf5241b05c');
   const today = moment().format("YYYY-MM-DD");
+  const queryClient = useQueryClient()
+  const store = useStore()
+  const checkBoxes = store.checkBoxes
 
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.netlify.app/passwordless-otp-verification?email=${email}`;
   const [hover, setHover] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [allSelected, setAllSelected] = useState(false)
-  const [checkBoxes, setCheckBoxes] = useState<any>([]);
+  // const [checkBoxes, setCheckBoxes] = useState<any>([]); // array of transaction data with check status
   const [selectedItems, setSelectedItems] = useState<any>([]);
-  const [unlockAll, setUnlockAll] = useState(false)
+  // const [unlockAll, setUnlockAll] = useState(false) //to set unlock all modal
   const [page, setPage] = useState<number>(1);
   const { data: transactions, isPending } = useTransactions({ page });
-  const { mutate: unlockFund, isPending: unlockFundIsPending } =
-    useUnlockFunds();
+  const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
 
   // update check boxes array : CheckBoxes has the data and isChecked status that is either tru or false
   // selectedItems is an array of data and isChecked status that is true - items that has been checked
@@ -40,7 +42,7 @@ const UnlockFund = () => {
       }
       return checkbox;
     });
-    setCheckBoxes(updatedCheckBoxes);
+    store.setCheckBoxes(updatedCheckBoxes);
     setSelectedItems(
       updatedCheckBoxes.filter(
         (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
@@ -62,18 +64,18 @@ const UnlockFund = () => {
       const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
         return { ...checkbox, isChecked: selectAll };
       });
-      setCheckBoxes(updatedCheckBoxes);
+      store.setCheckBoxes(updatedCheckBoxes);
       setSelectedItems(updatedCheckBoxes);
       // setSelectAll(!selectAll);
     } else {
       // alert('not all')
-      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
+      const updatedCheckBoxes = checkBoxes?.map((checkbox: any) => {
         return { ...checkbox, isChecked: selectAll }; //there is a problem here
       });
-      setCheckBoxes(updatedCheckBoxes);
+      store.setCheckBoxes(updatedCheckBoxes);
       // setSelectedItems([]);
       setSelectedItems(
-        updatedCheckBoxes.filter(
+        updatedCheckBoxes?.filter(
           (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
         )
       );
@@ -110,7 +112,7 @@ const UnlockFund = () => {
       //   isChecked: false,
       // })
     );
-    setCheckBoxes(itemIds);
+    store.setCheckBoxes(itemIds);
     console.log(itemIds);
     console.log("here you go");
   }, [transactions]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -166,14 +168,14 @@ const UnlockFund = () => {
               )}
             </div>
             <button
-              disabled={selectedItems.length === 0 ? true : false}
+              disabled={selectedItems?.length === 0 ? true : false}
               className="rounded-[8px] bg-[#FD7E14] px-[16px] py-[12px] text-[14px] font-bold text-white disabled:cursor-not-allowed"
-              onClick={() => setUnlockAll(true)}
+              onClick={() => store.setIsUnlockAll(true)}
             >
               Unlock Funds
             </button>
 
-            {unlockAll && (
+            {store.isUnlockAll && (
               <div className="animate-jump fixed top-0 left-0 z-50 w-full h-full bg-[#3a3a3a]/30 backdrop-blur-[8px]"> 
                 <div className="py-6 px-6 max-w-[400px] min-h-[246px] rounded-[12px] absolute bg-white top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 z-50">
                   <div className='shadow-3xl'>
@@ -188,7 +190,7 @@ const UnlockFund = () => {
                       </div>
                     </div>
                     <button className="w-full rounded-md border border-[#101828] py-3 px-4 capitalize font-bold cursor-pointer transition-all mb-3"
-                      onClick={()=>setUnlockAll(false)}
+                      onClick={()=>store.setIsUnlockAll(false)}
                     >Cancel</button>
                     <button className="w-full bg-[#039855] text-white rounded-md py-3 px-4 capitalize font-bold cursor-pointer transition-all mb-6"
                       onClick={() => {
@@ -223,7 +225,7 @@ const UnlockFund = () => {
             />
           </div>
         ) : (
-          checkBoxes.map(
+          checkBoxes?.map(
             (cartData: any, index: any, arr: any, key: any) => (
               <div key={key} className={arr.length - 1 === index ? "" : "mb-4"}>
                 <UnlockFundCard
