@@ -174,7 +174,7 @@ function Verification() {
                     navigate(-1);
                   }}
                 >
-                  Return to dashboard
+                  Done
                 </Button>
               ) : (
                 <Button
