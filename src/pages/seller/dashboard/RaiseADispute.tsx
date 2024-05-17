@@ -35,6 +35,7 @@ const RaiseADispute = () => {
       toast.success(res.data.message, {
         toastId: "success1",
       });
+      navigate(-1)
     } catch (error: any) {
       let resMessage;
       error.response.data.errors === null

@@ -128,7 +128,7 @@ const UnlockFund = () => {
         <h2 className="font-bold text-[#303030] text-[23px] ">Unlock Fund</h2>
         <p className="mb-6">
           Perform transactions such as unlock funds, raise a dispute or view
-          trannsactions details.
+          transactions details.
         </p>
 
         <div className="flex items-center justify-between mb-4">
