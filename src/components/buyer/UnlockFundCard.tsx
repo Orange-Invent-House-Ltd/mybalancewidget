@@ -3,6 +3,8 @@ import { Link } from "react-router-dom"
 import UnlockFundModal from "./UnlockFundModal"
 import moment from "moment"
 import FormatNumberWithCommas from "../reuseable/FormatNumberWithCommas"
+import { Copy } from "lucide-react"
+import { toast } from "react-toastify"
 
 const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
   const [unlockFund, setUnlockFund] = useState(false)
@@ -23,8 +25,14 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
           <input type="checkbox" name='item' value={cartData?.id} checked={cartData?.isChecked} onChange={() => handleSingleCheckBoxChange(cartData?.id)} />
           <img src={cartData?.img} alt={cartData?.name}  className="w-[50px]"/>
           <div>
-            <h2 className='font-medium mb-2'>{cartData?.meta?.title}</h2>
-            <p>{cartData?.meta?.description}</p>
+            <div className="text-[#999999] text-[14px] flex items-center gap-x-2">{cartData?.meta?.sourcePaymentTransaction} 
+              <Copy className="" onClick={()=>{
+                navigator.clipboard.writeText(cartData?.meta?.sourcePaymentTransaction)
+                toast.success('Transaction id copied successfully!')
+              }} />
+            </div>
+            <h2 className='font-medium'>{cartData?.meta?.title}</h2>
+            <p className="text-[#999999]">{cartData?.meta?.description}</p>
             <p className=" text-[13px]">
               <span>Delivery date: <span className="font-semiold">{cartData?.escrow?.deliveryDate}</span></span> 
               <span className="ml-4 font-bold">₦ <FormatNumberWithCommas number={cartData?.amount}/></span>
