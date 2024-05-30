@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useTransactions } from "../../Hooks/query";
 import { useState } from "react";
 import FormatNumberWithCommas from "../reuseable/FormatNumberWithCommas";
+import { Copy } from "lucide-react";
+import { toast } from "react-toastify";
 
 function ItemsCard({ cartData }: any) {
   const [page, setPage] = useState<number>(1);
@@ -16,21 +18,23 @@ function ItemsCard({ cartData }: any) {
             name=""
             className="accent-black cursor-pointer"
           />
-          <div>
-            <span className="font-bold mr-4">Delivery date: </span>
-            {cartData?.escrow?.deliveryDate}
-          </div>
           {/* <img
             // src={cartData?.img}
             alt=''
             className="w-[50px]"
           /> */}
           <div>
+            <div className="text-[#999999] text-[14px] flex items-center gap-x-2">{cartData?.meta?.sourcePaymentTransaction} 
+              <Copy className="" onClick={()=>{
+                navigator.clipboard.writeText(cartData?.meta?.sourcePaymentTransaction)
+                toast.success('Transaction id copied successfully!')
+              }} />
+            </div>
             <h2 className="font-medium mb-1">{cartData?.meta?.title}</h2>
-            <p className="text-sm">{cartData?.meta?.description}</p>
-            <p className="font-bold text-[13px]">
-              {" "}
-              ₦ <FormatNumberWithCommas number={cartData?.amount} />
+            <p className="text-sm text-[#999999]">{cartData?.meta?.description}</p>
+            <p className=" text-[13px]">
+              <span>Delivery date: <span className="font-semiold">{cartData?.escrow?.deliveryDate}</span></span> 
+              <span className="ml-4 font-bold">₦ <FormatNumberWithCommas number={cartData?.amount}/></span>
             </p>
           </div>
         </div>
