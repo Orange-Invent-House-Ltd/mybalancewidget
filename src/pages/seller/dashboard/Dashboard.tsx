@@ -81,7 +81,7 @@ const Dashboard = () => {
         <div className=" mt-7">
           <div className="flex justify-between">
             <div>
-              <div className=" font-semibold text-xl">Dashboard</div>
+              <div className=" font-semibold text-xl">Dashboard.</div>
               <div className=" text-xs mt-2 text-slate-500">An overview.</div>
             </div>
             <button
