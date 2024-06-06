@@ -12,9 +12,11 @@ import EmptyState from "../../../components/reuseable/EmptyState";
 import FormatNumberWithCommas from "../../../components/reuseable/FormatNumberWithCommas";
 import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
 import Pagination from "../../../components/reuseable/Pagination";
+import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
 
 const Dashboard = () => {
   // const { key }: any = useParams();
+  const queryClient = useQueryClient()
   const [page, setPage] = useState<number>(1);
   const { mutate } = useStrimKey();
   const { data: profile } = useProfile();
@@ -32,7 +34,17 @@ const Dashboard = () => {
   };
 
   const strimkey = async (key:any) => {
-    mutate({ key: key });
+    mutate(
+      { 
+        key: key 
+      },
+      {
+        onSuccess: async() => {
+          queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
+          queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+        }
+      }
+    );
   };
 
   useEffect(() => {
