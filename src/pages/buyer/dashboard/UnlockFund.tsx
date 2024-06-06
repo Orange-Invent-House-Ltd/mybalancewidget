@@ -107,7 +107,10 @@ const UnlockFund = () => {
     const extractStartIndex = startIndex + startString.length;
     // Extract the substring from the calculated start index to the end of the URL
     const key = currentURL.substring(extractStartIndex);
-    strimkey(key);
+    store.setCount((prev:any) => prev + 1)
+    if (store.count < 1){
+      strimkey(key);
+    }
     console.log(key);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
