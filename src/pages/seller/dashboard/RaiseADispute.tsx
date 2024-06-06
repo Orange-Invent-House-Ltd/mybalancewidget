@@ -31,7 +31,8 @@ const RaiseADispute = () => {
         `/merchants/customer-transactions/${id}`,
         data
       );
-      queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      // queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
       toast.success(res.data.message, {
         toastId: "success1",
       });
@@ -56,7 +57,7 @@ const RaiseADispute = () => {
         description: "",
       });
     }
-  }, [isSubmitSuccessful]);
+  }, [isSubmitSuccessful]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="w-full px-[5%] pt-[30px]">
