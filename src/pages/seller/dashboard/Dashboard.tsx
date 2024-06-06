@@ -52,8 +52,9 @@ const Dashboard = () => {
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
-          queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+          // queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
+          // queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+          queryClient.invalidateQueries({ queryKey: ['profile'] });
         }
       }
     );
