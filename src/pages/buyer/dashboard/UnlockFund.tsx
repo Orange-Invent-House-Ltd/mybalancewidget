@@ -91,7 +91,6 @@ const UnlockFund = () => {
     mutate({ key: key },
       {
         onSuccess: async() => {
-          queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
           queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
         }
       }

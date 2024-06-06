@@ -13,12 +13,14 @@ import FormatNumberWithCommas from "../../../components/reuseable/FormatNumberWi
 import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
 import Pagination from "../../../components/reuseable/Pagination";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
+import { privateApi } from "../../../api/axios";
 
 const Dashboard = () => {
   // const { key }: any = useParams();
   const queryClient = useQueryClient()
   const [page, setPage] = useState<number>(1);
   const { mutate } = useStrimKey();
+  // const [profile, setProfile] = useState({})
   const { data: profile } = useProfile();
   const { data: transactions, isPending } = useTransactions({ page });
   const email = localStorage.getItem("email");
@@ -33,13 +35,23 @@ const Dashboard = () => {
     setPage(selected);
   };
 
+  // const getProfile = async()=>{
+  //   try {
+  //     const res = await privateApi.get("/auth/profile")
+  //     setProfile(res?.data?.data)
+
+  //   } catch (error: any) {
+  //     console.log(error);
+  //   }
+  // }
+
   const strimkey = async (key:any) => {
     mutate(
       { 
         key: key 
       },
       {
-        onSuccess: async() => {
+        onSuccess: () => {
           queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
           queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
         }
