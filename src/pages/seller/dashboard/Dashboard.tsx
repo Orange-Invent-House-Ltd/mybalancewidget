@@ -14,6 +14,7 @@ import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
 import Pagination from "../../../components/reuseable/Pagination";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
 import { privateApi } from "../../../api/axios";
+import useStore from "../../../store";
 
 const Dashboard = () => {
   // const { key }: any = useParams();
@@ -26,6 +27,7 @@ const Dashboard = () => {
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.netlify.app/passwordless-otp-verification?email=${email}`;
   const navigate = useNavigate();
+  const store = useStore()
 
   const goTo = (): void => {
     navigate("/seller/withdraw");
@@ -53,8 +55,8 @@ const Dashboard = () => {
       {
         onSuccess: () => {
           // queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
-          // queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
           queryClient.invalidateQueries({ queryKey: ['profile'] });
+          queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
         }
       }
     );
@@ -70,7 +72,10 @@ const Dashboard = () => {
     const extractStartIndex = startIndex + startString.length;
     // Extract the substring from the calculated start index to the end of the URL
     const key = currentURL.substring(extractStartIndex);
-    strimkey(key);
+    store.setCount((prev:any) => prev + 1)
+    if (store.count < 1){
+      strimkey(key);
+    }
     console.log(key);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -81,7 +86,7 @@ const Dashboard = () => {
         <div className=" mt-7">
           <div className="flex justify-between">
             <div>
-              <div className=" font-semibold text-xl">Dashboard.</div>
+              <div className=" font-semibold text-xl">Dashboard</div>
               <div className=" text-xs mt-2 text-slate-500">An overview.</div>
             </div>
             <button
