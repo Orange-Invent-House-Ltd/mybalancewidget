@@ -10,10 +10,11 @@ import { useParams } from "react-router-dom";
 import EmptyState from "../../../components/reuseable/EmptyState";
 import useStore from "../../../store";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
+import Pagination from "../../../components/reuseable/Pagination";
 
 
 const UnlockFund = () => {
-  const { key }: any = useParams();
+  // const { key }: any = useParams();
   const { mutate } = useStrimKey();
   const today = moment().format("YYYY-MM-DD");
   const queryClient = useQueryClient()
@@ -84,7 +85,7 @@ const UnlockFund = () => {
   };
 
   
-  const strimkey = async () => {
+  const strimkey = async (key:any) => {
     mutate({ key: key });
   };
 
@@ -97,8 +98,8 @@ const UnlockFund = () => {
     // Calculate the start of the substring (position after "unlock-fund/")
     const extractStartIndex = startIndex + startString.length;
     // Extract the substring from the calculated start index to the end of the URL
-    // const key = currentURL.substring(extractStartIndex);
-    strimkey();
+    const key = currentURL.substring(extractStartIndex);
+    strimkey(key);
     console.log(key);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -120,6 +121,11 @@ const UnlockFund = () => {
   useEffect(() => {
       handleAllChecked()
   }, [selectAll]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // pagination
+  const handlePageChange = (selected: any) => {
+    setPage(selected);
+  };
 
   return (
     <div>
@@ -235,6 +241,13 @@ const UnlockFund = () => {
               </div>
             )
           )
+        )}
+        {!isPending && transactions?.data.length > 0 && (
+          <Pagination
+            currentPage={transactions?.meta?.currentPage}
+            totalPage={transactions?.meta?.totalPages}
+            onPageChange={handlePageChange}
+          />
         )}
       </div>
     </div>

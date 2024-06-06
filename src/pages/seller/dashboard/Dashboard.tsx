@@ -11,60 +11,28 @@ import { useStrimKey } from "../../../Hooks/mutate";
 import EmptyState from "../../../components/reuseable/EmptyState";
 import FormatNumberWithCommas from "../../../components/reuseable/FormatNumberWithCommas";
 import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
+import Pagination from "../../../components/reuseable/Pagination";
 
 const Dashboard = () => {
-  const { key }: any = useParams();
+  // const { key }: any = useParams();
   const { mutate } = useStrimKey();
 
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.netlify.app/passwordless-otp-verification?email=${email}`;
   const [page, setPage] = useState<number>(1);
   const { data: transactions, isPending } = useTransactions({ page });
-  const [selectAll, setSelectAll] = useState(false);
-  const [checkBoxes, setCheckBoxes] = useState<any>([]);
-  const [selectedItems, setSelectedItems] = useState<any>([]);
   const navigate = useNavigate();
   const { data: profile } = useProfile();
+
   const goTo = (): void => {
     navigate("/seller/withdraw");
   };
 
-  const handleAllChecked = () => {
-    if (!selectAll) {
-      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
-        return { ...checkbox, isChecked: !selectAll };
-      });
-      setCheckBoxes(updatedCheckBoxes);
-      setSelectedItems(updatedCheckBoxes);
-      setSelectAll(!selectAll);
-    } else {
-      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
-        return { ...checkbox, isChecked: !selectAll };
-      });
-      setCheckBoxes(updatedCheckBoxes);
-      setSelectAll(!selectAll);
-    }
+  const handlePageChange = (selected: any) => {
+    setPage(selected);
   };
 
-  const handleSingleCheckBoxChange = (id: any) => {
-    const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
-      if (checkbox.id === id) {
-        return { ...checkbox, isChecked: !checkbox.isChecked };
-      }
-      return checkbox;
-    });
-    setCheckBoxes(updatedCheckBoxes);
-    setSelectedItems(
-      updatedCheckBoxes.filter(
-        (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
-      )
-    );
-    setSelectAll(
-      updatedCheckBoxes.every((checkbox: any) => checkbox.isChecked)
-    );
-  };
-
-  const strimkey = async () => {
+  const strimkey = async (key:any) => {
     mutate({ key: key });
   };
 
@@ -77,8 +45,8 @@ const Dashboard = () => {
     // Calculate the start of the substring (position after "unlock-fund/")
     const extractStartIndex = startIndex + startString.length;
     // Extract the substring from the calculated start index to the end of the URL
-    // const key = currentURL.substring(extractStartIndex);
-    strimkey();
+    const key = currentURL.substring(extractStartIndex);
+    strimkey(key);
     console.log(key);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -179,6 +147,13 @@ const Dashboard = () => {
               </div>
             )
           )
+        )}
+        {!isPending && transactions?.data.length > 0 && (
+          <Pagination
+            currentPage={transactions?.meta?.currentPage}
+            totalPage={transactions?.meta?.totalPages}
+            onPageChange={handlePageChange}
+          />
         )}
       </div>
     </div>

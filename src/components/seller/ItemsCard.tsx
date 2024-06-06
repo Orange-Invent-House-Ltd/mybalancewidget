@@ -13,11 +13,11 @@ function ItemsCard({ cartData }: any) {
     <div className="mt-6">
       <div className="lg:flex md:flex block justify-between items-center ">
         <div className="flex items-center gap-6">
-          <input
+          {/* <input
             type="checkbox"
             name=""
             className="accent-black cursor-pointer"
-          />
+          /> */}
           {/* <img
             // src={cartData?.img}
             alt=''
