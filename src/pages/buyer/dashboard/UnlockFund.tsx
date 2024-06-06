@@ -175,7 +175,7 @@ const UnlockFund = () => {
             </div>
             <button
               disabled={selectedItems?.length === 0 ? true : false}
-              className="rounded-[8px] bg-[#FD7E14] px-[16px] py-[12px] text-[14px] font-bold text-white disabled:cursor-not-allowed"
+              className="rounded-[8px] bg-[#FD7E14] px-[16px] py-[12px] text-[14px] font-bold text-white disabled:cursor-not-allowed text-nowrap"
               onClick={() => store.setIsUnlockAll(true)}
             >
               Unlock Funds

@@ -25,7 +25,8 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
           <input type="checkbox" name='item' value={cartData?.id} checked={cartData?.isChecked} onChange={() => handleSingleCheckBoxChange(cartData?.id)} />
           <img src={cartData?.img} alt={cartData?.name}  className="w-[50px]"/>
           <div>
-            <div className="text-[#999999] text-[14px] flex items-center gap-x-2">{cartData?.meta?.sourcePaymentTransaction} 
+            <div className="text-[#999999] text-[14px] flex items-center gap-x-2">
+              <p>{cartData?.meta?.sourcePaymentTransaction.slice(0, 8)}</p>
               <Copy className="" onClick={()=>{
                 navigator.clipboard.writeText(cartData?.meta?.sourcePaymentTransaction)
                 toast.success('Transaction id copied successfully!')
@@ -33,7 +34,7 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
             </div>
             <h2 className='font-medium'>{cartData?.meta?.title}</h2>
             <p className="text-[#999999]">{cartData?.meta?.description}</p>
-            <p className=" text-[13px]">
+            <p className="text-[13px]">
               <span>Delivery date: <span className="font-semiold">{cartData?.escrow?.deliveryDate}</span></span> 
               <span className="ml-4 font-bold">₦ <FormatNumberWithCommas number={cartData?.amount}/></span>
             </p>

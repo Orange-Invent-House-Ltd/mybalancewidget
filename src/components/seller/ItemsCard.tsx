@@ -24,7 +24,8 @@ function ItemsCard({ cartData }: any) {
             className="w-[50px]"
           /> */}
           <div>
-            <div className="text-[#999999] text-[14px] flex items-center gap-x-2">{cartData?.meta?.sourcePaymentTransaction} 
+            <div className="text-[#999999] text-[14px] flex items-center gap-x-2">
+              <p>{cartData?.meta?.sourcePaymentTransaction.slice(0, 8)}</p>
               <Copy className="" onClick={()=>{
                 navigator.clipboard.writeText(cartData?.meta?.sourcePaymentTransaction)
                 toast.success('Transaction id copied successfully!')
