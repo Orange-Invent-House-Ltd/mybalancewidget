@@ -23,7 +23,7 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
       <div className='flex justify-between items-center'>
         <div className='flex items-center gap-6'>
           <input type="checkbox" name='item' value={cartData?.id} checked={cartData?.isChecked} onChange={() => handleSingleCheckBoxChange(cartData?.id)} />
-          <img src={cartData?.img} alt={cartData?.name}  className="w-[50px]"/>
+          {/* <img src={cartData?.img} alt={cartData?.name}  className="w-[50px]"/> */}
           <div>
             <div className="text-[#999999] text-[14px] flex items-center gap-x-2">
               <p>{cartData?.meta?.sourcePaymentTransaction.slice(0, 8)}</p>
