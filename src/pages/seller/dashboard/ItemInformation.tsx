@@ -72,59 +72,26 @@ const ItemInformation = () => {
               readOnly
             />
           </div>
-          {/* <h1 className="mt-6 text-[#393737] text-lg font-medium">
-            VENDOR ACCOUNT INFORMATION
+          <h1 className="mt-6 text-[#393737] text-lg font-medium">
+            BUYER'S INFORMATION
           </h1>
           <div className="mt-6 flex flex-col">
-            <TextField
+            {/* <TextField
               control={control}
-              name="bankName"
+              name="BuyerName"
               rules={{ required: "this field is required" }}
-              label="Bank Name"
+              label="Buyer's Name"
               readOnly
-              placeholder="Access Bank"
-            />
+            /> */}
             <TextField
               control={control}
-              name="accNum"
+              name="buyerEmail"
               rules={{ required: "this field is required" }}
-              label="Enter Account number"
-              placeholder="1234567890"
-              readOnly
-            />
-            <TextField
-              control={control}
-              name="accName"
-              rules={{ required: "this field is required" }}
-              label="Account Name"
-              placeholder="e.g JMusty Feet"
-              readOnly
-            />
-            <TextField
-              control={control}
-              name="email"
-              rules={{ required: "this field is required" }}
-              label="Email"
-              placeholder="e.g JMustyfeet@gmail.com"
+              label="Buyer's Email"
+              value={cartData?.escrow?.parties?.buyer}
               readOnly
             />
           </div>
-
-          <div className="mt-6 space-y-3 mb-16">
-            <Button
-              fullWidth
-              variant="outlined"
-            >
-              {" "}
-              reject information{" "}
-            </Button>
-            <Button
-              fullWidth
-            >
-              {" "}
-              accept information{" "}
-            </Button>
-          </div> */}
         </form>
       </div>
     </div>
