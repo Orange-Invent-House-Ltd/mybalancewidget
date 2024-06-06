@@ -139,7 +139,7 @@ const UnlockFund = () => {
   };
 
   return (
-    <div className="overflow-y-scroll no-scrollbar">
+    <div>
       {isPending && <LoadingOverlay />}
       <div className="px-[5%] pt-[30px]">
         <h2 className="font-bold text-[#303030] text-[23px] ">Unlock Fund</h2>
