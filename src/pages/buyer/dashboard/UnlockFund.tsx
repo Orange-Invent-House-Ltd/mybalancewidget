@@ -88,7 +88,14 @@ const UnlockFund = () => {
 
   
   const strimkey = async (key:any) => {
-    mutate({ key: key });
+    mutate({ key: key },
+      {
+        onSuccess: async() => {
+          queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
+          queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+        }
+      }
+    );
   };
 
   useEffect(() => {
