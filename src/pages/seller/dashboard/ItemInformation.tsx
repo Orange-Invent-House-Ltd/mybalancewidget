@@ -76,19 +76,20 @@ const ItemInformation = () => {
             BUYER'S INFORMATION
           </h1>
           <div className="mt-6 flex flex-col">
-            {/* <TextField
+            <TextField
               control={control}
               name="BuyerName"
               rules={{ required: "this field is required" }}
               label="Buyer's Name"
+              value={cartData?.escrow?.parties?.buyer?.name}
               readOnly
-            /> */}
+            />
             <TextField
               control={control}
               name="buyerEmail"
               rules={{ required: "this field is required" }}
               label="Buyer's Email"
-              value={cartData?.escrow?.parties?.buyer}
+              value={cartData?.escrow?.parties?.buyer?.email}
               readOnly
             />
           </div>
