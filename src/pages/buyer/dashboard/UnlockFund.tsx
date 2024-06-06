@@ -15,7 +15,10 @@ import Pagination from "../../../components/reuseable/Pagination";
 
 const UnlockFund = () => {
   // const { key }: any = useParams();
+  const [page, setPage] = useState<number>(1);
   const { mutate } = useStrimKey();
+  const { data: transactions, isPending } = useTransactions({ page });
+  
   const today = moment().format("YYYY-MM-DD");
   const queryClient = useQueryClient()
   const store = useStore()
@@ -29,8 +32,7 @@ const UnlockFund = () => {
   // const [checkBoxes, setCheckBoxes] = useState<any>([]); // array of transaction data with check status
   const [selectedItems, setSelectedItems] = useState<any>([]);
   // const [unlockAll, setUnlockAll] = useState(false) //to set unlock all modal
-  const [page, setPage] = useState<number>(1);
-  const { data: transactions, isPending } = useTransactions({ page });
+  
   const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
 
   // update check boxes array : CheckBoxes has the data and isChecked status that is either tru or false

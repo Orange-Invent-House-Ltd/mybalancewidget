@@ -85,6 +85,7 @@ export const useStrimKey = () => {
       // toast.success(data.message, {
       //   toastId: 'success1'
       // });
+      queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
       queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
     },
     onError: (error: any) => {

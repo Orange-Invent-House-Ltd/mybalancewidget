@@ -15,14 +15,13 @@ import Pagination from "../../../components/reuseable/Pagination";
 
 const Dashboard = () => {
   // const { key }: any = useParams();
+  const [page, setPage] = useState<number>(1);
   const { mutate } = useStrimKey();
-
+  const { data: profile } = useProfile();
+  const { data: transactions, isPending } = useTransactions({ page });
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.netlify.app/passwordless-otp-verification?email=${email}`;
-  const [page, setPage] = useState<number>(1);
-  const { data: transactions, isPending } = useTransactions({ page });
   const navigate = useNavigate();
-  const { data: profile } = useProfile();
 
   const goTo = (): void => {
     navigate("/seller/withdraw");
