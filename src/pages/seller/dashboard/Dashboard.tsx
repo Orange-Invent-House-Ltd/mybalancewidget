@@ -6,7 +6,7 @@ import ItemsCard from "../../../components/seller/ItemsCard";
 import HeroHeader from "../../../components/reuseable/HeroHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useProfile, useTransactions } from "../../../Hooks/query";
+import { useMercahntWallet, useProfile, useTransactions } from "../../../Hooks/query";
 import { useStrimKey } from "../../../Hooks/mutate";
 import EmptyState from "../../../components/reuseable/EmptyState";
 import FormatNumberWithCommas from "../../../components/reuseable/FormatNumberWithCommas";
@@ -22,7 +22,9 @@ const Dashboard = () => {
   const [page, setPage] = useState<number>(1);
   const { mutate } = useStrimKey();
   // const [profile, setProfile] = useState({})
+  // API CALL
   const { data: profile } = useProfile();
+  const {data:wallet, isLoading:walletIsLoading} = useMercahntWallet()
   const { data: transactions, isPending } = useTransactions({ page });
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.netlify.app/passwordless-otp-verification?email=${email}`;
