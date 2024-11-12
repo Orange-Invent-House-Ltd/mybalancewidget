@@ -19,7 +19,7 @@ const RaiseADispute = () => {
   const cartData = location.state?.cartData;
   const id = cartData?.id;
   const navigate = useNavigate();
-  const today = moment().format("YYYY-MM-DD");
+  const today = moment().format('YYYY-MM-DD')
   const [page, setPage] = useState<number>(1);
   const { data } = useTransactions({ page });
   const queryClient = useQueryClient();
@@ -142,7 +142,7 @@ const RaiseADispute = () => {
           label="Description"
         />
         <div className="w-[350px]">
-          {/* disabled={ today <= cartData?.escrow?.deliveryDate ? true : false }  */}
+          {/* disabled={ today <= cartData?.escrow?.deliveryDate}  */}
           <Button fullWidth>submit</Button>
         </div>
       </form>

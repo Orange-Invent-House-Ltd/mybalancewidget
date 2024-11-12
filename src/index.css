@@ -29,6 +29,24 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
   margin: 0; 
 }
 
+/* Scroll bar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #FD7E14;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ceb0fa;
+}
+
+
+
 
 
 @font-face {
