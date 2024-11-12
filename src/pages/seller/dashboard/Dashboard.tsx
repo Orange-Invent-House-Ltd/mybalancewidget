@@ -97,8 +97,8 @@ const Dashboard = () => {
             </button>
           </div>
           {/*  */}
-          <div className="lg:flex md:flex block items-center gap-3">
-            <div className="flex flex-auto justify-between shadow-lg  rounded-[25px] p-9 mt-[2rem] border border-slate-100">
+          <div className="sm:flex block items-center gap-3">
+            <div className="flex flex-auto justify-between shadow-lg rounded-[25px] p-9 mt-[2rem] border border-slate-100">
               <div>
                 <p className="text-xs text-slate-500 mb-2">Amount in wallet</p>
                 <div className="font-semibold text-lg">
