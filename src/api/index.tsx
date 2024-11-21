@@ -74,13 +74,16 @@ export const getTransactions = async ({
   });
   return res.data;
 };
-
 export const getProfile = async () => {
   const res = await privateApi.get("/auth/profile");
   return res.data.data;
 };
-
 export const getMerchantWallet= async () => {
   const res = await privateApi.get("/merchants/wallets");
   return res.data.data;
 };
+// Users
+export const getUserWallet = async (id:number) => {
+  const res = await privateApi.get(`/console/users/${id}/wallets/`);
+  return res.data.data;
+}; 

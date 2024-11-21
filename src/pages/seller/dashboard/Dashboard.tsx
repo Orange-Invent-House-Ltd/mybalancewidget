@@ -6,7 +6,7 @@ import ItemsCard from "../../../components/seller/ItemsCard";
 import HeroHeader from "../../../components/reuseable/HeroHeader";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useMercahntWallet, useProfile, useTransactions } from "../../../Hooks/query";
+import { useMercahntWallet, useProfile, useTransactions, useUserWallet } from "../../../Hooks/query";
 import { useStrimKey } from "../../../Hooks/mutate";
 import EmptyState from "../../../components/reuseable/EmptyState";
 import FormatNumberWithCommas from "../../../components/reuseable/FormatNumberWithCommas";
@@ -24,12 +24,15 @@ const Dashboard = () => {
   // const [profile, setProfile] = useState({})
   // API CALL
   const { data: profile } = useProfile();
-  const {data:wallet, isLoading:walletIsLoading} = useMercahntWallet()
+  const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId)
   const { data: transactions, isPending } = useTransactions({ page });
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.netlify.app/passwordless-otp-verification?email=${email}`;
   const navigate = useNavigate();
   const store = useStore()
+  
+  const ngnWallet = userWallet?.find((wallet: any) => wallet?.currency === "NGN");
+  const usdWallet = userWallet?.find((wallet: any) => wallet?.currency === "USD");
 
   const goTo = (): void => {
     navigate("/seller/withdraw");
@@ -111,7 +114,7 @@ const Dashboard = () => {
                     "Loading..."
                   )}
                 </div>
-                <p className="text-xs text-slate-500 mt-5">since last month</p>
+                {/* <p className="text-xs text-slate-500 mt-5">since last month</p> */}
               </div>
               <div>
                 <img src={amtwallet} alt="" />{" "}
@@ -128,7 +131,7 @@ const Dashboard = () => {
                     "Loading..."
                   )}
                 </div>
-                <p className="text-xs text-slate-500 mt-5">since last month</p>
+                {/* <p className="text-xs text-slate-500 mt-5">since last month</p> */}
               </div>
               <div>
                 <img src={amtwithdrawn} alt="" />{" "}

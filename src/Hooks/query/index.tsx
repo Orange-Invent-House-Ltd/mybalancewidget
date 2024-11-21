@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProfile, getBanks, getTransactions, getMerchantWallet } from "../../api";
+import { getProfile, getBanks, getTransactions, getMerchantWallet, getUserWallet } from "../../api";
 
 export const useTransactions = ({
   search,
@@ -33,5 +33,12 @@ export const useMercahntWallet = () => {
   return useQuery({
     queryKey: ["merchantWallet"],
     queryFn: getMerchantWallet,
+  });
+};
+// Users
+export const useUserWallet = (id:number) => {
+  return useQuery({
+    queryKey: ["userWallet", id],
+    queryFn: () => getUserWallet(id),
   });
 };
