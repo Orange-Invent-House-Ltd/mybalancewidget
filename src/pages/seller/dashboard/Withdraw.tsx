@@ -61,7 +61,7 @@ function Withdraw() {
     try {
       setIsSubmitted(true);
       const { bankName, AccountNumber, AccountName, Amount } = data;
-      console.log(data);
+      // console.log(data);
       initiateWithdrawMutate({
         // ...data,
         accountNumber: accNum,
@@ -126,8 +126,8 @@ function Withdraw() {
                 }}
                 className="block border border-[#B7B7B7] w-full rounded-md p-2 outline-none focus:border-[#747373] "
               >
-                <option value={currency}>NGN</option>
-                <option value={currency}>USD</option>
+                <option value='NGN'>NGN</option>
+                <option value='USD'>USD</option>
               </select>
             </div>
             <div className="w-full mt-5">
