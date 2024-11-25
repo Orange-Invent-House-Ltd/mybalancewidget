@@ -18,6 +18,7 @@ interface FormValues {
 function Withdraw() {
   const [accNum, setAccNum] = useState("");
   const [code, setCode] = useState("");
+  const [currency, setCurrency] = useState('')
   const [modalMessageTitle, setModalMessageTitle] = useState("");
   const [isWithdraw, setIsWithdraw] = useState(false);
   const [modalMessageDescription, setModalMessageDescription] = useState("");
@@ -67,6 +68,7 @@ function Withdraw() {
         bankCode: code,
         amount: Amount,
         merchantId: merchantId,
+        currency,
       });
       // Handle success, navigate to next step or show success message
       navigate("/seller/otp", { state: { progress: 100 } });
@@ -113,6 +115,21 @@ function Withdraw() {
             </p>
           </div>
           <form onSubmit={onSubmitWrapper}>
+          <div className="w-full mt-5">
+              <label htmlFor={"selectBank"} className="block">
+                Select Currency
+              </label>
+              <select
+                value={currency}
+                onChange={(e) => {
+                  setCurrency(e.target.value);
+                }}
+                className="block border border-[#B7B7B7] w-full rounded-md p-2 outline-none focus:border-[#747373] "
+              >
+                <option value={currency}>NGN</option>
+                <option value={currency}>USD</option>
+              </select>
+            </div>
             <div className="w-full mt-5">
               <label htmlFor={"selectBank"} className="block">
                 Select bank
