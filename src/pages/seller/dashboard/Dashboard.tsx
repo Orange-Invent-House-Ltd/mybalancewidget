@@ -149,7 +149,7 @@ const Dashboard = () => {
     <div>
       {isPending && <LoadingOverlay />}
       <div className="px-[5%] pt-[30px] pb-10 backdrop-blur-lg bg-opacity-50">
-        <div className=" mt-7">
+        <div className="mt-7">
           <div className="flex justify-between">
             <div>
               <div className="font-semibold text-xl">Dashboard</div>
@@ -162,8 +162,9 @@ const Dashboard = () => {
               Make a Withdrawal
             </button>
           </div>
+          <HeroHeader />
           {/*  */}
-          <p className="text-[#303030] font-semibold mt-4 mb-2">Balance Breakdown</p>
+          <p className="text-[#303030] font-semibold mt-6 mb-2">Balance Breakdown</p>
           <div className="space-y-3">
             <div className="lg:flex md:flex block items-center gap-3">
               <DashboardCard
@@ -214,8 +215,6 @@ const Dashboard = () => {
           </div>
           {/*  */}
         </div>
-        <HeroHeader />
-
         <div className="pt-[30px]">
           <div className="flex items-center justify-between mb-4">
             <div>
