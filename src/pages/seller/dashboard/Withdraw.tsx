@@ -126,6 +126,7 @@ function Withdraw() {
                 }}
                 className="block border border-[#B7B7B7] w-full rounded-md p-2 outline-none focus:border-[#747373] "
               >
+                <option value=''>Select Currency</option>
                 <option value='NGN'>NGN</option>
                 <option value='USD'>USD</option>
               </select>

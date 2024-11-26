@@ -165,7 +165,7 @@ function Verification() {
             <p className="mt-4 text-center text-base font-normal leading-[21.6px]">
               {modalMessageDescription}
             </p>
-            <div className=" mt-4 w-[300px]">
+            <div className=" mt-4">
               {isWithdraw ? (
                 <Button
                   fullWidth={true}

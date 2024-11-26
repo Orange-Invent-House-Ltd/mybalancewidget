@@ -15,12 +15,16 @@ import Pagination from "../../../components/reuseable/Pagination";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
 import { privateApi } from "../../../api/axios";
 import useStore from "../../../store";
+import formatToNairaCurrency from "../../../util/formatNumber";
+import { formatToDollarCurrency } from "../../../components/reuseable/formatCurrency";
 
 const Dashboard = () => {
+  const [currency, setCurrency] = useState('')
   // const { key }: any = useParams();
   const queryClient = useQueryClient()
   const [page, setPage] = useState<number>(1);
   const { mutate } = useStrimKey();
+
   // const [profile, setProfile] = useState({})
   // API CALL
   const { data: profile } = useProfile();
@@ -105,11 +109,18 @@ const Dashboard = () => {
           <div className="lg:flex md:flex block items-center gap-3">
             <div className="flex flex-auto justify-between shadow-lg rounded-[25px] p-9 mt-[2rem] border border-slate-100">
               <div>
-                <p className="text-xs text-slate-500 mb-2">Amount in wallet</p>
+                <div className="flex items-center gap-3 mb-2">
+                  <p className="text-xs text-slate-500">Amount in wallet</p>
+                  <select value={currency} onChange={(e)=> setCurrency(e.target.value)} className='h-6 bg-transparent outline-none text-sm'>
+                    <option value="NGN">NGN</option>
+                    <option value="USD">USD</option>
+                  </select>
+                </div>
+                
                 <div className="font-semibold text-lg">
-                  ₦{" "}
-                  {profile ? (
-                    <FormatNumberWithCommas number={profile?.walletBalance} />
+                  {userWallet ? (
+                    currency === 'NGN' ? formatToNairaCurrency(ngnWallet?.balance) : 
+                    formatToDollarCurrency(usdWallet?.balance)
                   ) : (
                     "Loading..."
                   )}
@@ -122,11 +133,17 @@ const Dashboard = () => {
             </div>
             <div className="flex flex-auto justify-between shadow-lg  rounded-[25px] p-9 mt-[2rem] border border-slate-100">
               <div>
-                <p className="text-xs text-slate-500 mb-2">Amount withdrawn</p>
+                <div className="flex items-center gap-3 mb-2">
+                  <p className="text-xs text-slate-500">Amount withdrawn</p>
+                  <select value={currency} onChange={(e)=> setCurrency(e.target.value)} className='h-6 bg-transparent outline-none text-sm'>
+                    <option value="NGN">NGN</option>
+                    <option value="USD">USD</option>
+                  </select>
+                </div>
                 <div className="font-semibold text-lg">
-                  ₦{" "}
-                  {profile ? (
-                    <FormatNumberWithCommas number={profile?.withdrawnAmount} />
+                  {userWallet ? (
+                    currency === 'NGN' ? formatToNairaCurrency(ngnWallet?.withdrawnAmount) : 
+                    formatToDollarCurrency(usdWallet?.withdrawnAmount)
                   ) : (
                     "Loading..."
                   )}
