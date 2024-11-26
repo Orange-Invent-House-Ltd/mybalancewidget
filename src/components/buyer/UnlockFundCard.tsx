@@ -22,8 +22,7 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
       )}
       <div className='flex justify-between items-center'>
         <div className='flex items-center gap-6'>
-          <input type="checkbox" name='item' value={cartData?.id} checked={cartData?.isChecked} onChange={() => handleSingleCheckBoxChange(cartData?.id)} />
-          {/* <img src={cartData?.img} alt={cartData?.name}  className="w-[50px]"/> */}
+          {/* <input type="checkbox" name='item' value={cartData?.id} checked={cartData?.isChecked} onChange={() => handleSingleCheckBoxChange(cartData?.id)} /> */}
           <div>
             <div className="text-[#999999] text-[14px] flex items-center gap-x-2">
               <p>{cartData?.meta?.sourcePaymentTransaction.slice(0, 8)}</p>
@@ -56,9 +55,11 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
               Raise a Dispute</p>
             </Link>
           </button> */}
-          <button className="font-medium text-[14px] text-[#FD7E14] cursor-pointer hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={()=> setUnlockFund(true)}
-          >Unlock Funds </button>
+          {cartData?.customerRole === 'BUYER' ? 
+            <button className="font-medium text-[14px] text-[#FD7E14] cursor-pointer hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={()=> setUnlockFund(true)}
+            >Unlock Funds </button> : ''
+          }
         </div>
       </div>
       <div className="border border-[#EDEDED] mt-2"/>

@@ -12,6 +12,7 @@ export default {
           normal: " #FD7E14",
           dark: " #9A4D0C",
         },
+        borderColor: '#E4E4E4',
       }
     },
   },

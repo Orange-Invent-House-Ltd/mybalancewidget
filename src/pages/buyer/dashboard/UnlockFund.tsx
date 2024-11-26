@@ -29,9 +29,7 @@ const UnlockFund = () => {
   const [hover, setHover] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [allSelected, setAllSelected] = useState(false)
-  // const [checkBoxes, setCheckBoxes] = useState<any>([]); // array of transaction data with check status
   const [selectedItems, setSelectedItems] = useState<any>([]);
-  // const [unlockAll, setUnlockAll] = useState(false) //to set unlock all modal
   
   const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
 
@@ -51,10 +49,6 @@ const UnlockFund = () => {
         (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
       )
     );
-    // setSelectAll(
-    //   //set SelectAll to true if all checkboxes are checked and false otherwise.
-    //   updatedCheckBoxes.every((checkbox: any) => checkbox.isChecked) 
-    // );
     setAllSelected(
       //set AllSelected to true if all checkboxes are checked and false otherwise.
       updatedCheckBoxes.every((checkbox: any) => checkbox.isChecked) 
@@ -69,14 +63,12 @@ const UnlockFund = () => {
       });
       store.setCheckBoxes(updatedCheckBoxes);
       setSelectedItems(updatedCheckBoxes);
-      // setSelectAll(!selectAll);
     } else {
       // alert('not all')
       const updatedCheckBoxes = checkBoxes?.map((checkbox: any) => {
         return { ...checkbox, isChecked: selectAll }; //there is a problem here
       });
       store.setCheckBoxes(updatedCheckBoxes);
-      // setSelectedItems([]);
       setSelectedItems(
         updatedCheckBoxes?.filter(
           (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
@@ -118,11 +110,6 @@ const UnlockFund = () => {
     // CartDatas
     const itemIds = transactions?.data?.map((cartData: any) =>
       ({...cartData, isChecked: false} )//complete data with checked status
-      // ({
-      //   //only the data id with check status
-      //   id: cartData.id,
-      //   isChecked: false,
-      // })
     );
     store.setCheckBoxes(itemIds);
     console.log(itemIds);
@@ -228,9 +215,6 @@ const UnlockFund = () => {
             )}
           </div>
         </div>
-        {/* {selectedItems.map((value:any)=>(
-          <p key={value.id}>{value.id}</p>
-        ))} */}
         {transactions?.data?.length === 0 ? (
           <div className="mt-10">
             <EmptyState
