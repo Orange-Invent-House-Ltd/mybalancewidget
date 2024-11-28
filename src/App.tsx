@@ -9,6 +9,7 @@ import Buyer from './pages/buyer/index'
 import AuthLayout from "./layout/AuthLayout";
 import SingleSignInVeriication from "./pages/auth/SingleSignInVeriication";
 import Home from "./pages/auth/Home";
+import Dashboard from "./pages/dashboard/Dashboard";
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/dashboard/:key" element={<Dashboard />} />
         <Route path="/buyer/*" element={<Buyer />} />
         <Route path="/seller/*" element={<Seller />} />
         <Route path="/auth" element={<AuthLayout />} >

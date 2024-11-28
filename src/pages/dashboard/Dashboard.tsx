@@ -1,26 +1,23 @@
-import { LucideHelpCircle, ArrowLeft, Rabbit, CircleHelp } from "lucide-react";
-import amtwallet from "../../../assets/icon/amtwallet.svg";
-import amtwithdrawn from "../../../assets/icon/amtwithdrawn.svg";
-import shoe from "../../../assets/images/shoe.png";
-import ItemsCard from "../../../components/seller/ItemsCard";
-import HeroHeader from "../../../components/reuseable/HeroHeader";
-import { useNavigate, useParams } from "react-router-dom";
+import {Rabbit, CircleHelp } from "lucide-react";
+import shoe from "../../assets/images/shoe.png";
+import HeroHeader from "../../components/reuseable/HeroHeader";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useProfile, useTransactions, useUserWallet } from "../../../Hooks/query";
-import { useStrimKey, useUnlockFunds } from "../../../Hooks/mutate";
-import EmptyState from "../../../components/reuseable/EmptyState";
-import LoadingOverlay from "../../../components/reuseable/LoadingOverlay";
-import Pagination from "../../../components/reuseable/Pagination";
+import { useProfile, useTransactions, useUserWallet } from "../../Hooks/query";
+import { useStrimKey, useUnlockFunds } from "../../Hooks/mutate";
+import EmptyState from "../../components/reuseable/EmptyState";
+import LoadingOverlay from "../../components/reuseable/LoadingOverlay";
+import Pagination from "../../components/reuseable/Pagination";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
-import useStore from "../../../store";
-import formatToNairaCurrency from "../../../util/formatNumber";
-import { formatToDollarCurrency } from "../../../components/reuseable/formatCurrency";
-import UnlockFundCard from "../../../components/buyer/UnlockFundCard";
-import DashboardCard from "../../../components/DashboardCard";
-import wallet from '../../../assets/icon/wallet.svg'
-import lock from '../../../assets/icon/lock.svg'
-import unlock from '../../../assets/icon/unlock.svg'
-import arrowTR from '../../../assets/icon/arrowTR.svg'
+import useStore from "../../store";
+import formatToNairaCurrency from "../../util/formatNumber";
+import { formatToDollarCurrency } from "../../components/reuseable/formatCurrency";
+import UnlockFundCard from "../../components/buyer/UnlockFundCard";
+import wallet from '../../assets/icon/wallet.svg'
+import lock from '../../assets/icon/lock.svg'
+import unlock from '../../assets/icon/unlock.svg'
+import arrowTR from '../../assets/icon/arrowTR.svg'
+import DashboardCard from "../../components/DashboardCard";
 
 const Dashboard = () => {
   const [currency, setCurrency] = useState('NGN')
@@ -201,7 +198,7 @@ const Dashboard = () => {
                 isPendingUserWallet={isPendingUserWallet}
               />
               <DashboardCard
-                icon={lock}
+                icon={unlock}
                 title='UnLocked amount'
                 amount={currency === 'NGN' ? formatToNairaCurrency(ngnWallet?.unlockedAmount) : formatToDollarCurrency(usdWallet?.unlockedAmount)}
                 isPendingUserWallet={isPendingUserWallet}
