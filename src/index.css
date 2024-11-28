@@ -44,6 +44,11 @@ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer
 ::-webkit-scrollbar-thumb:hover {
   background: #ceb0fa;
 }
+/* no increase and decrease arrow in input type number for verification code boxes */
+.spin-button-none::-webkit-outer-spin-button,
+.spin-button-none::-webkit-inner-spin-button {
+  appearance: none;
+}
 
 
 

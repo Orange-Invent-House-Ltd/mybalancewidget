@@ -33,7 +33,7 @@ const Dashboard = () => {
   const [selectedItems, setSelectedItems] = useState<any>([]);
 
   const email = localStorage.getItem("email");
-  const urlWithUserEmail = `https://staging.mybalanceapp.com/passwordless-otp-verification?email=${email}`;
+  const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`;
   const navigate = useNavigate();
   const store = useStore()
   const checkBoxes = store?.checkBoxes
@@ -318,55 +318,6 @@ const Dashboard = () => {
             />
           )}
         </div>
-
-        {/* <div className="flex flex-col md:flex-row lg:flex-row text-center justify-between align-items-center  mt-10">
-          <div className="flex lg:justify-normal justify-center items-center gap-4">
-            <div className="text-2xl font-semibold">Transaction history</div>
-          </div>
-
-          <div className="flex justify-center items-center gap-3 px-1 mt-4">
-            <div className="flex lg:items-center md:items-center items-start gap-2">
-              <a
-                href={urlWithUserEmail}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {" "}
-                <LucideHelpCircle size="20" name="help" className="inline" />
-                <div className="text-sm font-medium inline ml-2">
-                  View Transaction History
-                </div>
-              </a>
-            </div>
-          </div>
-        </div>
-        {transactions?.data?.length === 0 ? (
-          <div className="mt-10">
-            <EmptyState
-              img={<Rabbit size={100} className="" />}
-              title={`No Lock found`}
-              text={`opps, it seems you don't have any transaction yet.`}
-            />
-          </div>
-        ) : (
-          transactions?.data?.map(
-            (cartData: any, index: any, arr: any, key: any) => (
-              <div
-                className={arr.length - 1 === index ? "" : "mb-4"}
-                key={cartData?.id}
-              >
-                <ItemsCard cartData={cartData} />
-              </div>
-            )
-          )
-        )}
-        {!isPending && transactions?.data.length > 0 && (
-          <Pagination
-            currentPage={transactions?.meta?.currentPage}
-            totalPage={transactions?.meta?.totalPages}
-            onPageChange={handlePageChange}
-          />
-        )} */}
       </div>
     </div>
   );

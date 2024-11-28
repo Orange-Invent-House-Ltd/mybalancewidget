@@ -68,7 +68,7 @@ const RaiseADispute = () => {
       />
       <h2 className="font-bold text-[#303030] text-[23px] ">Raise a Dispute</h2>
       <p className="mb-6">
-        Manage disputes with vendors by creating a dispute thread here.
+        Manage disputes with vendors by creating a dispute thread here..
       </p>
       <HeroHeader />
       <form

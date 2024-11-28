@@ -93,59 +93,64 @@ const RaiseADispute = () => {
         <img src={bannerImage} alt="Buyer" />
       </div>
 
-      <form
-        className="max-w-[720px] space-y-8 relative mb-8"
-        onSubmit={handleSubmit(raiseADispute)}
-      >
-        {/* {isLoading && <LoadingOverlay />} */}
-        <div className="flex gap-5 w-full items-center flex-col lg:flex-row ">
+      <div className="max-w-[720px] border border-borderColor rounded-lg px-[30px] py-[50px] mx-auto mb-10">
+        <form
+          className="space-y-8 relative"
+          onSubmit={handleSubmit(raiseADispute)}
+        >
+          {/* {isLoading && <LoadingOverlay />} */}
+          <div className="flex gap-5 w-full items-center flex-col lg:flex-row ">
+            <TextField
+              control={control}
+              label="Reference code/ Transaction ID"
+              value={cartData?.id}
+              name="transaction"
+              variant="xlong"
+              disabled
+              rules={{ required: "this field is required" }}
+            />
+
+            <div className="w-full mb-3">
+              <label
+                htmlFor={"selectBank"}
+                className="text-sm mb-[6px] capitalize block"
+              >
+                Priority
+              </label>
+              <select
+                className="block border border-[#B7B7B7] w-full h-12 rounded-md p-2 outline-none focus:border-[#B7B7B7]"
+                {...register("priority", {
+                  required: "this field is required",
+                })}
+              >
+                <option value="" className="text-[#B7B7B7]">Select Priority</option>
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+              </select>
+            </div>
+          </div>
           <TextField
             control={control}
-            label="Reference code/ Transaction ID"
-            value={cartData?.id}
-            name="transaction"
+            label="Reason for filing your dispute"
+            placeholder="Wrong Product"
+            name="reason"
             variant="xlong"
-            disabled
             rules={{ required: "this field is required" }}
           />
-
-          <div className="w-full mb-3">
-            <label
-              htmlFor={"selectBank"}
-              className="text-sm mb-[6px] capitalize block"
-            >
-              Priority
-            </label>
-            <select
-              className="block border border-[#B7B7B7] w-full h-12 rounded-md p-2 outline-none focus:border-[#B7B7B7]"
-              {...register("priority", {
-                required: "this field is required",
-              })}
-            >
-              <option value="LOW">Low</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HIGH">High</option>
-            </select>
+          <MultilineTextField
+            control={control}
+            name="description"
+            rules={{ required: "this field is required" }}
+            label="Description"
+            placeholder="Hello My Balance, this sneaker is not white o, it is blue."
+          />
+          <div className="">
+            {/* disabled={ today <= cartData?.escrow?.deliveryDate}  */}
+            <Button fullWidth>submit</Button>
           </div>
-        </div>
-        <TextField
-          control={control}
-          label="Reason for filing your dispute"
-          name="reason"
-          variant="xlong"
-          rules={{ required: "this field is required" }}
-        />
-        <MultilineTextField
-          control={control}
-          name="description"
-          rules={{ required: "this field is required" }}
-          label="Description"
-        />
-        <div className="w-[350px]">
-          {/* disabled={ today <= cartData?.escrow?.deliveryDate}  */}
-          <Button fullWidth>submit</Button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
