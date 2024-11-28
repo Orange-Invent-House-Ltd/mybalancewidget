@@ -247,7 +247,7 @@ const Dashboard = () => {
                   </a>
                 </p>
                 {hover && (
-                  <div className="absolute top-10 bg-[#d4d4d4] rounded-[8px] w-[359px] px-4 py-4">
+                  <div className="absolute bottom-10 -right-6 bg-white rounded-[8px] w-[359px] px-4 py-4 shadow-2xl">
                     <p className="mb-2">
                       <span className="font-bold">NB:</span> Note that clicking on
                       “View Transaction History” button will redirect you to
