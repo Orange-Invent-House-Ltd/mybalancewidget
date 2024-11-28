@@ -168,14 +168,8 @@ function Withdraw() {
                 placeholder="Account number"
                 className="border-gray-400 border-2 p-3 w-full rounded-lg outline-none text-gray-600 font-semibold"
               />
-              {/* {errors.AccountNumber && (
-                <p className="text-red-500 text-[15px] font-semibold mt-2 mb-[-8px]">
-                  {errors.AccountNumber.message}
-                </p>
-              )} */}
             </div>
             <div className="w-full mt-5">
-              {/* {LookupIsLoading && <option value="">loading...</option>} */}
 
               <label
                 htmlFor=""
@@ -193,11 +187,6 @@ function Withdraw() {
                 placeholder="Account name"
                 className="hover:cursor-not-allowed border-gray-400 border-2 p-3 w-full rounded-lg outline-none text-gray-600 font-semibold"
               />
-              {/* {errors.AccountName && (
-                <p className="text-red-500 text-[15px] font-semibold mt-2 mb-[-8px]">
-                  {errors.AccountName.message}
-                </p>
-              )} */}
             </div>
             <div className="w-full mt-5">
               <label

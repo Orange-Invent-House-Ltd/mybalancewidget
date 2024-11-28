@@ -123,7 +123,10 @@ const Dashboard = () => {
     // Calculate the start of the substring (position after "unlock-fund/")
     const extractStartIndex = startIndex + startString.length;
     // Extract the substring from the calculated start index to the end of the URL
-    const key = currentURL.substring(extractStartIndex);
+    let key = currentURL.substring(extractStartIndex);
+    if (key.endsWith("/")) {
+      key = key.slice(0, -1);
+    }
     store.setCount((prev:any) => prev + 1)
     if (store.count < 1){
       strimkey(key);
