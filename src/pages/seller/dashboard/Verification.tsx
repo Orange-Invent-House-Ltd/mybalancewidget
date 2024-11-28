@@ -118,8 +118,7 @@ function Verification() {
               Verify OTP
             </p>
             <p className="text-gray-500 max-w-[400px]text-[19px] mb-6">
-              Enter the 6-digits OTP that was sent to your email address you
-              provided.
+              Enter the 6-digits OTP that was sent to your email - <span className="text-primary-normal font-semibold">{profile?.email}</span>.
             </p>
           </div>
 
@@ -131,8 +130,6 @@ function Verification() {
                   e.preventDefault();
                   passwordlessOTPVerification(otp);
                   setIsSubmitted(true);
-                  // setOtp("");
-                  // setFilledCount(0);
                 }}
                 type="submit"
                 className={`p-3 w-full rounded-lg outline-none text-white font-semibold bg-[#FD7E14] my-6 hover:bg-[#c37e46] ${
@@ -143,12 +140,12 @@ function Verification() {
                 Withdraw Now
               </button>
             </div>
-            <div className="text-gray-400 text-center">
+            {/* <div className="text-gray-400 text-center">
               Didn’t receive OTP?{" "}
               <a href="" className="text-[#FD7E14] font-bold">
                 Click to resend
               </a>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>
