@@ -164,7 +164,7 @@ const Dashboard = () => {
           </div>
           <HeroHeader />
           {/*  */}
-          <div className="flex items-center justify-between gap-4 mt-8 mb-2">
+          <div className="flex items-center justify-between gap-4 w-[1080px] mt-8 mb-2">
             <p className="text-[#303030] font-semibold">Balance Breakdown</p>
             <select value={currency} onChange={(e)=> setCurrency(e.target.value)} className='h-6 bg-transparent outline-none text-sm'>
               <option value="NGN">NGN</option>
@@ -199,8 +199,8 @@ const Dashboard = () => {
             <div className="lg:flex md:flex block items-center gap-3">
               <DashboardCard
                 icon={wallet}
-                title='Transaction count'
-                amount={currency === 'NGN' ? formatToNairaCurrency(ngnWallet?.unlockedAmount) : formatToDollarCurrency(usdWallet?.unlockedAmount)}
+                title='Pending transaction'
+                amount={transactions?.meta?.totalResults}
                 currency={currency}
                 setCurrency={setCurrency}
               />

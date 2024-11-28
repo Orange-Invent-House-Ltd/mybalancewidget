@@ -7,7 +7,7 @@ const DashboardCard = ({icon,title, amount, currency, setCurrency}:any) => {
         <img src={icon} alt="card icons" className='w-[48px] h-[48px]'/>
         <div>
           <p className="text-sm text-slate-500 leading-5">{title}</p>
-          <p className="font-semibold text-[29px] text-[#121212]">{amount}</p>
+          <p className="font-semibold text-[24px] text-[#121212]">{amount}</p>
         </div>
       </div>
       
