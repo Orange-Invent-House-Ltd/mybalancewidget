@@ -100,7 +100,7 @@ export const getTransaction = async ({
       merchant: localStorage.getItem("merchant"),
     },
   });
-  return res.data;
+  return res.data.data;
 };
 export const getProfile = async () => {
   const res = await privateApi.get("/auth/profile");

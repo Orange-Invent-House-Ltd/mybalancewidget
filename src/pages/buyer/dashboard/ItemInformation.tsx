@@ -1,16 +1,17 @@
-import { useForm } from "react-hook-form";
-import { TextField } from "../../../components/reuseable/FormInput";
 import { Button } from "../../../components/reuseable/Buttons";
 import { ArrowLeft } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { formatToDollarCurrency, formatToNairaCurrency } from "../../../components/reuseable/formatCurrency";
 import { convertDate } from "../../../components/reuseable/convertDate";
 import bannerImage from "../../../assets/images/buyer.png";
+import { useTransaction } from "../../../Hooks/query";
 
 const ItemInformation = () => {
   const location = useLocation();
   const cartData = location.state?.cartData;
   const navigate = useNavigate()
+  // Api Call
+  const {data:transaction, isPending} = useTransaction({id:cartData?.id})
 
   return (
     <div className="px-[5%] pt-[30px]">
@@ -41,7 +42,7 @@ const ItemInformation = () => {
         {/* Amount */}
         <div className="flex flex-col items-center mb-6">
           <p>Amount Agreed</p>
-          <p className="text-[32px] font-semibold">{cartData?.currency === "NGN" ? formatToNairaCurrency(cartData?.amount) : formatToDollarCurrency(cartData?.amount) }</p>
+          <p className="text-[32px] font-semibold">{transaction?.currency === "NGN" ? formatToNairaCurrency(transaction?.amount) : formatToDollarCurrency(transaction?.amount) }</p>
         </div>
 
         <div>
@@ -54,10 +55,10 @@ const ItemInformation = () => {
               <p>Delivery timeline</p>
             </div>
             <div className="space-y-4 text-right">
-              <p>{cartData?.meta?.title}</p>
-              <p>{cartData?.meta?.description}</p>
-              <p>{cartData?.escrow?.itemQuantity}</p>
-              <p>{convertDate(cartData?.escrow?.deliveryDate)}</p>
+              <p>{transaction?.meta?.title}</p>
+              <p>{transaction?.meta?.description}</p>
+              <p>{transaction?.escrow?.itemQuantity}</p>
+              <p>{convertDate(transaction?.escrow?.deliveryDate)}</p>
             </div>
           </div>
           <p className="text-[18px] font-bold mb-4">Vendor Information</p>
@@ -66,10 +67,10 @@ const ItemInformation = () => {
               <p>Vendor’s email</p>
             </div>
             <div>
-              <p>{cartData?.escrow?.parties?.seller?.email}</p>
+              <p>{transaction?.escrow?.parties?.seller?.email}</p>
             </div>
           </div>
-          <Link to='/buyer/raise-a-dispute' state={{cartData: cartData }}>
+          <Link to='/buyer/raise-a-dispute' state={{cartData: transaction }}>
             <Button fullWidth>
               Raise a dispute
             </Button>
