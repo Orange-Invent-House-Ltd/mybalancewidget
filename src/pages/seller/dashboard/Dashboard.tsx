@@ -164,7 +164,7 @@ const Dashboard = () => {
           </div>
           <HeroHeader />
           {/*  */}
-          <div className="flex items-center justify-between gap-4 w-[1080px] mt-8 mb-2">
+          <div className="flex items-center justify-between gap-4 max-w-[1080px] mt-8 mb-2">
             <p className="text-[#303030] font-semibold">Balance Breakdown</p>
             <select value={currency} onChange={(e)=> setCurrency(e.target.value)} className='h-6 bg-transparent outline-none text-sm'>
               <option value="NGN">NGN</option>
