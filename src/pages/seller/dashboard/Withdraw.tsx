@@ -115,7 +115,7 @@ function Withdraw() {
             </p>
           </div>
           <form onSubmit={onSubmitWrapper}>
-          <div className="w-full mt-5">
+            <div className=" mt-5">
               <label htmlFor={"selectBank"} className="block">
                 Select Currency
               </label>

@@ -164,7 +164,14 @@ const Dashboard = () => {
           </div>
           <HeroHeader />
           {/*  */}
-          <p className="text-[#303030] font-semibold mt-6 mb-2">Balance Breakdown</p>
+          <div className="flex items-center justify-between gap-4 mt-8 mb-2">
+            <p className="text-[#303030] font-semibold">Balance Breakdown</p>
+            <select value={currency} onChange={(e)=> setCurrency(e.target.value)} className='h-6 bg-transparent outline-none text-sm'>
+              <option value="NGN">NGN</option>
+              <option value="USD">USD</option>
+            </select>
+          </div>
+          
           <div className="space-y-3">
             <div className="lg:flex md:flex block items-center gap-3">
               <DashboardCard
@@ -219,7 +226,7 @@ const Dashboard = () => {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="font-bold text-[#303030] text-[23px] ">Transaction History</h2>
-              <p className="mb-6">
+              <p className="max-w-[400px] mb-6">
                 Perform transactions such as unlock funds, raise a dispute or view
                 transactions details.
               </p>
