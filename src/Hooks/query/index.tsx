@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { getProfile, getBanks, getTransactions, getMerchantWallet, getUserWallet } from "../../api";
+import { getProfile, getBanks, getTransactions, getMerchantWallet, getUserWallet, getTransaction } from "../../api";
 
 export const useTransactions = ({
+  currency,
   search,
   page,
   size,
@@ -9,10 +10,29 @@ export const useTransactions = ({
   search?: string;
   page?: number;
   size?: number;
+  currency?: string;
 }) => {
   return useQuery({
-    queryKey: ["transactions", search, page, size],
-    queryFn: () => getTransactions({ search, page, size }),
+    queryKey: ["transactions", currency, search, page, size],
+    queryFn: () => getTransactions({ currency, search, page, size }),
+  });
+};
+export const useTransaction = ({
+  id,
+  search,
+  page,
+  size,
+  currency,
+}: {
+  id: string;
+  search?: string;
+  page?: number;
+  size?: number;
+  currency?: string;
+}) => {
+  return useQuery({
+    queryKey: ["transactions", id, search, page, size, currency],
+    queryFn: () => getTransaction({ id, search, page, size, currency }),
   });
 };
 

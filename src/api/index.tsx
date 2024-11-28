@@ -59,16 +59,44 @@ export const getTransactions = async ({
   search,
   page,
   size,
+  currency,
 }: {
   search?: string;
   page?: number;
   size?: number;
+  currency?: string;
 }) => {
   const res = await privateApi.get("/merchants/customer-transactions", {
     params: {
       search,
       page,
       size,
+      currency,
+      merchant: localStorage.getItem("merchant"),
+    },
+  });
+  return res.data;
+};
+export const getTransaction = async ({
+  id,
+  search,
+  page,
+  size,
+  currency,
+}: {
+  id: string;
+  search?: string;
+  page?: number;
+  size?: number;
+  currency?: string;
+}) => {
+  const res = await privateApi.get(`/merchants/customer-transactions/${id}`, {
+    params: {
+      id,
+      search,
+      page,
+      size,
+      currency,
       merchant: localStorage.getItem("merchant"),
     },
   });

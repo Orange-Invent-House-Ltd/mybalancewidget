@@ -38,7 +38,10 @@ const Dashboard = () => {
   // API CALL
   const { data: profile } = useProfile();
   const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId)
-  const { data: transactions, isPending } = useTransactions({ page });
+  const { data: transactions, isPending } = useTransactions({ 
+      page,
+      currency,
+    });
   const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
   
   const ngnWallet = userWallet?.find((wallet: any) => wallet?.currency === "NGN");
@@ -292,8 +295,8 @@ const Dashboard = () => {
                 img={
                   <Rabbit size={100} className="" />
                 }
-                title={`No Lock found`}
-                text={`opps, it seems you don't have any transaction yet.`}
+                title={`No Transaction History`}
+                text={`opps, you don't have any transaction for your search.`}
               />
             </div>
           ) : (
