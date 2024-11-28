@@ -1,6 +1,6 @@
-import React from 'react'
 
-const DashboardCard = ({icon,title, amount, currency, setCurrency}:any) => {
+
+const DashboardCard = ({icon, title, amount}:any) => {
   return (
     <div className='w-[350px] h-[120px] flex justify-between gap-4 border border-borderColor rounded-[12px] px-3 py-4'>
       <div className='flex items-center gap-2'>

@@ -201,22 +201,16 @@ const Dashboard = () => {
                 icon={wallet}
                 title='Pending transaction'
                 amount={transactions?.meta?.totalResults}
-                currency={currency}
-                setCurrency={setCurrency}
               />
               <DashboardCard
                 icon={lock}
                 title='UnLocked amount'
                 amount={currency === 'NGN' ? formatToNairaCurrency(ngnWallet?.unlockedAmount) : formatToDollarCurrency(usdWallet?.unlockedAmount)}
-                currency={currency}
-                setCurrency={setCurrency}
               />
               <DashboardCard
                 icon={arrowTR}
                 title='Amount withdrawn'
                 amount={currency === 'NGN' ? formatToNairaCurrency(ngnWallet?.withdrawnAmount) : formatToDollarCurrency(usdWallet?.withdrawnAmount)}
-                currency={currency}
-                setCurrency={setCurrency}
               />
             </div>
           </div>
