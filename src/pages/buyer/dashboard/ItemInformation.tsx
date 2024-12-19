@@ -5,11 +5,13 @@ import { formatToDollarCurrency, formatToNairaCurrency } from "../../../componen
 import { convertDate } from "../../../components/reuseable/convertDate";
 import bannerImage from "../../../assets/images/buyer.png";
 import { useTransaction } from "../../../Hooks/query";
+import moment from "moment";
 
 const ItemInformation = () => {
   const location = useLocation();
   const cartData = location.state?.cartData;
   const navigate = useNavigate()
+  const today = moment().format("YYYY-MM-DD");
   // Api Call
   const {data:transaction, isPending} = useTransaction({id:cartData?.id})
 
@@ -71,8 +73,8 @@ const ItemInformation = () => {
             </div>
           </div>
           <Link to='/buyer/raise-a-dispute' state={{cartData: transaction }}>
-            <Button fullWidth>
-              Raise a dispute
+            <Button fullWidth disabled={transaction?.escrow?.disputeRaised || today < transaction?.escrow?.deliveryDate }>
+              {transaction?.escrow?.disputeRaised ? 'Dispute Raised' : 'Raise a dispute'}
             </Button>
           </Link>
         </div>
