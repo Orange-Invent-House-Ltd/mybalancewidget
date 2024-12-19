@@ -1,3 +1,6 @@
+// NOT IN USE
+// NOT IN USE
+// NOT IN USE - You can delete this page and it will not have effect on the app. but remember to delete the route on buyer index file
 import UnlockFundCard from "../../../components/buyer/UnlockFundCard";
 import { ArrowLeft, CircleHelp, Rabbit } from "lucide-react";
 import shoe from "../../../assets/images/shoe.png";

@@ -18,6 +18,7 @@ import lock from '../../assets/icon/lock.svg'
 import unlock from '../../assets/icon/unlock.svg'
 import arrowTR from '../../assets/icon/arrowTR.svg'
 import DashboardCard from "../../components/DashboardCard";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [currency, setCurrency] = useState('NGN')

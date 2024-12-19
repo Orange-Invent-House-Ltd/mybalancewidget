@@ -5,14 +5,11 @@ import moment from "moment"
 import FormatNumberWithCommas from "../reuseable/FormatNumberWithCommas"
 import { Copy } from "lucide-react"
 import { toast } from "react-toastify"
+import { formatToDollarCurrency, formatToNairaCurrency } from "../reuseable/formatCurrency"
 
 const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
   const [unlockFund, setUnlockFund] = useState(false)
   const today  = moment().format("YYYY-MM-DD");
-  // const [disable, setDisable] = useState(false)
-  // today <= cartData?.escrow?.deliveryDate ? setDisable(true) : setDisable(false) 
-  let disable;
-  today <= cartData?.escrow?.deliveryDate ? disable = true : disable = false 
 
   
   return (
@@ -34,8 +31,8 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
             <h2 className='font-medium'>{cartData?.meta?.title}</h2>
             <p className="text-[#999999]">{cartData?.meta?.description}</p>
             <p className="text-[13px]">
-              <span>Delivery date: <span className="font-semiold">{cartData?.escrow?.deliveryDate}</span></span> 
-              <span className="ml-4 font-bold">₦ <FormatNumberWithCommas number={cartData?.amount}/></span>
+              {/* <span>Delivery date: <span className="font-semiold">{cartData?.escrow?.deliveryDate}</span></span>  */}
+              <span className="font-bold">{cartData?.currency === 'NGN' ? formatToNairaCurrency(cartData?.amount) : formatToDollarCurrency(cartData?.amount)}</span>
             </p>
           </div>
         </div>
@@ -45,19 +42,19 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
           {cartData?.escrow?.disputeRaised ? (
             <p className="font-medium text-[14px] opacity-50 hover:cursor-not-allowed">
              Dispute Raised</p>
-          ):(
+          ) : cartData?.deliveryDateIsDue ? (
             <Link to='/buyer/raise-a-dispute' state={{cartData: cartData }}><p className="font-medium text-[14px] cursor-pointer hover:underline">
               Raise a Dispute</p>
             </Link>
+          ) : (
+            <button className="font-medium text-[14px] cursor-pointer hover:underline disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              Raise a Dispute
+            </button>
           )}
-          {/* <button disabled = { today <= cartData?.escrow?.deliveryDate ? true : false } className="disabled:opacity-50 disabled:cursor-not-allowed">
-            <Link to='/buyer/raise-a-dispute' state={{cartData: cartData }}><p className="font-medium text-[14px] cursor-pointer hover:underline">
-              Raise a Dispute</p>
-            </Link>
-          </button> */}
           {cartData?.customerRole === 'BUYER' ? 
             <button className="font-medium text-[14px] text-[#FD7E14] cursor-pointer hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={()=> setUnlockFund(true)}
+              disabled={!cartData?.deliveryDateIsDue}
             >Unlock Funds </button> : ''
           }
         </div>
