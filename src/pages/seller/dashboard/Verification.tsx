@@ -29,7 +29,7 @@ function Verification() {
   const [modalMessageDescription, setModalMessageDescription] = useState("");
   const [pusherLoading, setPusherLoading] = useState(false);
   const merchantId = localStorage.getItem("merchant");
-  const {userID} = useStore()
+  const {userID, key} = useStore()
   // API CALL
   const { data: profile } = useProfile();
 
@@ -181,7 +181,7 @@ function Verification() {
                   fullWidth={true}
                   onClick={() => {
                     setIsWithdraw(false);
-                    navigate(-1);
+                    navigate(`/dashboard/${key}`);
                   }}
                 >
                   Done
