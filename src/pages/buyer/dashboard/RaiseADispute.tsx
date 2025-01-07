@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import { useTransactions } from "../../../Hooks/query";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
+import { useRaiseADispute } from "../../../Hooks/mutate";
 
 const RaiseADispute = () => {
   const location = useLocation();
@@ -30,28 +31,37 @@ const RaiseADispute = () => {
     reset,
     formState: { isSubmitSuccessful },
   } = useForm();
+  // API CALL
+  const{mutate:raiseADisputeMutate} = useRaiseADispute()
 
   const raiseADispute = async (data: any) => {
-    try {
-      const res = await privateApi.post(
-        `/merchants/customer-transactions/${id}`,
-        data
-      );
-      queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
-      toast.success(res.data.message, {
-        toastId: "success1",
-      });
-      navigate(-1)
-    } catch (error: any) {
-      let resMessage;
-      error.response.data.errors === null
-        ? (resMessage = error.response.data.message)
-        : (resMessage = error.response.data.errors.transaction[0]);
-      toast.error(resMessage, {
-        toastId: "error1",
-      });
-    }
-  };
+    raiseADisputeMutate({
+      id,
+      data
+    })
+  }
+
+  // const raiseADispute = async (data: any) => {
+  //   try {
+  //     const res = await privateApi.post(
+  //       `/merchants/customer-transactions/${id}`,
+  //       data
+  //     );
+  //     queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+  //     toast.success(res.data.message, {
+  //       toastId: "success1",
+  //     });
+  //     navigate(-1)
+  //   } catch (error: any) {
+  //     let resMessage;
+  //     error.response.data.errors === null
+  //       ? (resMessage = error.response.data.message)
+  //       : (resMessage = error.response.data.errors.transaction[0]);
+  //     toast.error(resMessage, {
+  //       toastId: "error1",
+  //     });
+  //   }
+  // };
 
   useEffect(() => {
     if (isSubmitSuccessful) {

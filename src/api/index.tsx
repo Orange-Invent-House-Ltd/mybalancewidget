@@ -23,6 +23,10 @@ export const unlockFunds = async (data: any) => {
   });
   return res.data;
 };
+export const raiseADispute = async ({id, data}:any) => {
+  const res = await privateApi.post(`/merchants/customer-transactions/${id}`, data);
+  return res.data;
+};
 export const initiateWithdrawal = async (data: any) => {
   const res = await privateApi.post(
     "/merchants/customers/initiate-withdrawal",

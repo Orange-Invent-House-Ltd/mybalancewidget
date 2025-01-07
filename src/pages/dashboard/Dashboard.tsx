@@ -1,7 +1,7 @@
 import {Rabbit, CircleHelp } from "lucide-react";
 import shoe from "../../assets/images/shoe.png";
 import HeroHeader from "../../components/reuseable/HeroHeader";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useProfile, useTransactions, useUserWallet } from "../../Hooks/query";
 import { useStrimKey, useUnlockFunds } from "../../Hooks/mutate";
@@ -29,19 +29,26 @@ const Dashboard = () => {
   const [selectAll, setSelectAll] = useState(false);
   const [allSelected, setAllSelected] = useState(false)
   const [selectedItems, setSelectedItems] = useState<any>([]);
+  const location = useLocation();
 
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`;
   const navigate = useNavigate();
-  const {checkBoxes, setCheckBoxes, count, setCount, isUnlockAll, setIsUnlockAll, setUserID} = useStore()
+  const {checkBoxes, setCheckBoxes, count, setCount, isUnlockAll, setIsUnlockAll, setUserID, setKey} = useStore()
 
   // API CALL
   const { data: profile } = useProfile();
   const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId)
-  const { data: transactions, isPending } = useTransactions({ 
+  const { data: transactions, isPending } = useTransactions(
+    { 
       page,
       currency,
-    });
+    },
+    // {
+    //   refetchOnMount: true,
+    //   staleTime: 0, // Consider data stale immediately
+    // }
+  );
   const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
   
   const ngnWallet = userWallet?.find((wallet: any) => wallet?.currency === "NGN");
@@ -52,6 +59,13 @@ const Dashboard = () => {
       setUserID(profile.userId);
     }
   }, [profile, setUserID]);
+  
+  useEffect(() => {
+    // Refetch all relevant queries when component mounts or route changes
+    queryClient.invalidateQueries({ queryKey: ['transactions'] });
+    queryClient.invalidateQueries({ queryKey: ['userWallet'] });
+    queryClient.invalidateQueries({ queryKey: ['profile'] });
+  }, [location.pathname, queryClient]);
 
   const goTo = (): void => {
     navigate("/seller/withdraw");
@@ -130,8 +144,10 @@ const Dashboard = () => {
     const extractStartIndex = startIndex + startString.length;
     // Extract the substring from the calculated start index to the end of the URL
     let key = currentURL.substring(extractStartIndex);
+    setKey(key)
     if (key.endsWith("/")) {
       key = key.slice(0, -1);
+      setKey(key)
     }
     setCount((prev:any) => prev + 1)
     if (count < 1){
@@ -154,7 +170,7 @@ const Dashboard = () => {
   }, [selectAll]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
-
+  console.log(transactions?.data)
   return (
     <div>
       {isPending && <LoadingOverlay />}

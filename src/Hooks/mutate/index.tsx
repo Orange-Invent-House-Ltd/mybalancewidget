@@ -10,6 +10,7 @@ import {
   initiateWithdrawal,
   passwordlessLogin,
   passwordlessOtpVerification,
+  raiseADispute,
   sellerOtpVerification,
   strimKey,
   unlockFunds,
@@ -112,6 +113,31 @@ export const useUnlockFunds = () => {
         toastId: "success1",
       });
       store.setIsUnlockAll(false)
+    },
+    onError: (error: any) => {
+      let resMessage;
+      error.response.data.errors === null
+        ? (resMessage = error.response.data.message)
+        : (resMessage = error.response.data.errors.error[0]);
+      toast.error(resMessage, {
+        toastId: "error1",
+      });
+    },
+  });
+};
+export const useRaiseADispute = () => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const {key} = useStore()
+  return useMutation({
+    mutationFn: raiseADispute,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+      toast.success(data.message, {
+        toastId: "success1",
+      });
+      // navigate(-1)
+      navigate(`/dashboard/${key}`)
     },
     onError: (error: any) => {
       let resMessage;
