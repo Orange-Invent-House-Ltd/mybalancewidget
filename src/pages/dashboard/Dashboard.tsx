@@ -310,7 +310,7 @@ const Dashboard = () => {
               />
             </div>
           ) : (
-            transactions?.map(
+            transactions?.data?.map(
               (cartData: any, index: any, arr: any, key: any) => (
                 <div key={key} className={arr.length - 1 === index ? "" : "mb-4"}>
                   <UnlockFundCard
