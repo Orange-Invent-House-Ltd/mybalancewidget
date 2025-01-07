@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { getProfile, getBanks, getTransactions, getMerchantWallet, getUserWallet, getTransaction } from "../../api";
 
 export const useTransactions = ({
@@ -60,5 +60,6 @@ export const useUserWallet = (id:number) => {
   return useQuery({
     queryKey: ["userWallet", id],
     queryFn: () => getUserWallet(id),
+    enabled: !!id,
   });
 };
