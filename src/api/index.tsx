@@ -36,11 +36,6 @@ export const initiateWithdrawal = async (data: any) => {
   return res.data;
 };
 
-export const getBanks = async () => {
-  const res = await publicApi.get("/shared/banks");
-  return res.data;
-};
-
 export const LookUpBank = async (data: any) => {
   const res = await privateApi.post("/shared/lookup/nuban", data);
   return res.data;
@@ -101,6 +96,10 @@ export const getTransaction = async ({
     },
   });
   return res.data.data;
+};
+export const getBanks = async () => {
+  const res = await publicApi.get("/shared/banks");
+  return res.data;
 };
 export const getProfile = async () => {
   const res = await privateApi.get("/auth/profile");
