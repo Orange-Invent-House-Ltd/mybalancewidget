@@ -6,8 +6,9 @@ import { ArrowLeft } from "lucide-react";
 
 import { useInitiateWithdrawal, useLookUpBank } from "../../../Hooks/mutate";
 import formatToNairaCurrency from "../../../util/formatNumber";
-import { useBanks, useProfile } from "../../../Hooks/query";
+import { useBanks, useProfile, useUserWallet } from "../../../Hooks/query";
 import FormatNumberWithCommas from "../../../components/reuseable/FormatNumberWithCommas";
+import { formatToDollarCurrency } from "../../../components/reuseable/formatCurrency";
 
 interface FormValues {
   Amount: number;
@@ -18,14 +19,19 @@ interface FormValues {
 function Withdraw() {
   const [accNum, setAccNum] = useState("");
   const [code, setCode] = useState("");
-  const [currency, setCurrency] = useState('')
+  const [currency, setCurrency] = useState('NGN')
   const [modalMessageTitle, setModalMessageTitle] = useState("");
   const [isWithdraw, setIsWithdraw] = useState(false);
   const [modalMessageDescription, setModalMessageDescription] = useState("");
   const [pusherLoading, setPusherLoading] = useState(false);
   const merchantId = localStorage.getItem("merchant");
   const navigate = useNavigate();
+  // API CALL
   const { data: profile } = useProfile();
+  const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId)
+
+  const ngnWallet = userWallet?.find((wallet: any) => wallet?.currency === "NGN");
+  const usdWallet = userWallet?.find((wallet: any) => wallet?.currency === "USD");
 
   const {
     mutate: initiateWithdrawMutate,
@@ -103,9 +109,9 @@ function Withdraw() {
               Withdraw to Bank
             </p>
             <p className="text-gray-500 text-[15px] font-semibold mb-2">
-              Available balance is ₦{" "}
+              Available balance is {" "}
               {profile ? (
-                <FormatNumberWithCommas number={profile?.walletBalance} />
+                currency === 'NGN' ? formatToNairaCurrency(ngnWallet?.balance) : formatToDollarCurrency(usdWallet?.balance)
               ) : (
                 "Loading..."
               )}

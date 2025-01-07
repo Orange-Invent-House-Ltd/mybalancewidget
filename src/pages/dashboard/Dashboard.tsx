@@ -33,8 +33,7 @@ const Dashboard = () => {
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`;
   const navigate = useNavigate();
-  const store = useStore()
-  const checkBoxes = store?.checkBoxes
+  const {checkBoxes, setCheckBoxes, count, setCount, isUnlockAll, setIsUnlockAll, setUserID} = useStore()
 
   // API CALL
   const { data: profile } = useProfile();
@@ -47,6 +46,12 @@ const Dashboard = () => {
   
   const ngnWallet = userWallet?.find((wallet: any) => wallet?.currency === "NGN");
   const usdWallet = userWallet?.find((wallet: any) => wallet?.currency === "USD");
+
+  useEffect(() => {
+    if (profile?.userId) {
+      setUserID(profile.userId);
+    }
+  }, [profile, setUserID]);
 
   const goTo = (): void => {
     navigate("/seller/withdraw");
@@ -66,7 +71,7 @@ const Dashboard = () => {
       }
       return checkbox;
     });
-    store.setCheckBoxes(updatedCheckBoxes);
+    setCheckBoxes(updatedCheckBoxes);
     setSelectedItems(
       updatedCheckBoxes.filter(
         (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
@@ -84,14 +89,14 @@ const Dashboard = () => {
       const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
         return { ...checkbox, isChecked: selectAll };
       });
-      store.setCheckBoxes(updatedCheckBoxes);
+      setCheckBoxes(updatedCheckBoxes);
       setSelectedItems(updatedCheckBoxes);
     } else {
       // alert('not all')
       const updatedCheckBoxes = checkBoxes?.map((checkbox: any) => {
         return { ...checkbox, isChecked: selectAll }; //there is a problem here
       });
-      store.setCheckBoxes(updatedCheckBoxes);
+      setCheckBoxes(updatedCheckBoxes);
       setSelectedItems(
         updatedCheckBoxes?.filter(
           (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
@@ -128,11 +133,11 @@ const Dashboard = () => {
     if (key.endsWith("/")) {
       key = key.slice(0, -1);
     }
-    store.setCount((prev:any) => prev + 1)
-    if (store.count < 1){
+    setCount((prev:any) => prev + 1)
+    if (count < 1){
       strimkey(key);
     }
-    console.log(key);
+    // console.log(key);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -140,14 +145,15 @@ const Dashboard = () => {
     const itemIds = transactions?.data?.map((cartData: any) =>
       ({...cartData, isChecked: false} )//complete data with checked status
     );
-    store.setCheckBoxes(itemIds);
-    console.log(itemIds);
-    console.log("here you go");
+    setCheckBoxes(itemIds);
+    // console.log(itemIds);
   }, [transactions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
       handleAllChecked()
   }, [selectAll]); // eslint-disable-line react-hooks/exhaustive-deps
+
+
 
   return (
     <div>
@@ -257,7 +263,7 @@ const Dashboard = () => {
                 )}
               </div>
 
-              {store.isUnlockAll && (
+              {isUnlockAll && (
                 <div className="animate-jump fixed top-0 left-0 z-50 w-full h-full bg-[#3a3a3a]/30 backdrop-blur-[8px]"> 
                   <div className="py-6 px-6 max-w-[400px] min-h-[246px] rounded-[12px] absolute bg-white top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 z-50">
                     <div className='shadow-3xl'>
@@ -272,7 +278,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <button className="w-full rounded-md border border-[#101828] py-3 px-4 capitalize font-bold cursor-pointer transition-all mb-3"
-                        onClick={()=>store.setIsUnlockAll(false)}
+                        onClick={()=>setIsUnlockAll(false)}
                       >Cancel</button>
                       <button className="w-full bg-[#039855] text-white rounded-md py-3 px-4 capitalize font-bold cursor-pointer transition-all mb-6"
                         onClick={() => {

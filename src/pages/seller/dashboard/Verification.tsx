@@ -14,11 +14,14 @@ import waves from "../../../assets/icon/waves.svg";
 import loading from "../../../assets/icon/loadingSpinner.svg";
 import warningIcon from "../../../assets/icon/warningIcon.svg";
 import { useProfile } from "../../../Hooks/query";
+import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
+import useStore from "../../../store";
 
 function Verification() {
   const [otp, setOtp] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient()
   const [filledCount, setFilledCount] = useState(0);
   const [modalMessageTitle, setModalMessageTitle] = useState("");
   const [isWithdraw, setIsWithdraw] = useState(false);
@@ -26,6 +29,8 @@ function Verification() {
   const [modalMessageDescription, setModalMessageDescription] = useState("");
   const [pusherLoading, setPusherLoading] = useState(false);
   const merchantId = localStorage.getItem("merchant");
+  const {userID} = useStore()
+  // API CALL
   const { data: profile } = useProfile();
 
   const {
@@ -40,7 +45,15 @@ function Verification() {
 
   const passwordlessOTPVerification = async (otp: string) => {
     if (otp.length < 6) return;
-    withdrawMutate({ otp: otp, tempId: tempId! });
+    withdrawMutate(
+      { otp: otp, tempId: tempId! },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["userWallet", userID]});
+          // queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+        }
+      }
+    );
   };
 
   const progressFromWithdraw = location.state?.progress || 0;

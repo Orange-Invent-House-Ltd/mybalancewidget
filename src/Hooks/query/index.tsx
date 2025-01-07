@@ -31,7 +31,7 @@ export const useTransaction = ({
   currency?: string;
 }) => {
   return useQuery({
-    queryKey: ["transactions", id, search, page, size, currency],
+    queryKey: ["transaction", id, search, page, size, currency],
     queryFn: () => getTransaction({ id, search, page, size, currency }),
   });
 };
