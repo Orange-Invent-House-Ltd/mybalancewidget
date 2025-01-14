@@ -7,8 +7,6 @@ import {
 } from "../../../components/reuseable/FormInput";
 import { set, useForm } from "react-hook-form";
 import { Button } from "../../../components/reuseable/Buttons";
-import { privateApi } from "../../../api/axios";
-import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { useTransactions } from "../../../Hooks/query";
@@ -40,28 +38,6 @@ const RaiseADispute = () => {
       data
     })
   }
-
-  // const raiseADispute = async (data: any) => {
-  //   try {
-  //     const res = await privateApi.post(
-  //       `/merchants/customer-transactions/${id}`,
-  //       data
-  //     );
-  //     queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
-  //     toast.success(res.data.message, {
-  //       toastId: "success1",
-  //     });
-  //     navigate(-1)
-  //   } catch (error: any) {
-  //     let resMessage;
-  //     error.response.data.errors === null
-  //       ? (resMessage = error.response.data.message)
-  //       : (resMessage = error.response.data.errors.transaction[0]);
-  //     toast.error(resMessage, {
-  //       toastId: "error1",
-  //     });
-  //   }
-  // };
 
   useEffect(() => {
     if (isSubmitSuccessful) {

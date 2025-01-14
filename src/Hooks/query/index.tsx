@@ -60,6 +60,5 @@ export const useUserWallet = (id:number) => {
   return useQuery({
     queryKey: ["userWallet", id],
     queryFn: () => getUserWallet(id),
-    enabled: !!id,
   });
 };

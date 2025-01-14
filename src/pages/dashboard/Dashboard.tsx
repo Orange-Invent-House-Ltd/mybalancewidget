@@ -38,16 +38,12 @@ const Dashboard = () => {
 
   // API CALL
   const { data: profile } = useProfile();
-  const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId)
+  const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId ?? undefined)
   const { data: transactions, isPending } = useTransactions(
     { 
       page,
       currency,
-    },
-    // {
-    //   refetchOnMount: true,
-    //   staleTime: 0, // Consider data stale immediately
-    // }
+    }
   );
   const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
   

@@ -10,10 +10,8 @@ const DashboardCard = ({icon, title, amount, isPendingUserWallet}:any) => {
           {isPendingUserWallet ? 'Loading...' : (
             <p className="font-semibold text-[24px] text-[#121212]">{amount}</p>
           )}
-          
         </div>
       </div>
-      
     </div>
   )
 }
