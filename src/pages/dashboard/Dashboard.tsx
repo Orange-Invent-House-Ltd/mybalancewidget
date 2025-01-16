@@ -103,7 +103,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      {isPending || !keyProcessed || !profile && <LoadingOverlay />}
+      {(isPending || !keyProcessed || !profile) && <LoadingOverlay />}
       <div className="px-[5%] pt-[30px] pb-10 backdrop-blur-lg bg-opacity-50">
         <div className="mt-7">
           <div className="flex justify-between">
