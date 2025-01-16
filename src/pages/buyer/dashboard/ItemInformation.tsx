@@ -30,7 +30,7 @@ const ItemInformation = () => {
       queryClient.invalidateQueries({ queryKey: ['dispute', transaction.escrow.disputeId] });
     }
   }, [cartData?.id, transaction?.escrow?.disputeId, queryClient]);
-  
+
   const step = dispute?.status ?? 'PENDING'
 
   return (
@@ -95,28 +95,28 @@ const ItemInformation = () => {
               <p className="text-[18px] font-bold mb-4">Dispute Status</p>
               <div className="mt-5 mb-2 flex items-center justify-center">
                 {step === 'PENDING' ? <CircleDot size={30} className="text-primary-normal"/> : <CircleCheck size={30} className="text-primary-normal"/>}
-                <div className={`h-0.5 w-[150px] rounded-full ${step === 'PROGRESS' || step === 'RESOLVED' ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
+                <div className={`h-0.5 w-[100px] rounded-full ${step === 'PROGRESS' || step === 'RESOLVED' ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
                 
                 {step === 'RESOLVED' ? <CircleCheck size={30} className="text-primary-normal"/> : step === 'PROGRESS' ? <CircleDot size={30} className="text-primary-normal"/> : <CircleDot size={30} className="text-[#EAECF0]"/>}
-                <div className={`h-0.5 w-[150px] rounded-full ${step === 'RESOLVED' ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
+                <div className={`h-0.5 w-[100px] rounded-full ${step === 'RESOLVED' ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
                 
                 {step === 'RESOLVED' ? <CircleCheck size={30} className="text-primary-normal"/> : <CircleDot size={30} className="text-[#EAECF0]"/> }
               </div>
               <div className="flex justify-between mb-6">
                 <div className="text-center">
                   <p className="text-status-pending font-medium leading-none">Pending</p>
-                  <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.createdAt}/>}</span>
+                  <span className="text-[#B7B7B7] text-[13px]">{<DateTime dateString={dispute?.createdAt}/>}</span>
                 </div>
                 <div className="text-center">
                   <p className={`font-medium leading-none ${step === 'PROGRESS' || step === 'RESOLVED' ? 'text-status-inprogress' : 'text-[#B7B7B7]'}`}>In Progress</p>
                   {(step === 'PROGRESS' || step === 'RESOLVED') && (
-                    <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.meta?.inProgressTimestamp}/>}</span>
+                    <span className="text-[#B7B7B7] text-[13px]">{<DateTime dateString={dispute?.meta?.inProgressTimestamp}/>}</span>
                   )}
                 </div>
                 <div className="text-center">
                   <p className={`font-medium leading-none ${step === 'RESOLVED' ? 'text-status-resolved' : 'text-[#B7B7B7]'}`}>Resolved</p>
                   {step === 'RESOLVED' && (
-                    <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.meta?.resolutionTimestamp}/>}</span>
+                    <span className="text-[#B7B7B7] text-[13px]">{<DateTime dateString={dispute?.meta?.resolutionTimestamp}/>}</span>
                   )}
                 </div>
               </div>
