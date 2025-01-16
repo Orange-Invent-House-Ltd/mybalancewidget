@@ -21,40 +21,121 @@ import DashboardCard from "../../components/DashboardCard";
 import { toast } from "react-toastify";
 
 const Dashboard = () => {
-  const [currency, setCurrency] = useState('NGN')
-  const queryClient = useQueryClient()
+  const [currency, setCurrency] = useState('NGN');
   const [page, setPage] = useState<number>(1);
   const [hover, setHover] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
-  const [allSelected, setAllSelected] = useState(false)
+  const [allSelected, setAllSelected] = useState(false);
   const [selectedItems, setSelectedItems] = useState<any>([]);
-  const location = useLocation();
+  const [urlKey, setUrlKey] = useState<string | null>(null);
+  const [keyProcessed, setKeyProcessed] = useState(false);
 
+  const queryClient = useQueryClient();
+  const location = useLocation();
+  const navigate = useNavigate();
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`;
-  const navigate = useNavigate();
-  const {checkBoxes, setCheckBoxes, count, setCount, isUnlockAll, setIsUnlockAll,userID, setUserID, setKey} = useStore()
+  
+  const {
+    checkBoxes, 
+    setCheckBoxes, 
+    isUnlockAll, 
+    setIsUnlockAll,
+    userID, 
+    setUserID, 
+    setKey
+  } = useStore();
 
-  // API CALL
-  const { mutate } = useStrimKey();
-  const { data: profile } = useProfile();
-  const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId ?? undefined)
-  const { data: transactions, isPending } = useTransactions(
+  // Extract key from URL
+  useEffect(() => {
+    const extractKeyFromUrl = () => {
+      const path = window.location.pathname;
+      const dashboardPrefix = "/dashboard/";
+      if (path.startsWith(dashboardPrefix)) {
+        const key = path.slice(dashboardPrefix.length).replace(/\/$/, '');
+        if (key) {
+          setUrlKey(key);
+          setKey(key);
+        }
+      }
+    };
+
+    extractKeyFromUrl();
+  }, [setKey]);
+
+   // Process the key using Strim API
+   const { mutate: processStrimKey, isSuccess: strimKeySuccess } = useStrimKey();
+
+   useEffect(() => {
+     if (urlKey && !keyProcessed) {
+       processStrimKey(
+         { key: urlKey },
+         {
+           onSuccess: () => {
+             setKeyProcessed(true);
+             queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
+           },
+           onError: (error) => {
+             toast.error("Failed to process key");
+             console.error("Strim key processing failed:", error);
+           }
+         }
+       );
+     }
+   }, [urlKey, keyProcessed, processStrimKey, queryClient]);
+ 
+   // Fetch profile data only after key is processed
+   const { data: profile } = useProfile();
+    // Fetch wallet and transaction data only after profile is available
+    const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId ?? undefined)
+   const { data: transactions, isPending } = useTransactions(
     { 
       page,
       currency,
     }
   );
   const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
-  
+
   const ngnWallet = userWallet?.find((wallet: any) => wallet?.currency === "NGN");
   const usdWallet = userWallet?.find((wallet: any) => wallet?.currency === "USD");
 
-  useEffect(() => {
-    if (profile?.userId) {
-      setUserID(profile.userId);
-    }
-  }, [profile, setUserID]);
+    // Set userID when profile is available
+    useEffect(() => {
+      if (profile?.userId) {
+        setUserID(profile.userId);
+      }
+    }, [profile, setUserID]);
+  
+    // Update checkboxes when transactions change
+    useEffect(() => {
+      if (transactions?.data) {
+        const itemIds = transactions.data.map((cartData: any) => ({
+          ...cartData,
+          isChecked: false
+        }));
+        setCheckBoxes(itemIds);
+      }
+    }, [transactions, setCheckBoxes]);
+
+  // API CALL
+  // const { mutate } = useStrimKey();
+  // const { data: profile } = useProfile();
+  // const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId ?? undefined)
+  // const { data: transactions, isPending } = useTransactions(
+  //   { 
+  //     page,
+  //     currency,
+  //   }
+  // );
+  // const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
+  
+  
+
+  // useEffect(() => {
+  //   if (profile?.userId) {
+  //     setUserID(profile.userId);
+  //   }
+  // }, [profile, setUserID]);
   
   // useEffect(() => {
   //   // Refetch all relevant queries when component mounts or route changes
@@ -117,45 +198,45 @@ const Dashboard = () => {
     }
   };
 
-  const strimkey = async (key:any) => {
-    mutate(
-      { 
-        key: key 
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
-          queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
-          queryClient.invalidateQueries(["userWallet"] as InvalidateQueryFilters);
-        }
-      }
-    );
-  };
+  // const strimkey = async (key:any) => {
+  //   mutate(
+  //     { 
+  //       key: key 
+  //     },
+  //     {
+  //       onSuccess: () => {
+  //         queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
+  //         queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+  //         queryClient.invalidateQueries(["userWallet"] as InvalidateQueryFilters);
+  //       }
+  //     }
+  //   );
+  // };
 
-  useEffect(() => {
-    // Get the current URL using window.location.href
-    const currentURL = window.location.href;
-    const startString = "dashboard/";
-    // Find the index of the starting string
-    const startIndex = currentURL.indexOf(startString);
-    // Calculate the start of the substring (position after "unlock-fund/")
-    const extractStartIndex = startIndex + startString.length;
-    // Extract the substring from the calculated start index to the end of the URL
-    const key = currentURL.substring(extractStartIndex);
-    setKey(key)
-    strimkey(key);
+  // useEffect(() => {
+  //   // Get the current URL using window.location.href
+  //   const currentURL = window.location.href;
+  //   const startString = "dashboard/";
+  //   // Find the index of the starting string
+  //   const startIndex = currentURL.indexOf(startString);
+  //   // Calculate the start of the substring (position after "unlock-fund/")
+  //   const extractStartIndex = startIndex + startString.length;
+  //   // Extract the substring from the calculated start index to the end of the URL
+  //   const key = currentURL.substring(extractStartIndex);
+  //   setKey(key)
+  //   strimkey(key);
 
-    // if (key.endsWith("/")) {
-    //   key = key.slice(0, -1);
-    //   setKey(key)
-    //   strimkey(key);
-    // }
-    setCount((prev:any) => prev + 1)
-    // if (count < 1){
-    //   strimkey(key);
-    // }
-    // console.log(key);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  //   // if (key.endsWith("/")) {
+  //   //   key = key.slice(0, -1);
+  //   //   setKey(key)
+  //   //   strimkey(key);
+  //   // }
+  //   setCount((prev:any) => prev + 1)
+  //   // if (count < 1){
+  //   //   strimkey(key);
+  //   // }
+  //   // console.log(key);
+  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     // CartDatas
@@ -171,7 +252,11 @@ const Dashboard = () => {
   }, [selectAll]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
-  console.log(transactions?.data)
+   // Your existing JSX remains largely the same, but add a loading state:
+   if (!keyProcessed || !profile) {
+    return <LoadingOverlay />;
+  }
+
   return (
     <div>
       {isPending && <LoadingOverlay />}
