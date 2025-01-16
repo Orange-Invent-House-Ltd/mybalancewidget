@@ -97,19 +97,19 @@ const ItemInformation = () => {
                 <div className="text-center">
                   <p className={`font-medium leading-none ${step === 'PROGRESS' || step === 'RESOLVED' ? 'text-status-inprogress' : 'text-[#B7B7B7]'}`}>In Progress</p>
                   {(step === 'PROGRESS' || step === 'RESOLVED') && (
-                    <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.updatedAt}/>}</span>
+                    <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.meta?.inProgressTimestamp}/>}</span>
                   )}
                 </div>
                 <div className="text-center">
                   <p className={`font-medium leading-none ${step === 'RESOLVED' ? 'text-status-resolved' : 'text-[#B7B7B7]'}`}>Resolved</p>
                   {step === 'RESOLVED' && (
-                    <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.updatedAt}/>}</span>
+                    <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.meta?.resolutionTimestamp}/>}</span>
                   )}
                 </div>
               </div>
             </>
           )}
-          <Link to='/buyer/raise-a-dispute' state={{cartData: transaction }}>
+          <Link to='/buyer/raise-a-dispute' state={{transaction: transaction }}>
             <Button fullWidth disabled={transaction?.escrow?.disputeRaised || today < transaction?.escrow?.deliveryDate }>
               {transaction?.escrow?.disputeRaised ? 'Dispute Raised' : 'Raise a dispute'}
             </Button>

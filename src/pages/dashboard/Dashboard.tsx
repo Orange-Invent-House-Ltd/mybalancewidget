@@ -29,7 +29,8 @@ const Dashboard = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
-  const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`;
+  const BASE_URL = import.meta.env.VITE_DOMAIN_URL
+  const urlWithUserEmail = `${BASE_URL}/passwordless-otp-verification?email=${email}`;
   
   const {
     setUserID, 
