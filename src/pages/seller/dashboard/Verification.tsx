@@ -47,12 +47,12 @@ function Verification() {
     if (otp.length < 6) return;
     withdrawMutate(
       { otp: otp, tempId: tempId! },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["userWallet", userID]});
-          // queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
-        }
-      }
+      // {
+      //   onSuccess: () => {
+      //     queryClient.invalidateQueries({ queryKey: ["userWallet", userID]});
+      //     queryClient.invalidateQueries({ queryKey: ["userWallet", userID]});
+      //   }
+      // }
     );
   };
 
@@ -181,7 +181,8 @@ function Verification() {
                   fullWidth={true}
                   onClick={() => {
                     setIsWithdraw(false);
-                    navigate(`/dashboard/${key}`);
+                    // navigate(`/dashboard/${key}`);
+                    navigate(-2)
                   }}
                 >
                   Done

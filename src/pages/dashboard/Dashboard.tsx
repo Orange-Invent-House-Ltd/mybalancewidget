@@ -24,7 +24,6 @@ const Dashboard = () => {
   const [currency, setCurrency] = useState('NGN')
   const queryClient = useQueryClient()
   const [page, setPage] = useState<number>(1);
-  const { mutate } = useStrimKey();
   const [hover, setHover] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
   const [allSelected, setAllSelected] = useState(false)
@@ -34,9 +33,10 @@ const Dashboard = () => {
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`;
   const navigate = useNavigate();
-  const {checkBoxes, setCheckBoxes, count, setCount, isUnlockAll, setIsUnlockAll, setUserID, setKey} = useStore()
+  const {checkBoxes, setCheckBoxes, count, setCount, isUnlockAll, setIsUnlockAll,userID, setUserID, setKey} = useStore()
 
   // API CALL
+  const { mutate } = useStrimKey();
   const { data: profile } = useProfile();
   const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId ?? undefined)
   const { data: transactions, isPending } = useTransactions(
@@ -56,12 +56,13 @@ const Dashboard = () => {
     }
   }, [profile, setUserID]);
   
-  useEffect(() => {
-    // Refetch all relevant queries when component mounts or route changes
-    queryClient.invalidateQueries({ queryKey: ['transactions'] });
-    queryClient.invalidateQueries({ queryKey: ['userWallet'] });
-    queryClient.invalidateQueries({ queryKey: ['profile'] });
-  }, [location.pathname, queryClient]);
+  // useEffect(() => {
+  //   // Refetch all relevant queries when component mounts or route changes
+  //   queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
+  //   queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
+  //   queryClient.invalidateQueries(["userWallet"] as InvalidateQueryFilters);
+    
+  // }, [location.pathname, queryClient]);
 
   const goTo = (): void => {
     navigate("/seller/withdraw");
@@ -123,7 +124,7 @@ const Dashboard = () => {
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['profile'] });
+          queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
           queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
           queryClient.invalidateQueries(["userWallet"] as InvalidateQueryFilters);
         }
@@ -140,16 +141,19 @@ const Dashboard = () => {
     // Calculate the start of the substring (position after "unlock-fund/")
     const extractStartIndex = startIndex + startString.length;
     // Extract the substring from the calculated start index to the end of the URL
-    let key = currentURL.substring(extractStartIndex);
+    const key = currentURL.substring(extractStartIndex);
     setKey(key)
-    if (key.endsWith("/")) {
-      key = key.slice(0, -1);
-      setKey(key)
-    }
+    strimkey(key);
+
+    // if (key.endsWith("/")) {
+    //   key = key.slice(0, -1);
+    //   setKey(key)
+    //   strimkey(key);
+    // }
     setCount((prev:any) => prev + 1)
-    if (count < 1){
-      strimkey(key);
-    }
+    // if (count < 1){
+    //   strimkey(key);
+    // }
     // console.log(key);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

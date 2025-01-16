@@ -20,10 +20,6 @@ function Withdraw() {
   const [accNum, setAccNum] = useState("");
   const [code, setCode] = useState("");
   const [currency, setCurrency] = useState('NGN')
-  const [modalMessageTitle, setModalMessageTitle] = useState("");
-  const [isWithdraw, setIsWithdraw] = useState(false);
-  const [modalMessageDescription, setModalMessageDescription] = useState("");
-  const [pusherLoading, setPusherLoading] = useState(false);
   const merchantId = localStorage.getItem("merchant");
   const navigate = useNavigate();
   // API CALL
