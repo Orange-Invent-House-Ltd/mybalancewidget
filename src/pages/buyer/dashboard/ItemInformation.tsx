@@ -96,11 +96,15 @@ const ItemInformation = () => {
                 </div>
                 <div className="text-center">
                   <p className={`font-medium leading-none ${step === 'PROGRESS' || step === 'RESOLVED' ? 'text-status-inprogress' : 'text-[#B7B7B7]'}`}>In Progress</p>
-                  <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.updatedAt}/>}</span>
+                  {(step === 'PROGRESS' || step === 'RESOLVED') && (
+                    <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.updatedAt}/>}</span>
+                  )}
                 </div>
                 <div className="text-center">
                   <p className={`font-medium leading-none ${step === 'RESOLVED' ? 'text-status-resolved' : 'text-[#B7B7B7]'}`}>Resolved</p>
-                  <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.updatedAt}/>}</span>
+                  {step === 'RESOLVED' && (
+                    <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.updatedAt}/>}</span>
+                  )}
                 </div>
               </div>
             </>
