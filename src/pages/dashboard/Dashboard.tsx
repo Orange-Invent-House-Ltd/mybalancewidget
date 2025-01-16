@@ -30,7 +30,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
   const BASE_URL = import.meta.env.VITE_DOMAIN_URL
-  const urlWithUserEmail = `${BASE_URL}/passwordless-otp-verification?email=${email}`;
+  const urlWithUserEmail = `${BASE_URL}passwordless-otp-verification?email=${email}`;
   
   const {
     setUserID, 
