@@ -2,14 +2,14 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { ArrowLeft, CircleCheck, CircleDot } from "lucide-react";
-import { useTransaction } from "../../../Hooks/query";
+import { useDispute, useTransaction } from "../../../Hooks/query";
 import { Button } from "../../../components/reuseable/Buttons";
 import { formatToDollarCurrency, formatToNairaCurrency } from "../../../components/reuseable/formatCurrency";
-import { convertDate } from "../../../components/reuseable/convertDate";
 import bannerImage from "../../../assets/images/buyer.png";
+import { DateTime } from "../../../components/reuseable/DateTime";
+import { convertDate } from "../../../components/reuseable/convertDate";
 
 const ItemInformation = () => {
-  const [step, setStep] = useState(1)
   const location = useLocation();
   const cartData = location.state?.transaction;
   const navigate = useNavigate()
@@ -17,8 +17,8 @@ const ItemInformation = () => {
 
   // Api Call
   const {data:transaction, isPending} = useTransaction({id:cartData?.id})
-
-
+  const {data:dispute} = useDispute(transaction?.escrow?.disputeId)
+  const step = dispute?.status ?? 'PENDING'
 
   return (
     <div className="px-[5%] pt-[30px]">
@@ -81,26 +81,26 @@ const ItemInformation = () => {
             <>
               <p className="text-[18px] font-bold mb-4">Dispute Status</p>
               <div className="mt-5 mb-2 flex items-center justify-center">
-                {step === 1 ? <CircleDot size={30} className="text-primary-normal"/> : <CircleCheck size={30} className="text-primary-normal"/>}
-                <div className={`h-0.5 w-[115px] rounded-full ${step >=2 ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
+                {step === 'PENDING' ? <CircleDot size={30} className="text-primary-normal"/> : <CircleCheck size={30} className="text-primary-normal"/>}
+                <div className={`h-0.5 w-[150px] rounded-full ${step === 'PROGRESS' || step === 'RESOLVED' ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
                 
-                {step > 2 ? <CircleCheck size={30} className="text-primary-normal"/> : step == 2 ? <CircleDot size={30} className="text-primary-normal"/> : <CircleDot size={30} className="text-[#EAECF0]"/>}
-                <div className={`h-0.5 w-[115px] rounded-full ${step >=3 ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
+                {step === 'RESOLVED' ? <CircleCheck size={30} className="text-primary-normal"/> : step === 'PROGRESS' ? <CircleDot size={30} className="text-primary-normal"/> : <CircleDot size={30} className="text-[#EAECF0]"/>}
+                <div className={`h-0.5 w-[150px] rounded-full ${step === 'RESOLVED' ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
                 
-                {step >=3 ? <CircleCheck size={30} className="text-primary-normal"/> : <CircleDot size={30} className="text-[#EAECF0]"/> }
+                {step === 'RESOLVED' ? <CircleCheck size={30} className="text-primary-normal"/> : <CircleDot size={30} className="text-[#EAECF0]"/> }
               </div>
               <div className="flex justify-between mb-6">
                 <div className="text-center">
                   <p className="text-status-pending font-medium leading-none">Pending</p>
-                  <span className="text-[#B7B7B7] text-[14px]">December 15, 2022</span>
+                  <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.createdAt}/>}</span>
                 </div>
                 <div className="text-center">
-                  <p className={`font-medium leading-none ${step >=2 ? 'text-status-inprogress' : 'text-[#B7B7B7]'}`}>In Progress</p>
-                  <span className="text-[#B7B7B7] text-[14px]">December 16, 2022</span>
+                  <p className={`font-medium leading-none ${step === 'PROGRESS' || step === 'RESOLVED' ? 'text-status-inprogress' : 'text-[#B7B7B7]'}`}>In Progress</p>
+                  <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.updatedAt}/>}</span>
                 </div>
                 <div className="text-center">
-                  <p className={`font-medium leading-none ${step >=3 ? 'text-status-resolved' : 'text-[#B7B7B7]'}`}>Resolved</p>
-                  <span className="text-[#B7B7B7] text-[14px]">December 18, 2022</span>
+                  <p className={`font-medium leading-none ${step === 'RESOLVED' ? 'text-status-resolved' : 'text-[#B7B7B7]'}`}>Resolved</p>
+                  <span className="text-[#B7B7B7] text-[14px]">{<DateTime dateString={dispute?.updatedAt}/>}</span>
                 </div>
               </div>
             </>

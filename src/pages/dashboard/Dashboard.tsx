@@ -129,7 +129,7 @@ const Dashboard = () => {
           </div>
           
           <div className="space-y-3">
-            <div className="lg:flex md:flex block items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center gap-3">
               <DashboardCard
                 icon={wallet}
                 title='Amount in Wallet'
@@ -149,7 +149,7 @@ const Dashboard = () => {
                 isPendingUserWallet={isPendingUserWallet}
               />
             </div>
-            <div className="lg:flex md:flex block items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center gap-3 ">
               <DashboardCard
                 icon={wallet}
                 title='Pending transaction'

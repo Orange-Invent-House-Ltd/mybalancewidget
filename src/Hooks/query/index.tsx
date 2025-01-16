@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { getProfile, getBanks, getTransactions, getMerchantWallet, getUserWallet, getTransaction } from "../../api";
+import { getProfile, getBanks, getTransactions, getMerchantWallet, getUserWallet, getTransaction, getDispute } from "../../api";
 
 export const useTransactions = ({
   currency,
@@ -61,5 +61,13 @@ export const useUserWallet = (id:number) => {
     queryKey: ["userWallet", id],
     queryFn: () => getUserWallet(id),
     enabled: !!id, // Only run when id has a value
+  });
+};
+// Disputes
+export const useDispute = (id:any) => {
+  return useQuery({
+    queryKey: ["dispute", id],
+    queryFn: () => getDispute(id),
+    enabled: !!id,  // Only run when id has a value
   });
 };

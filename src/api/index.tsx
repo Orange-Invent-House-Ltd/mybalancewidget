@@ -54,6 +54,7 @@ export const sellerOtpVerification = async (data: any) => {
 };
 
 // Queries
+// Transactions
 export const getTransactions = async ({
   search,
   page,
@@ -118,3 +119,8 @@ export const getUserWallet = async (id:number) => {
   const res = await privateApi.get(`/console/users/${id}/wallets/`);
   return res.data.data;
 }; 
+// Disputes
+export const getDispute = async (id:any) => {
+  const res = await privateApi.get(`/dispute/${id}`);
+  return res.data.data;
+};
