@@ -1,7 +1,6 @@
 import {Rabbit, CircleHelp } from "lucide-react";
-import shoe from "../../assets/images/shoe.png";
 import HeroHeader from "../../components/reuseable/HeroHeader";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useProfile, useTransactions, useUserWallet } from "../../Hooks/query";
 import { useStrimKey, useUnlockFunds } from "../../Hooks/mutate";
@@ -24,9 +23,6 @@ const Dashboard = () => {
   const [currency, setCurrency] = useState('NGN');
   const [page, setPage] = useState<number>(1);
   const [hover, setHover] = useState(false);
-  const [selectAll, setSelectAll] = useState(false);
-  const [allSelected, setAllSelected] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<any>([]);
   const [urlKey, setUrlKey] = useState<string | null>(null);
   const [keyProcessed, setKeyProcessed] = useState(false);
 
@@ -36,11 +32,6 @@ const Dashboard = () => {
   const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`;
   
   const {
-    checkBoxes, 
-    setCheckBoxes, 
-    isUnlockAll, 
-    setIsUnlockAll,
-    userID, 
     setUserID, 
   } = useStore();
 
@@ -90,28 +81,17 @@ const Dashboard = () => {
       currency,
     }
   );
-  const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
 
   const ngnWallet = userWallet?.find((wallet: any) => wallet?.currency === "NGN");
   const usdWallet = userWallet?.find((wallet: any) => wallet?.currency === "USD");
 
-    // Set userID when profile is available
-    useEffect(() => {
-      if (profile?.userId) {
-        setUserID(profile.userId);
-      }
-    }, [profile, setUserID]);
+  // Set userID when profile is available
+  useEffect(() => {
+    if (profile?.userId) {
+      setUserID(profile.userId);
+    }
+  }, [profile, setUserID]);
   
-    // Update checkboxes when transactions change
-    useEffect(() => {
-      if (transactions?.data) {
-        const itemIds = transactions.data.map((cartData: any) => ({
-          ...cartData,
-          isChecked: false
-        }));
-        setCheckBoxes(itemIds);
-      }
-    }, [transactions, setCheckBoxes]);
 
   const goTo = (): void => {
     navigate("/seller/withdraw");
@@ -121,107 +101,8 @@ const Dashboard = () => {
     setPage(selected);
   };
 
-  // update check boxes array : CheckBoxes has the data and isChecked status that is either tru or false
-  // selectedItems is an array of data and isChecked status that is true - items that has been checked
-  // set isChecked to true for every checked boxes and VICE VERSA 
-  const handleSingleCheckBoxChange = (id: any) => {
-    const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
-      if (checkbox.id === id) {
-        return { ...checkbox, isChecked: !checkbox.isChecked }; //if isChecked is false set it to true, if it is true set it to false
-      }
-      return checkbox;
-    });
-    setCheckBoxes(updatedCheckBoxes);
-    setSelectedItems(
-      updatedCheckBoxes.filter(
-        (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
-      )
-    );
-    setAllSelected(
-      //set AllSelected to true if all checkboxes are checked and false otherwise.
-      updatedCheckBoxes.every((checkbox: any) => checkbox.isChecked) 
-    );
-  };
-
-  const handleAllChecked = () => {
-    if (selectAll) {
-      // alert('All')
-      const updatedCheckBoxes = checkBoxes.map((checkbox: any) => {
-        return { ...checkbox, isChecked: selectAll };
-      });
-      setCheckBoxes(updatedCheckBoxes);
-      setSelectedItems(updatedCheckBoxes);
-    } else {
-      // alert('not all')
-      const updatedCheckBoxes = checkBoxes?.map((checkbox: any) => {
-        return { ...checkbox, isChecked: selectAll }; //there is a problem here
-      });
-      setCheckBoxes(updatedCheckBoxes);
-      setSelectedItems(
-        updatedCheckBoxes?.filter(
-          (updatedCheckBoxe: any) => updatedCheckBoxe.isChecked === true
-        )
-      );
-      setAllSelected(false); // set all selected to false when selectAll is false
-    }
-  };
-
-  // const strimkey = async (key:any) => {
-  //   mutate(
-  //     { 
-  //       key: key 
-  //     },
-  //     {
-  //       onSuccess: () => {
-  //         queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
-  //         queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
-  //         queryClient.invalidateQueries(["userWallet"] as InvalidateQueryFilters);
-  //       }
-  //     }
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   // Get the current URL using window.location.href
-  //   const currentURL = window.location.href;
-  //   const startString = "dashboard/";
-  //   // Find the index of the starting string
-  //   const startIndex = currentURL.indexOf(startString);
-  //   // Calculate the start of the substring (position after "unlock-fund/")
-  //   const extractStartIndex = startIndex + startString.length;
-  //   // Extract the substring from the calculated start index to the end of the URL
-  //   const key = currentURL.substring(extractStartIndex);
-  //   setKey(key)
-  //   strimkey(key);
-
-  //   // if (key.endsWith("/")) {
-  //   //   key = key.slice(0, -1);
-  //   //   setKey(key)
-  //   //   strimkey(key);
-  //   // }
-  //   setCount((prev:any) => prev + 1)
-  //   // if (count < 1){
-  //   //   strimkey(key);
-  //   // }
-  //   // console.log(key);
-  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    // CartDatas
-    const itemIds = transactions?.data?.map((cartData: any) =>
-      ({...cartData, isChecked: false} )//complete data with checked status
-    );
-    setCheckBoxes(itemIds);
-    // console.log(itemIds);
-  }, [transactions]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-      handleAllChecked()
-  }, [selectAll]); // eslint-disable-line react-hooks/exhaustive-deps
-
-
-   // Your existing JSX remains largely the same, but add a loading state:
-   if (!keyProcessed || !profile) {
+  // add a loading state:
+  if (!keyProcessed || !profile) {
     return <LoadingOverlay />;
   }
 
@@ -332,41 +213,6 @@ const Dashboard = () => {
                   </div>
                 )}
               </div>
-
-              {isUnlockAll && (
-                <div className="animate-jump fixed top-0 left-0 z-50 w-full h-full bg-[#3a3a3a]/30 backdrop-blur-[8px]"> 
-                  <div className="py-6 px-6 max-w-[400px] min-h-[246px] rounded-[12px] absolute bg-white top-[50%] left-[50%] -translate-y-1/2 -translate-x-1/2 z-50">
-                    <div className='shadow-3xl'>
-                      <h2 className="text-neutral-950 text-[18px] font-semibold">
-                        Unlock Funds!
-                      </h2>
-                      <div className='mt-4 mb-10 leading-tight '>Before proceeding, please confirm if you wish to unlock the funds for your fund(s) with transaction id
-                        <div className="mt-2 flex flex-col gap-y-2">
-                          { selectedItems.map((seletedItem:any, key:any) => (
-                            <p key={key}  className="font-bold">{seletedItem?.id}</p>
-                          ))}
-                        </div>
-                      </div>
-                      <button className="w-full rounded-md border border-[#101828] py-3 px-4 capitalize font-bold cursor-pointer transition-all mb-3"
-                        onClick={()=>setIsUnlockAll(false)}
-                      >Cancel</button>
-                      <button className="w-full bg-[#039855] text-white rounded-md py-3 px-4 capitalize font-bold cursor-pointer transition-all mb-6"
-                        onClick={() => {
-                          // selectedIds is an array of selected item ids
-                          const seletedItemsIds= selectedItems.map(
-                            (seletedItem: any) => seletedItem.id
-                          );
-                          unlockFund({
-                            transactions: seletedItemsIds,
-                          });
-                        }}
-                      >
-                        Proceed</button>
-                      <p className="text-[10px]">By unlocking the funds, you are accepting responsibility for verifying the quality of the received product. For more details on your buyer obligations, we recommend reviewing our <span className="text-[#FD943C] ">“Terms and Conditions.”</span></p>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
           {transactions?.data?.length === 0 ? (

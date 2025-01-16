@@ -1,12 +1,12 @@
 import { useUnlockFunds } from "../../Hooks/mutate"
 
-const UnlockFundModal = ({cartData, setUnlockFund}:any) => {
+const UnlockFundModal = ({transaction, setUnlockFund}:any) => {
   const{mutate, isPending}= useUnlockFunds()
 
   const unlockfund = async() => {
     mutate({
       transactions: [
-        cartData?.id
+        transaction?.id
       ]
     })
     setUnlockFund(false)
@@ -19,7 +19,8 @@ const UnlockFundModal = ({cartData, setUnlockFund}:any) => {
           <h2 className="text-neutral-950 text-[18px] font-semibold">
             Unlock Funds!
           </h2>
-          <p className='mt-4 mb-10 leading-tight '>Before proceeding, please confirm if you wish to unlock the funds for <span className="font-bold">{cartData?.meta?.title}</span>.</p>
+          <p className='mt-4 mb-10 leading-tight '>Before proceeding, please confirm if you wish to unlock the funds for 
+            <span className="font-bold">{transaction?.meta?.title}</span>.</p>
           <button className="w-full rounded-md border border-[#101828] py-3 px-4 capitalize font-bold cursor-pointer transition-all mb-3"
             onClick={()=>setUnlockFund(false)}
           >Cancel</button>
