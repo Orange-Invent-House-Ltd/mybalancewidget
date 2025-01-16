@@ -15,7 +15,6 @@ import loading from "../../../assets/icon/loadingSpinner.svg";
 import warningIcon from "../../../assets/icon/warningIcon.svg";
 import { useProfile } from "../../../Hooks/query";
 import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
-import useStore from "../../../store";
 
 function Verification() {
   const [otp, setOtp] = useState("");

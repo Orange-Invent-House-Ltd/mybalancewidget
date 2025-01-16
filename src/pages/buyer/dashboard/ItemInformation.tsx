@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { ArrowLeft, CircleCheck, CircleDot } from "lucide-react";
@@ -8,16 +8,29 @@ import { formatToDollarCurrency, formatToNairaCurrency } from "../../../componen
 import bannerImage from "../../../assets/images/buyer.png";
 import { DateTime } from "../../../components/reuseable/DateTime";
 import { convertDate } from "../../../components/reuseable/convertDate";
+import { InvalidateQueryFilters, useQueryClient } from "@tanstack/react-query";
 
 const ItemInformation = () => {
   const location = useLocation();
   const cartData = location.state?.transaction;
   const navigate = useNavigate()
   const today = moment().format("YYYY-MM-DD");
+  const queryClient = useQueryClient()
 
   // Api Call
   const {data:transaction, isPending} = useTransaction({id:cartData?.id})
   const {data:dispute} = useDispute(transaction?.escrow?.disputeId)
+
+  // Force refetch when component mounts
+  useEffect(() => {
+    if (cartData?.id) {
+      queryClient.invalidateQueries({ queryKey: ['transaction', cartData.id] });
+    }
+    if (transaction?.escrow?.disputeId) {
+      queryClient.invalidateQueries({ queryKey: ['dispute', transaction.escrow.disputeId] });
+    }
+  }, [cartData?.id, transaction?.escrow?.disputeId, queryClient]);
+  
   const step = dispute?.status ?? 'PENDING'
 
   return (

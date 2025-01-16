@@ -11,6 +11,5 @@ export const DateTime = ({ dateString }: { dateString: string | undefined }) => 
     return <span>Invalid date</span>;
   }
 
-  return <span>{format(date, "MMM dd, yyyy")}</span>;
-  // return <span>{format(date, "MMM dd, yyyy | hh:mma")}</span>;
+  return <span>{format(date, "MMM dd, yyyy | hh:mma")}</span>;
 };

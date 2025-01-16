@@ -65,12 +65,13 @@ const Dashboard = () => {
            },
            onError: (error) => {
              toast.error("Failed to process key",{toastId: "error1",});
+             navigate("/");
              console.error("Strim key processing failed:", error);
            }
          }
        );
      }
-   }, [urlKey, keyProcessed, processStrimKey, queryClient]);
+   }, [urlKey, keyProcessed, processStrimKey, queryClient, navigate]);
  
    // Fetch profile data only after key is processed
    const { data: profile } = useProfile();
