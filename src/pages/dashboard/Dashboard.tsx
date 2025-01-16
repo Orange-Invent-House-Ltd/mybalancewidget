@@ -31,7 +31,6 @@ const Dashboard = () => {
   const [keyProcessed, setKeyProcessed] = useState(false);
 
   const queryClient = useQueryClient();
-  const location = useLocation();
   const navigate = useNavigate();
   const email = localStorage.getItem("email");
   const urlWithUserEmail = `https://mybalanceapp.com/passwordless-otp-verification?email=${email}`;
@@ -43,7 +42,6 @@ const Dashboard = () => {
     setIsUnlockAll,
     userID, 
     setUserID, 
-    setKey
   } = useStore();
 
   // Extract key from URL
@@ -55,13 +53,11 @@ const Dashboard = () => {
         const key = path.slice(dashboardPrefix.length).replace(/\/$/, '');
         if (key) {
           setUrlKey(key);
-          setKey(key);
         }
       }
     };
-
     extractKeyFromUrl();
-  }, [setKey]);
+  }, [setUrlKey]);
 
    // Process the key using Strim API
    const { mutate: processStrimKey, isSuccess: strimKeySuccess } = useStrimKey();
@@ -116,34 +112,6 @@ const Dashboard = () => {
         setCheckBoxes(itemIds);
       }
     }, [transactions, setCheckBoxes]);
-
-  // API CALL
-  // const { mutate } = useStrimKey();
-  // const { data: profile } = useProfile();
-  // const {data:userWallet, isPending: isPendingUserWallet} = useUserWallet(profile?.userId ?? undefined)
-  // const { data: transactions, isPending } = useTransactions(
-  //   { 
-  //     page,
-  //     currency,
-  //   }
-  // );
-  // const { mutate: unlockFund, isPending: unlockFundIsPending } = useUnlockFunds();
-  
-  
-
-  // useEffect(() => {
-  //   if (profile?.userId) {
-  //     setUserID(profile.userId);
-  //   }
-  // }, [profile, setUserID]);
-  
-  // useEffect(() => {
-  //   // Refetch all relevant queries when component mounts or route changes
-  //   queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
-  //   queryClient.invalidateQueries(["transactions"] as InvalidateQueryFilters);
-  //   queryClient.invalidateQueries(["userWallet"] as InvalidateQueryFilters);
-    
-  // }, [location.pathname, queryClient]);
 
   const goTo = (): void => {
     navigate("/seller/withdraw");
@@ -347,7 +315,7 @@ const Dashboard = () => {
                   <a
                     href={urlWithUserEmail}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    // rel="noopener noreferrer"
                   >
                     <CircleHelp className="inline" /> View Transaction History
                   </a>
@@ -413,11 +381,10 @@ const Dashboard = () => {
             </div>
           ) : (
             transactions?.data?.map(
-              (cartData: any, index: any, arr: any, key: any) => (
+              (transaction: any, index: any, arr: any, key: any) => (
                 <div key={key} className={arr.length - 1 === index ? "" : "mb-4"}>
                   <UnlockFundCard
-                    cartData={cartData}
-                    handleSingleCheckBoxChange={handleSingleCheckBoxChange}
+                    transaction={transaction}
                   />
                 </div>
               )
@@ -437,24 +404,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-const cartDatas = [
-  {
-    name: "Blue Vintage Sneakers",
-    description: "Lorem ipsum dolor sit amet consectetur. Sed erat ...",
-    img: shoe,
-    price: "54,000.00",
-  },
-  {
-    name: "Off-White Snapback",
-    description: "Lorem ipsum dolor sit amet consectetur. Sed erat ...",
-    img: shoe,
-    price: "15,000.00",
-  },
-  {
-    name: "Yellow Wool Beanie",
-    description: "Lorem ipsum dolor sit amet consectetur. Sed erat ...",
-    img: shoe,
-    price: "30,000.00",
-  },
-];

@@ -15,7 +15,7 @@ import { useRaiseADispute } from "../../../Hooks/mutate";
 
 const RaiseADispute = () => {
   const location = useLocation();
-  const cartData = location.state?.cartData;
+  const cartData = location.state?.transaction;
   const id = cartData?.id;
   const navigate = useNavigate();
   const today = moment().format('YYYY-MM-DD')

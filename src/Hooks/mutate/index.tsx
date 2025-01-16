@@ -126,7 +126,6 @@ export const useUnlockFunds = () => {
 export const useRaiseADispute = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const {key} = useStore()
   return useMutation({
     mutationFn: raiseADispute,
     onSuccess: (data) => {
@@ -134,8 +133,7 @@ export const useRaiseADispute = () => {
       toast.success(data.message, {
         toastId: "success1",
       });
-      // navigate(-1)
-      navigate(`/dashboard/${key}`)
+      navigate(-1)
     },
     onError: (error: any) => {
       let resMessage;

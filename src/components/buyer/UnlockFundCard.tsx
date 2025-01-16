@@ -6,7 +6,7 @@ import { Copy } from "lucide-react"
 import { toast } from "react-toastify"
 import { formatToDollarCurrency, formatToNairaCurrency } from "../reuseable/formatCurrency"
 
-const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
+const UnlockFundCard = ({transaction}:any) => {
   const [unlockFund, setUnlockFund] = useState(false)
   const today  = moment().format("YYYY-MM-DD");
 
@@ -14,35 +14,35 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
   return (
     <div className="">
       {unlockFund && (
-        <UnlockFundModal unlockFund = {unlockFund} setUnlockFund={setUnlockFund} cartData={cartData} />
+        <UnlockFundModal unlockFund = {unlockFund} setUnlockFund={setUnlockFund} transaction={transaction} />
       )}
       <div className='flex justify-between items-center'>
         <div className='flex items-center gap-6'>
-          {/* <input type="checkbox" name='item' value={cartData?.id} checked={cartData?.isChecked} onChange={() => handleSingleCheckBoxChange(cartData?.id)} /> */}
           <div>
             <div className="text-[#999999] text-[14px] flex items-center gap-x-2">
-              <p>{cartData?.meta?.sourcePaymentTransaction.slice(0, 8)}</p>
+              <p>{transaction?.meta?.sourcePaymentTransaction.slice(0, 8)}</p>
               <Copy className="" onClick={()=>{
-                navigator.clipboard.writeText(cartData?.meta?.sourcePaymentTransaction)
+                navigator.clipboard.writeText(transaction?.meta?.sourcePaymentTransaction)
                 toast.success('Transaction id copied successfully!')
               }} />
             </div>
-            <h2 className='font-medium'>{cartData?.meta?.title}</h2>
-            <p className="text-[#999999]">{cartData?.meta?.description}</p>
+            <h2 className='font-medium'>{transaction?.meta?.title}</h2>
+            <p className="text-[#999999]">{transaction?.meta?.description}</p>
             <p className="text-[13px]">
               {/* <span>Delivery date: <span className="font-semiold">{cartData?.escrow?.deliveryDate}</span></span>  */}
-              <span className="font-bold">{cartData?.currency === 'NGN' ? formatToNairaCurrency(cartData?.amount) : formatToDollarCurrency(cartData?.amount)}</span>
+              <span className="font-bold">{transaction?.currency === 'NGN' ? formatToNairaCurrency(transaction?.amount) 
+              : formatToDollarCurrency(transaction?.amount)}</span>
             </p>
           </div>
         </div>
         <div className="flex gap-6">
-        <Link to='/buyer/item-details' state={{cartData: cartData }}><p className="font-medium text-[14px] cursor-pointer hover:underline">View Info</p></Link>
+        <Link to='/buyer/item-details' state={{transaction: transaction}}><p className="font-medium text-[14px] cursor-pointer hover:underline">View Info</p></Link>
           
-          {cartData?.disputeRaised ? (
+          {transaction?.disputeRaised ? (
             <p className="font-medium text-[14px] opacity-50 hover:cursor-not-allowed">
              Dispute Raised</p>
-          ) : cartData?.deliveryDateIsDue ? (
-            <Link to='/buyer/raise-a-dispute' state={{cartData: cartData }}><p className="font-medium text-[14px] cursor-pointer hover:underline">
+          ) : transaction?.deliveryDateIsDue ? (
+            <Link to='/buyer/raise-a-dispute' state={{transaction: transaction}}><p className="font-medium text-[14px] cursor-pointer hover:underline">
               Raise a Dispute</p>
             </Link>
           ) : (
@@ -50,10 +50,10 @@ const UnlockFundCard = ({cartData, handleSingleCheckBoxChange}:any) => {
               Raise a Dispute
             </button>
           )}
-          {cartData?.customerRole === 'BUYER' ? 
+          {transaction?.customerRole === 'BUYER' ? 
             <button className="font-medium text-[14px] text-[#FD7E14] cursor-pointer hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={()=> setUnlockFund(true)}
-              disabled={!cartData?.deliveryDateIsDue}
+              disabled={!transaction?.deliveryDateIsDue}
             >Unlock Funds </button> : ''
           }
         </div>

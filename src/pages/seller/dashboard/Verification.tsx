@@ -28,8 +28,7 @@ function Verification() {
   const [isFailWithdraw, setIsFailWithdraw] = useState(false);
   const [modalMessageDescription, setModalMessageDescription] = useState("");
   const [pusherLoading, setPusherLoading] = useState(false);
-  const merchantId = localStorage.getItem("merchant");
-  const {userID, key} = useStore()
+
   // API CALL
   const { data: profile } = useProfile();
 

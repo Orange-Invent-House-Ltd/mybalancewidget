@@ -11,7 +11,7 @@ import bannerImage from "../../../assets/images/buyer.png";
 const ItemInformation = () => {
   const [step, setStep] = useState(1)
   const location = useLocation();
-  const cartData = location.state?.cartData;
+  const cartData = location.state?.transaction;
   const navigate = useNavigate()
   const today = moment().format("YYYY-MM-DD");
 
