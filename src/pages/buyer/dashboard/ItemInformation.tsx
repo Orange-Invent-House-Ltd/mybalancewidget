@@ -81,13 +81,13 @@ const ItemInformation = () => {
             <>
               <p className="text-[18px] font-bold mb-4">Dispute Status</p>
               <div className="mt-5 mb-2 flex items-center justify-center">
-                {step === 1 ? <CircleDot size={40} className="text-primary-normal"/> : <CircleCheck size={40} className="text-primary-normal"/>}
-                <div className={`h-0.5 w-[110px] rounded-full ${step >=2 ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
+                {step === 1 ? <CircleDot size={30} className="text-primary-normal"/> : <CircleCheck size={30} className="text-primary-normal"/>}
+                <div className={`h-0.5 w-[115px] rounded-full ${step >=2 ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
                 
-                {step > 2 ? <CircleCheck size={40} className="text-primary-normal"/> : step == 2 ? <CircleDot size={40} className="text-primary-normal"/> : <CircleDot size={40} className="text-[#EAECF0]"/>}
-                <div className={`h-0.5 w-[110px] rounded-full ${step >=3 ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
+                {step > 2 ? <CircleCheck size={30} className="text-primary-normal"/> : step == 2 ? <CircleDot size={30} className="text-primary-normal"/> : <CircleDot size={30} className="text-[#EAECF0]"/>}
+                <div className={`h-0.5 w-[115px] rounded-full ${step >=3 ? 'bg-primary-normal' : 'bg-[#EAECF0]'}`}></div>
                 
-                {step >=3 ? <CircleCheck size={40} className="text-primary-normal"/> : <CircleDot size={40} className="text-[#EAECF0]"/> }
+                {step >=3 ? <CircleCheck size={30} className="text-primary-normal"/> : <CircleDot size={30} className="text-[#EAECF0]"/> }
               </div>
               <div className="flex justify-between mb-6">
                 <div className="text-center">

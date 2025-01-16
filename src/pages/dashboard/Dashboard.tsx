@@ -63,7 +63,7 @@ const Dashboard = () => {
              queryClient.invalidateQueries(["profile"] as InvalidateQueryFilters);
            },
            onError: (error) => {
-             toast.error("Failed to process key");
+             toast.error("Failed to process key",{toastId: "error1",});
              console.error("Strim key processing failed:", error);
            }
          }
@@ -101,14 +101,9 @@ const Dashboard = () => {
     setPage(selected);
   };
 
-  // add a loading state:
-  if (!keyProcessed || !profile) {
-    return <LoadingOverlay />;
-  }
-
   return (
     <div>
-      {isPending && <LoadingOverlay />}
+      {isPending || !keyProcessed || !profile && <LoadingOverlay />}
       <div className="px-[5%] pt-[30px] pb-10 backdrop-blur-lg bg-opacity-50">
         <div className="mt-7">
           <div className="flex justify-between">
